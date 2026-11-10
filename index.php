@@ -19,7 +19,7 @@ require __DIR__ . '/includes/header.php';
         </div>
       </div>
       <div class="hero-mark">
-        <img alt="Approved official club emblem displaying Imo State local government areas" fetchpriority="high" src="assets/official-logo.webp"/>
+        <img alt="Official Imolites club emblem displaying Imo State local government areas" fetchpriority="high" src="assets/official-logo.png"/>
       </div>
     </div>
   </section>

@@ -6,7 +6,7 @@
   <meta content="#03271c" name="theme-color"/>
   <meta content="Imolites in Diaspora Social Club USA — progress and hospitality, Imo heritage, community and our November 14, 2026 induction and end-of-year celebration." name="description"/>
   <title>Imolites in Diaspora Social Club USA | Progress &amp; Hospitality</title>
-  <link rel="icon" href="assets/official-logo.webp" type="image/webp"/>
+  <link rel="icon" href="assets/official-logo.png" type="image/png"/>
   <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
@@ -14,7 +14,7 @@
 <header class="nav">
   <div class="wrap nav-row">
     <a class="brand" href="index.html">
-      <img alt="Original official Imolites club crest" src="assets/official-logo.webp"/>
+      <img alt="Official Imolites club crest" src="assets/official-logo.png"/>
       <span><strong>IMOLITES</strong><small>IN DIASPORA · SOCIAL CLUB USA</small></span>
     </a>
     <button aria-expanded="false" aria-label="Open navigation" class="hamb">☰</button>
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="hero-mark">
-        <img alt="Approved official club emblem displaying Imo State local government areas" fetchpriority="high" src="assets/official-logo.webp"/>
+        <img alt="Official Imolites club emblem displaying Imo State local government areas" fetchpriority="high" src="assets/official-logo.png"/>
       </div>
     </div>
   </section>
@@ -223,6 +223,17 @@
     <div class="copyright">© <span id="yr">2026</span> Imolites in Diaspora Social Club USA · Official crest retained without redesign. Gallery contains promotional artwork and creative Imo State illustrations.</div>
   </div>
 </footer>
+
+<!-- 2026 Induction Celebration Audio -->
+<audio id="event-audio" preload="auto" playsinline>
+  <source src="assets/event-music.mp3" type="audio/mpeg"/>
+</audio>
+
+<div id="event-audio-badge" class="event-audio-badge" style="display:none;" aria-live="polite">
+  <span>🎵 2026 Induction Music</span>
+  <button id="event-audio-toggle" aria-label="Pause audio" title="Pause / Play">⏸</button>
+</div>
+
 <script>
 document.querySelector('.hamb')?.addEventListener('click',function(){
   let n=document.querySelector('.navlinks');
@@ -231,6 +242,93 @@ document.querySelector('.hamb')?.addEventListener('click',function(){
 });
 document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.navlinks')?.classList.remove('open')));
 document.querySelector('#yr').textContent=new Date().getFullYear();
+
+// Induction Celebration Audio Controller
+(function() {
+  const audio = document.getElementById('event-audio');
+  const badge = document.getElementById('event-audio-badge');
+  const toggleBtn = document.getElementById('event-audio-toggle');
+  if (!audio) return;
+
+  audio.loop = false;
+  let hasStarted = false;
+
+  function showBadge() {
+    if (badge) badge.style.display = 'flex';
+  }
+  function hideBadge() {
+    if (badge) badge.style.display = 'none';
+  }
+
+  function playInductionAudio() {
+    if (hasStarted) return;
+    hasStarted = true;
+    try {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          showBadge();
+        }).catch(err => {
+          hasStarted = false;
+        });
+      }
+    } catch(e) {
+      hasStarted = false;
+    }
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play();
+        toggleBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        toggleBtn.textContent = '▶';
+      }
+    });
+  }
+
+  audio.addEventListener('ended', function() {
+    hideBadge();
+  });
+
+  const eventSelectors = [
+    'a[href*="#event"]',
+    'a[href*="category=events"]',
+    '.filter[data-filter="events"]',
+    '.navcta'
+  ];
+
+  document.querySelectorAll(eventSelectors.join(',')).forEach(el => {
+    ['click', 'touchend'].forEach(evt => {
+      el.addEventListener(evt, function() {
+        playInductionAudio();
+        try {
+          sessionStorage.setItem('imolites_play_event', '1');
+        } catch(e) {}
+      }, { passive: true });
+    });
+  });
+
+  try {
+    const shouldPlay = window.location.hash === '#event' || sessionStorage.getItem('imolites_play_event') === '1';
+    if (shouldPlay) {
+      sessionStorage.removeItem('imolites_play_event');
+      playInductionAudio();
+      if (!hasStarted) {
+        const unlock = function() {
+          playInductionAudio();
+          window.removeEventListener('click', unlock);
+          window.removeEventListener('touchend', unlock);
+        };
+        window.addEventListener('click', unlock, { once: true, passive: true });
+        window.addEventListener('touchend', unlock, { once: true, passive: true });
+      }
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>

@@ -15,7 +15,7 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
   <meta content="#03271c" name="theme-color"/>
   <meta content="<?= htmlspecialchars($meta_description, ENT_QUOTES, 'UTF-8') ?>" name="description"/>
   <title><?= $page_title ?></title>
-  <link rel="icon" href="assets/official-logo.webp" type="image/webp"/>
+  <link rel="icon" href="assets/official-logo.png" type="image/png"/>
   <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
@@ -23,7 +23,7 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
 <header class="nav">
   <div class="wrap nav-row">
     <a class="brand" href="index<?= $ext ?>">
-      <img alt="Original official Imolites club crest" src="assets/official-logo.webp"/>
+      <img alt="Official Imolites club crest" src="assets/official-logo.png"/>
       <span><strong>IMOLITES</strong><small>IN DIASPORA · SOCIAL CLUB USA</small></span>
     </a>
     <button aria-expanded="false" aria-label="Open navigation" class="hamb">☰</button>

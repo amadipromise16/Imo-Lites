@@ -24,6 +24,17 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
     <div class="copyright">© <span id="yr"><?= date('Y') ?></span> Imolites in Diaspora Social Club USA · Official crest retained without redesign. Gallery contains promotional artwork and creative Imo State illustrations.</div>
   </div>
 </footer>
+
+<!-- 2026 Induction Celebration Audio -->
+<audio id="event-audio" preload="auto" playsinline>
+  <source src="assets/event-music.mp3" type="audio/mpeg"/>
+</audio>
+
+<div id="event-audio-badge" class="event-audio-badge" style="display:none;" aria-live="polite">
+  <span>🎵 2026 Induction Music</span>
+  <button id="event-audio-toggle" aria-label="Pause audio" title="Pause / Play">⏸</button>
+</div>
+
 <script>
 document.querySelector('.hamb')?.addEventListener('click',function(){
   let n=document.querySelector('.navlinks');
@@ -32,6 +43,93 @@ document.querySelector('.hamb')?.addEventListener('click',function(){
 });
 document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.navlinks')?.classList.remove('open')));
 document.querySelector('#yr').textContent=new Date().getFullYear();
+
+// Induction Celebration Audio Controller
+(function() {
+  const audio = document.getElementById('event-audio');
+  const badge = document.getElementById('event-audio-badge');
+  const toggleBtn = document.getElementById('event-audio-toggle');
+  if (!audio) return;
+
+  audio.loop = false;
+  let hasStarted = false;
+
+  function showBadge() {
+    if (badge) badge.style.display = 'flex';
+  }
+  function hideBadge() {
+    if (badge) badge.style.display = 'none';
+  }
+
+  function playInductionAudio() {
+    if (hasStarted) return;
+    hasStarted = true;
+    try {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          showBadge();
+        }).catch(err => {
+          hasStarted = false;
+        });
+      }
+    } catch(e) {
+      hasStarted = false;
+    }
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play();
+        toggleBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        toggleBtn.textContent = '▶';
+      }
+    });
+  }
+
+  audio.addEventListener('ended', function() {
+    hideBadge();
+  });
+
+  const eventSelectors = [
+    'a[href*="#event"]',
+    'a[href*="category=events"]',
+    '.filter[data-filter="events"]',
+    '.navcta'
+  ];
+
+  document.querySelectorAll(eventSelectors.join(',')).forEach(el => {
+    ['click', 'touchend'].forEach(evt => {
+      el.addEventListener(evt, function() {
+        playInductionAudio();
+        try {
+          sessionStorage.setItem('imolites_play_event', '1');
+        } catch(e) {}
+      }, { passive: true });
+    });
+  });
+
+  try {
+    const shouldPlay = window.location.hash === '#event' || sessionStorage.getItem('imolites_play_event') === '1';
+    if (shouldPlay) {
+      sessionStorage.removeItem('imolites_play_event');
+      playInductionAudio();
+      if (!hasStarted) {
+        const unlock = function() {
+          playInductionAudio();
+          window.removeEventListener('click', unlock);
+          window.removeEventListener('touchend', unlock);
+        };
+        window.addEventListener('click', unlock, { once: true, passive: true });
+        window.addEventListener('touchend', unlock, { once: true, passive: true });
+      }
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>

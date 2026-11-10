@@ -27,7 +27,7 @@ $gallery_items = [
     ],
     [
         'category' => 'branding',
-        'image'    => 'assets/official-logo.webp',
+        'image'    => 'assets/official-logo.png',
         'alt'      => 'Official Imolites Crest',
         'title'    => 'Official Imolites Crest',
         'subtitle' => 'The club-approved official emblem, preserved as supplied.',
