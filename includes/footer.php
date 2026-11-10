@@ -33,8 +33,11 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
 </audio>
 
 <div id="event-audio-badge" class="event-audio-badge" style="display:none;" aria-live="polite">
-  <span>🎵 2026 Induction Music</span>
-  <button id="event-audio-toggle" aria-label="Pause audio" title="Pause / Play">⏸</button>
+  <span class="audio-equalizer" id="audio-equalizer" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </span>
+  <span id="audio-status-text">🎵 2026 Induction Music · Tap to Play</span>
+  <button id="event-audio-toggle" type="button" aria-label="Play or pause celebration music" title="Play / Pause">▶</button>
 </div>
 
 <script>
@@ -51,82 +54,131 @@ document.querySelector('#yr').textContent = new Date().getFullYear();
   const audio = document.getElementById('event-audio');
   const badge = document.getElementById('event-audio-badge');
   const toggleBtn = document.getElementById('event-audio-toggle');
+  const statusText = document.getElementById('audio-status-text');
+  const equalizer = document.getElementById('audio-equalizer');
   if (!audio) return;
 
-  audio.loop = false;
-  let hasStarted = false;
+  audio.loop = false; // Must play once through to the end
 
-  function showBadge() {
-    if (badge) badge.style.display = 'flex';
-  }
-  function hideBadge() {
-    if (badge) badge.style.display = 'none';
-  }
+  const path = window.location.pathname.toLowerCase();
+  const search = window.location.search.toLowerCase();
+  const isEventPage = path.includes('event') || search.includes('event');
 
-  function playInductionAudio() {
-    if (hasStarted) return;
-    hasStarted = true;
-    try {
-      const p = audio.play();
-      if (p !== undefined) {
-        p.then(() => {
-          showBadge();
-        }).catch(err => {
-          hasStarted = false;
-        });
+  function updateUI(playing) {
+    if (!badge) return;
+    badge.style.display = 'flex';
+    if (playing) {
+      if (statusText) statusText.textContent = '🎵 Playing 2026 Induction Music';
+      if (toggleBtn) {
+        toggleBtn.textContent = '⏸';
+        toggleBtn.setAttribute('aria-label', 'Pause celebration music');
+        toggleBtn.title = 'Pause';
       }
-    } catch(e) {
-      hasStarted = false;
+      if (equalizer) equalizer.classList.add('playing');
+    } else {
+      if (statusText) statusText.textContent = '🎵 2026 Induction Music · Tap to Play';
+      if (toggleBtn) {
+        toggleBtn.textContent = '▶';
+        toggleBtn.setAttribute('aria-label', 'Play celebration music');
+        toggleBtn.title = 'Play';
+      }
+      if (equalizer) equalizer.classList.remove('playing');
     }
   }
 
+  function startAudio() {
+    if (!audio.paused) {
+      updateUI(true);
+      return Promise.resolve();
+    }
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      return playPromise.then(() => {
+        updateUI(true);
+      }).catch(err => {
+        updateUI(false);
+        throw err;
+      });
+    }
+    updateUI(!audio.paused);
+    return Promise.resolve();
+  }
+
+  function pauseAudio() {
+    audio.pause();
+    updateUI(false);
+  }
+
+  // Toggle button click
   if (toggleBtn) {
     toggleBtn.addEventListener('click', function(e) {
       e.stopPropagation();
+      e.preventDefault();
       if (audio.paused) {
-        audio.play();
-        toggleBtn.textContent = '⏸';
+        startAudio().catch(() => {});
       } else {
-        audio.pause();
-        toggleBtn.textContent = '▶';
+        pauseAudio();
       }
     });
   }
 
+  // Entire badge clickable
+  if (badge) {
+    badge.addEventListener('click', function(e) {
+      if (e.target === toggleBtn) return;
+      if (audio.paused) {
+        startAudio().catch(() => {});
+      } else {
+        pauseAudio();
+      }
+    });
+  }
+
+  // When audio finishes, stop and update UI
   audio.addEventListener('ended', function() {
-    hideBadge();
+    updateUI(false);
+    if (statusText) statusText.textContent = '🎵 2026 Induction Music Finished';
   });
 
-  // Attach to all elements related to the Event / 2026 Induction
-  const eventSelectors = [
+  // Track user tapping/clicking navigation links leading to Event page
+  const eventLinkSelectors = [
     'a[href*="event"]',
     'a[href*="category=events"]',
     '.filter[data-filter="events"]',
     '.navcta',
     '.btn-event'
   ];
-
-  document.querySelectorAll(eventSelectors.join(',')).forEach(el => {
+  document.querySelectorAll(eventLinkSelectors.join(',')).forEach(el => {
     ['click', 'touchend'].forEach(evt => {
       el.addEventListener(evt, function() {
-        playInductionAudio();
+        try { sessionStorage.setItem('imolites_play_event_music', '1'); } catch(e){}
       }, { passive: true });
     });
   });
 
-  // If user is on event page, play on first user tap or immediately if permitted
-  const isEventPage = window.location.pathname.toLowerCase().includes('event');
+  // If user is on Event page
   if (isEventPage) {
-    playInductionAudio();
-    if (!hasStarted) {
-      const unlock = function() {
-        playInductionAudio();
-        window.removeEventListener('click', unlock);
-        window.removeEventListener('touchend', unlock);
-      };
-      window.addEventListener('click', unlock, { once: true, passive: true });
-      window.addEventListener('touchend', unlock, { once: true, passive: true });
-    }
+    updateUI(false);
+
+    // Function to unlock audio on first user touch anywhere on the page
+    const unlockGesture = function() {
+      startAudio().then(() => {
+        ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown'].forEach(ev => {
+          window.removeEventListener(ev, unlockGesture);
+          document.removeEventListener(ev, unlockGesture);
+        });
+      }).catch(() => {});
+    };
+
+    ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown'].forEach(ev => {
+      window.addEventListener(ev, unlockGesture, { passive: true });
+      document.addEventListener(ev, unlockGesture, { passive: true });
+    });
+
+    // Also attempt immediate play if user already clicked an event link or browser allows
+    startAudio().catch(() => {
+      // Autoplay blocked by mobile browser - waiting for user touch
+    });
   }
 })();
 </script>

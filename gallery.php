@@ -53,8 +53,9 @@ require __DIR__ . '/includes/header.php';
       <div class="gallery-grid" id="gallery-grid">
         <?php foreach ($display_items as $item): 
           $isCommunity = ($item['category'] === 'community');
+          $itemId = $item['id'] ?? '';
         ?>
-          <figure class="gallery-card" data-category="<?= htmlspecialchars($item['category'], ENT_QUOTES, 'UTF-8') ?>">
+          <figure class="gallery-card" data-category="<?= htmlspecialchars($item['category'], ENT_QUOTES, 'UTF-8') ?>" <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
             <?php if ($isCommunity): ?>
               <span class="badge-community">Community Snap</span>
             <?php endif; ?>
@@ -102,12 +103,13 @@ require __DIR__ . '/includes/header.php';
         </div>
         <div class="preview-container" id="preview-container">
           <img id="image-preview" src="" alt="Selected photo preview"/>
+          <button type="button" class="btn-change-photo" id="change-photo-btn">Change Photo</button>
         </div>
       </div>
 
       <div class="form-group">
         <label for="photo-title">Photo Title / Caption</label>
-        <input type="text" id="photo-title" name="title" placeholder="e.g. Induction Celebration, Imo Heritage, Family..."/>
+        <input type="text" id="photo-title" name="title" placeholder="e.g. Celebration with Club Family, Gala Night..."/>
       </div>
 
       <div class="form-group">
@@ -127,40 +129,49 @@ let cards = [...document.querySelectorAll('.gallery-card')];
 
 function applyFilter(v) {
   buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === v));
-  cards = [...document.querySelectorAll('.gallery-card')];
-  cards.forEach(c => c.classList.toggle('hidden', v !== 'all' && c.dataset.category !== v));
+  cards.forEach(c => {
+    const show = (v === 'all') || (c.dataset.category === v);
+    c.style.display = show ? 'block' : 'none';
+  });
 }
 
-buttons.forEach(b => b.addEventListener('click', () => {
-  applyFilter(b.dataset.filter);
-  const targetPage = window.location.pathname.endsWith('.html') ? 'gallery.html' : 'gallery.php';
-  history.replaceState(null, '', b.dataset.filter === 'all' ? targetPage : '?category=' + b.dataset.filter);
-}));
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+});
 
-let v = new URLSearchParams(location.search).get('category');
-if (['community', 'events', 'heritage', 'branding'].includes(v)) applyFilter(v);
+const urlFilter = new URLSearchParams(window.location.search).get('category');
+if (urlFilter) applyFilter(urlFilter);
 
-// Lightbox
 const lightbox = document.querySelector('.lightbox');
+const lbImg = lightbox.querySelector('img');
+
 function setupLightboxEvents() {
-  document.querySelectorAll('.gallery-card img').forEach(im => {
-    im.onclick = function() {
-      lightbox.querySelector('img').src = im.src;
-      lightbox.querySelector('img').alt = im.alt;
-      lightbox.classList.add('open');
-    };
-    im.onkeydown = function(e) {
-      if (e.key === 'Enter') im.click();
-    };
+  document.querySelectorAll('.gallery-card img').forEach(img => {
+    if (!img.dataset.hasLb) {
+      img.dataset.hasLb = 'true';
+      img.addEventListener('click', () => {
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lightbox.classList.add('open');
+      });
+      img.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          lbImg.src = img.src;
+          lbImg.alt = img.alt;
+          lightbox.classList.add('open');
+        }
+      });
+    }
   });
 }
 setupLightboxEvents();
 
-document.querySelector('.close').addEventListener('click', () => lightbox.classList.remove('open'));
-lightbox.addEventListener('click', e => {
-  if (e.target === lightbox) lightbox.classList.remove('open');
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox || e.target.classList.contains('close')) {
+    lightbox.classList.remove('open');
+  }
 });
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     lightbox.classList.remove('open');
     closeUploadModal();
@@ -175,6 +186,7 @@ const fileDropzone = document.getElementById('file-dropzone');
 const photoFileInput = document.getElementById('photo-file');
 const previewContainer = document.getElementById('preview-container');
 const imagePreview = document.getElementById('image-preview');
+const changePhotoBtn = document.getElementById('change-photo-btn');
 const photoUploadForm = document.getElementById('photo-upload-form');
 const uploadSubmitBtn = document.getElementById('upload-submit-btn');
 const galleryGrid = document.getElementById('gallery-grid');
@@ -182,38 +194,40 @@ const galleryGrid = document.getElementById('gallery-grid');
 function openUploadModal() {
   uploadModal.classList.add('open');
   uploadModal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeUploadModal() {
   uploadModal.classList.remove('open');
   uploadModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
 }
 
 if (openUploadBtn) openUploadBtn.addEventListener('click', openUploadModal);
 if (closeUploadBtn) closeUploadBtn.addEventListener('click', closeUploadModal);
+if (changePhotoBtn) changePhotoBtn.addEventListener('click', () => photoFileInput.click());
+
+uploadModal.addEventListener('click', function(e) {
+  if (e.target === uploadModal) closeUploadModal();
+});
+
 if (fileDropzone) {
   fileDropzone.addEventListener('click', () => photoFileInput.click());
   fileDropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter') photoFileInput.click(); });
 }
 
-// Global Shared Cloud Database (Cloudflare Edge KV) & Local Fallback
+// Global Shared Cloud Database & Local Fallback
 const CLOUD_KV_ENDPOINT = 'https://kvs.ix.workers.dev/imolites/community-photos';
-const STORAGE_KEY = 'imolites_community_photos_v4';
+const STORAGE_KEY = 'imolites_community_photos_v5';
 
-// Remove previous test caches from phone and laptop
+// Clear test caches from user's phone and laptop
 try {
+  localStorage.removeItem('imolites_community_photos_v4');
   localStorage.removeItem('imolites_community_photos_v3');
   localStorage.removeItem('imolites_community_snaps');
   localStorage.removeItem('imolites_uploaded_snaps');
   localStorage.removeItem('imolites_local_snaps');
 } catch(e) {}
-
-const IMGUR_CLIENT_IDS = [
-  '546c25a59c58ad7',
-  'c38a164bfa85a4a',
-  'e463a5ba823c310',
-  'b2c5545233c4ee4'
-];
 
 // Load cached community snaps immediately on page load
 function loadCachedCommunityPhotos() {
@@ -282,6 +296,7 @@ photoFileInput.addEventListener('change', async function() {
 function prependPhotoToGallery(photo) {
   if (!photo || !photo.image) return;
   // Check if card with this image or id already exists
+  if (photo.id && document.querySelector(`.gallery-card[data-id="${photo.id}"]`)) return;
   if (document.querySelector(`.gallery-card img[src="${photo.image}"]`)) return;
 
   const figure = document.createElement('figure');
@@ -317,37 +332,56 @@ function prependPhotoToGallery(photo) {
   cards = [...document.querySelectorAll('.gallery-card')];
 }
 
-// Fetch photos from the global Cloudflare edge database
+// Fetch photos from the global cloud edge database & local PHP backend
 async function loadGlobalCommunityPhotos() {
-  try {
-    const res = await fetch(CLOUD_KV_ENDPOINT);
-    if (!res.ok) return;
-    const data = await res.json();
-    const photos = (data && Array.isArray(data.photos)) ? data.photos : [];
+  const remotePhotos = [];
 
-    // Sync DOM: remove any community card that is no longer in the cloud list
-    const validImages = new Set(photos.map(p => p.image));
-    document.querySelectorAll('.gallery-card[data-category="community"]').forEach(card => {
-      const img = card.querySelector('img');
-      if (img && !validImages.has(img.src)) {
-        card.remove();
-      }
-    });
-
-    if (photos.length > 0) {
-      // Sort newest first
-      photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-      photos.forEach(photo => prependPhotoToGallery(photo));
-    }
-
+  // 1. Try local PHP upload endpoint on Hostinger
+  if (window.location.protocol.startsWith('http')) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
+      const phpRes = await fetch('upload.php');
+      if (phpRes.ok) {
+        const phpData = await phpRes.json();
+        if (phpData && Array.isArray(phpData.photos)) {
+          remotePhotos.push(...phpData.photos);
+        }
+      }
     } catch(e) {}
+  }
 
-    cards = [...document.querySelectorAll('.gallery-card')];
+  // 2. Try global Cloudflare Edge KV
+  try {
+    const kvRes = await fetch(CLOUD_KV_ENDPOINT);
+    if (kvRes.ok) {
+      const kvData = await kvRes.json();
+      if (kvData && Array.isArray(kvData.photos)) {
+        remotePhotos.push(...kvData.photos);
+      }
+    }
   } catch(err) {
     console.warn('Could not read global community photos:', err);
   }
+
+  // Deduplicate by ID and image
+  const seen = new Set();
+  const uniquePhotos = [];
+  for (const p of remotePhotos) {
+    const key = p.id || p.image;
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      uniquePhotos.push(p);
+    }
+  }
+
+  if (uniquePhotos.length > 0) {
+    uniquePhotos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    uniquePhotos.forEach(photo => prependPhotoToGallery(photo));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(uniquePhotos));
+    } catch(e) {}
+  }
+
+  cards = [...document.querySelectorAll('.gallery-card')];
 }
 
 // 1. Load instant cache first
@@ -357,37 +391,6 @@ loadGlobalCommunityPhotos();
 
 // Auto-sync community photos every 15 seconds so other devices see updates live
 setInterval(loadGlobalCommunityPhotos, 15000);
-
-// Upload image file to public cloud host (Imgur with multiple fallback keys)
-async function uploadImageToImgur(dataUrl, title) {
-  const base64Data = dataUrl.replace(/^data:image\/[a-z]+;base64,/, '');
-
-  for (const clientId of IMGUR_CLIENT_IDS) {
-    try {
-      const formData = new FormData();
-      formData.append('image', base64Data);
-      formData.append('type', 'base64');
-      formData.append('title', title || 'Imolites Community Photo');
-
-      const res = await fetch('https://api.imgur.com/3/image', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Client-ID ' + clientId
-        },
-        body: formData
-      });
-
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (data && data.success && data.data && data.data.link) {
-        return data.data.link;
-      }
-    } catch (err) {
-      console.warn('Imgur attempt failed with clientId:', clientId, err);
-    }
-  }
-  return null;
-}
 
 // Save photo record to global Cloudflare edge database so everyone sees it
 async function savePhotoToGlobalCloud(photo) {
@@ -442,35 +445,41 @@ photoUploadForm.addEventListener('submit', async function(e) {
   const titleVal = document.getElementById('photo-title').value.trim() || 'Community Celebration Snap';
   const uploaderVal = document.getElementById('photo-uploader').value.trim() || 'Club Member';
   const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const photoId = 'snap_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
 
-  let liveImageUrl = null;
+  let finalImage = selectedDataUrl;
+  let serverPhotoEntry = null;
 
-  // Step 1: Try public image host
-  try {
-    liveImageUrl = await uploadImageToImgur(selectedDataUrl, titleVal);
-  } catch (err) {
-    console.warn('Imgur upload error:', err);
-  }
-
-  // Step 2: Fallback to local upload.php if available on a PHP server
-  if (!liveImageUrl && window.location.protocol.startsWith('http')) {
+  // Step 1: If hosted on PHP (e.g. Hostinger), save directly to server storage via upload.php
+  if (window.location.protocol.startsWith('http')) {
     try {
-      const formData = new FormData(photoUploadForm);
-      const phpRes = await fetch('upload.php', { method: 'POST', body: formData });
+      const formData = new FormData();
+      formData.append('title', titleVal);
+      formData.append('uploader', uploaderVal);
+      formData.append('image_data', selectedDataUrl);
+
+      const phpRes = await fetch('upload.php', {
+        method: 'POST',
+        body: formData
+      });
+
       if (phpRes.ok) {
         const phpData = await phpRes.json();
-        if (phpData.success && phpData.photo && phpData.photo.image) {
-          liveImageUrl = phpData.photo.image;
+        if (phpData && phpData.success && phpData.photo) {
+          serverPhotoEntry = phpData.photo;
+          if (phpData.photo.image) {
+            finalImage = phpData.photo.image;
+          }
         }
       }
-    } catch (e) {}
+    } catch(err) {
+      console.warn('Local PHP upload attempt:', err);
+    }
   }
 
-  // Step 3: If no external URL returned, use optimized compressed data URL directly
-  const finalImage = liveImageUrl || selectedDataUrl;
-
-  const newPhoto = {
-    id: 'snap_' + Date.now(),
+  // Step 2: Assemble new photo object
+  const newPhoto = serverPhotoEntry || {
+    id: photoId,
     category: 'community',
     image: finalImage,
     title: titleVal,
@@ -479,22 +488,27 @@ photoUploadForm.addEventListener('submit', async function(e) {
     timestamp: Date.now()
   };
 
-  // Step 4: Render card immediately in DOM and save to local cache
+  // Step 3: Render card immediately in DOM and save to local cache
   prependPhotoToGallery(newPhoto);
   try {
     const localList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    localList.unshift(newPhoto);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(localList));
+    const filtered = localList.filter(p => p.id !== newPhoto.id && p.image !== newPhoto.image);
+    filtered.unshift(newPhoto);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   } catch(e) {}
 
-  // Step 5: Publish to shared global cloud database so EVERY visitor on EVERY device sees it
+  // Step 4: Publish to shared global cloud database (Cloudflare edge KV)
+  const cloudPhoto = {
+    ...newPhoto,
+    image: selectedDataUrl // ensures anyone on any external domain or device can display it
+  };
   try {
-    await savePhotoToGlobalCloud(newPhoto);
+    await savePhotoToGlobalCloud(cloudPhoto);
   } catch(e) {
     console.warn('Could not sync to cloud store:', e);
   }
 
-  // Step 6: Reset form and close modal
+  // Step 5: Reset form and close modal
   uploadSubmitBtn.disabled = false;
   uploadSubmitBtn.textContent = 'Publish to Live Gallery →';
   photoUploadForm.reset();
@@ -504,11 +518,11 @@ photoUploadForm.addEventListener('submit', async function(e) {
   selectedDataUrl = '';
   closeUploadModal();
 
-  // Step 7: Filter to community snaps and scroll to top of gallery
+  // Step 6: Filter to community snaps and scroll to top of gallery
   applyFilter('community');
   window.scrollTo({ top: galleryGrid.offsetTop - 100, behavior: 'smooth' });
 
-  alert('🎉 Success! Your photo is now live in the gallery. Anyone visiting this site from their phone, tablet, or laptop can now view and enjoy it!');
+  alert('🎉 Success! Your photo is now published live in the gallery. Anyone visiting this site from their phone, tablet, or laptop worldwide can now view it!');
 });
 </script>
 

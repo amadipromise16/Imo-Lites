@@ -1,7 +1,24 @@
 # Imolites in Diaspora Social Club USA
-# Apache Configuration
+# Apache Configuration for Hostinger & cPanel
 
 DirectoryIndex index.php index.html
+
+# MIME Types for Audio, Video, and Modern Image Formats
+<IfModule mod_mime.c>
+    AddType audio/mpeg .mp3
+    AddType video/mp4 .mp4
+    AddType image/webp .webp
+    AddType image/png .png
+    AddType image/jpeg .jpg .jpeg
+</IfModule>
+
+# Byte range requests for smooth mobile audio streaming (iOS Safari & Android)
+<IfModule mod_headers.c>
+    <FilesMatch "\.(mp3|mp4)$">
+        Header set Accept-Ranges bytes
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
@@ -18,6 +35,7 @@ DirectoryIndex index.php index.html
     RewriteRule ^(.*)$ $1.php [L]
 </IfModule>
 
+# Caching for fast performance
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/webp "access plus 1 month"
