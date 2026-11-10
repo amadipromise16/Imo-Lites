@@ -6,18 +6,20 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
     <div class="footgrid">
       <div>
         <div class="eyebrow">IMOLITES IN DIASPORA SOCIAL CLUB USA</div>
-        <h2 style="font-family:Playfair Display,serif;font-size:30px;color:white">Progress &amp; Hospitality.</h2>
+        <h2 style="font-family:'Playfair Display',serif;font-size:28px;color:#ffffff;margin:8px 0 14px">Progress &amp; Hospitality.</h2>
         <p>Preserving our heritage, celebrating our community, and building connections across generations.</p>
       </div>
       <div>
         <h4>Explore</h4>
-        <a href="index<?= $ext ?>#about">About us</a>
-        <a href="index<?= $ext ?>#event">Induction &amp; Year-End Party</a>
-        <a href="gallery<?= $ext ?>">Cultural gallery</a>
+        <a href="about<?= $ext ?>">Our Club &amp; Story</a>
+        <a href="values<?= $ext ?>">Our Purpose &amp; Values</a>
+        <a href="event<?= $ext ?>">2026 Induction &amp; Gala</a>
+        <a href="gallery<?= $ext ?>">Cultural Gallery</a>
+        <a href="videos<?= $ext ?>">Video Library</a>
       </div>
       <div>
         <h4>Get connected</h4>
-        <a href="index<?= $ext ?>#connect">Social media</a>
+        <a href="connect<?= $ext ?>">Social Media &amp; Community</a>
         <a href="https://www.google.com/maps/search/?api=1&amp;query=3338+Broadway+Blvd+Garland+TX+75043" rel="noopener" target="_blank">Event location ↗</a>
       </div>
     </div>
@@ -36,13 +38,13 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
 </div>
 
 <script>
-document.querySelector('.hamb')?.addEventListener('click',function(){
-  let n=document.querySelector('.navlinks');
+document.querySelector('.hamb')?.addEventListener('click', function() {
+  let n = document.querySelector('.navlinks');
   n.classList.toggle('open');
-  this.setAttribute('aria-expanded',n.classList.contains('open'))
+  this.setAttribute('aria-expanded', n.classList.contains('open'));
 });
-document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.navlinks')?.classList.remove('open')));
-document.querySelector('#yr').textContent=new Date().getFullYear();
+document.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => document.querySelector('.navlinks')?.classList.remove('open')));
+document.querySelector('#yr').textContent = new Date().getFullYear();
 
 // Induction Celebration Audio Controller
 (function() {
@@ -95,40 +97,37 @@ document.querySelector('#yr').textContent=new Date().getFullYear();
     hideBadge();
   });
 
+  // Attach to all elements related to the Event / 2026 Induction
   const eventSelectors = [
-    'a[href*="#event"]',
+    'a[href*="event"]',
     'a[href*="category=events"]',
     '.filter[data-filter="events"]',
-    '.navcta'
+    '.navcta',
+    '.btn-event'
   ];
 
   document.querySelectorAll(eventSelectors.join(',')).forEach(el => {
     ['click', 'touchend'].forEach(evt => {
       el.addEventListener(evt, function() {
         playInductionAudio();
-        try {
-          sessionStorage.setItem('imolites_play_event', '1');
-        } catch(e) {}
       }, { passive: true });
     });
   });
 
-  try {
-    const shouldPlay = window.location.hash === '#event' || sessionStorage.getItem('imolites_play_event') === '1';
-    if (shouldPlay) {
-      sessionStorage.removeItem('imolites_play_event');
-      playInductionAudio();
-      if (!hasStarted) {
-        const unlock = function() {
-          playInductionAudio();
-          window.removeEventListener('click', unlock);
-          window.removeEventListener('touchend', unlock);
-        };
-        window.addEventListener('click', unlock, { once: true, passive: true });
-        window.addEventListener('touchend', unlock, { once: true, passive: true });
-      }
+  // If user is on event page, play on first user tap or immediately if permitted
+  const isEventPage = window.location.pathname.toLowerCase().includes('event');
+  if (isEventPage) {
+    playInductionAudio();
+    if (!hasStarted) {
+      const unlock = function() {
+        playInductionAudio();
+        window.removeEventListener('click', unlock);
+        window.removeEventListener('touchend', unlock);
+      };
+      window.addEventListener('click', unlock, { once: true, passive: true });
+      window.addEventListener('touchend', unlock, { once: true, passive: true });
     }
-  } catch(e) {}
+  }
 })();
 </script>
 </body>

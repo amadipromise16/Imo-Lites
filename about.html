@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="#032417" name="theme-color"/>
+  <meta content="Learn about Imolites in Diaspora Social Club USA — who we are, our heritage, our call &amp; response, and our commitment to progress and hospitality." name="description"/>
+  <title>Our Club | Imolites in Diaspora Social Club USA</title>
+  <link rel="icon" href="assets/crest-logo.png" type="image/png"/>
+  <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="topline">Our roots unite us. Progress moves us forward.</div>
+<header class="nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="index.html">
+      <img alt="Official Imolites club crest" src="assets/crest-logo.png"/>
+      <span><strong>IMOLITES</strong><small>IN DIASPORA · SOCIAL CLUB USA</small></span>
+    </a>
+    <button aria-expanded="false" aria-label="Open navigation" class="hamb">☰</button>
+    <nav class="navlinks" id="navlinks">
+      <a class="" href="index.html">Home</a>
+      <a class="active" href="about.html">Our Club</a>
+      <a class="" href="values.html">Our Purpose</a>
+      <a class="" href="event.html">2026 Induction</a>
+      <a class="" href="videos.html">Videos</a>
+      <a class="" href="gallery.html">Gallery</a>
+      <a class="" href="connect.html">Connect</a>
+      <a class="navcta" href="event.html">Event Details</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="pagehead">
+    <div class="wrap">
+      <div class="eyebrow">Who we are · Our Club</div>
+      <h1 class="title">A community that feels like home.</h1>
+      <p class="lead">Celebrating our shared heritage, creating meaningful progress, and connecting families across the diaspora.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <div class="eyebrow">Our Roots &amp; Mission</div>
+        <h2 class="title">Honoring traditions, building the future.</h2>
+        <p class="intro">From the heart of Imo State to communities across America, we celebrate the bonds that connect us. Imolites in Diaspora Social Club USA is a gathering place for friendship, cultural expression, family, and meaningful progress.</p>
+        <p class="intro">We honor our traditions while creating opportunities for the next generation to know where they come from—and to build where they are going.</p>
+        <div class="actions" style="justify-content:flex-start">
+          <a class="btn" href="values.html">Discover Our Purpose →</a>
+          <a class="btn btn-outline" style="color:#072e1e;border-color:#072e1e" href="gallery.html">Explore Our Gallery</a>
+        </div>
+      </div>
+
+      <div class="dark-card">
+        <div class="eyebrow">Our call &amp; response</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:38px;line-height:1.35;margin:18px 0;color:#ffffff">Imolites! <span style="color:#e5c278">Progress!</span><br/>Imolites! <span style="color:#e5c278">Progress!</span><br/>Progress! <span style="color:#e5c278">Imolites!</span></h2>
+        <p>One shared heritage. One community. A commitment to progress and hospitality.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-Pillar Gold Strip -->
+  <div class="strip">
+    <div>Our Heritage</div>
+    <div>Our Community</div>
+    <div>Our Progress</div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footgrid">
+      <div>
+        <div class="eyebrow">IMOLITES IN DIASPORA SOCIAL CLUB USA</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:28px;color:#ffffff;margin:8px 0 14px">Progress &amp; Hospitality.</h2>
+        <p>Preserving our heritage, celebrating our community, and building connections across generations.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="about.html">Our Club &amp; Story</a>
+        <a href="values.html">Our Purpose &amp; Values</a>
+        <a href="event.html">2026 Induction &amp; Gala</a>
+        <a href="gallery.html">Cultural Gallery</a>
+        <a href="videos.html">Video Library</a>
+      </div>
+      <div>
+        <h4>Get connected</h4>
+        <a href="connect.html">Social Media &amp; Community</a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=3338+Broadway+Blvd+Garland+TX+75043" rel="noopener" target="_blank">Event location ↗</a>
+      </div>
+    </div>
+    <div class="copyright">© <span id="yr">2026</span> Imolites in Diaspora Social Club USA · Official crest retained without redesign. Gallery contains promotional artwork and creative Imo State illustrations.</div>
+  </div>
+</footer>
+
+<!-- 2026 Induction Celebration Audio -->
+<audio id="event-audio" preload="auto" playsinline>
+  <source src="assets/event-music.mp3" type="audio/mpeg"/>
+</audio>
+
+<div id="event-audio-badge" class="event-audio-badge" style="display:none;" aria-live="polite">
+  <span>🎵 2026 Induction Music</span>
+  <button id="event-audio-toggle" aria-label="Pause audio" title="Pause / Play">⏸</button>
+</div>
+
+<script>
+document.querySelector('.hamb')?.addEventListener('click', function() {
+  let n = document.querySelector('.navlinks');
+  n.classList.toggle('open');
+  this.setAttribute('aria-expanded', n.classList.contains('open'));
+});
+document.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => document.querySelector('.navlinks')?.classList.remove('open')));
+document.querySelector('#yr').textContent = new Date().getFullYear();
+
+// Induction Celebration Audio Controller
+(function() {
+  const audio = document.getElementById('event-audio');
+  const badge = document.getElementById('event-audio-badge');
+  const toggleBtn = document.getElementById('event-audio-toggle');
+  if (!audio) return;
+
+  audio.loop = false;
+  let hasStarted = false;
+
+  function showBadge() {
+    if (badge) badge.style.display = 'flex';
+  }
+  function hideBadge() {
+    if (badge) badge.style.display = 'none';
+  }
+
+  function playInductionAudio() {
+    if (hasStarted) return;
+    hasStarted = true;
+    try {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          showBadge();
+        }).catch(err => {
+          hasStarted = false;
+        });
+      }
+    } catch(e) {
+      hasStarted = false;
+    }
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play();
+        toggleBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        toggleBtn.textContent = '▶';
+      }
+    });
+  }
+
+  audio.addEventListener('ended', function() {
+    hideBadge();
+  });
+
+  // Attach to all elements related to the Event / 2026 Induction
+  const eventSelectors = [
+    'a[href*="event"]',
+    'a[href*="category=events"]',
+    '.filter[data-filter="events"]',
+    '.navcta',
+    '.btn-event'
+  ];
+
+  document.querySelectorAll(eventSelectors.join(',')).forEach(el => {
+    ['click', 'touchend'].forEach(evt => {
+      el.addEventListener(evt, function() {
+        playInductionAudio();
+      }, { passive: true });
+    });
+  });
+
+  // If user is on event page, play on first user tap or immediately if permitted
+  const isEventPage = window.location.pathname.toLowerCase().includes('event');
+  if (isEventPage) {
+    playInductionAudio();
+    if (!hasStarted) {
+      const unlock = function() {
+        playInductionAudio();
+        window.removeEventListener('click', unlock);
+        window.removeEventListener('touchend', unlock);
+      };
+      window.addEventListener('click', unlock, { once: true, passive: true });
+      window.addEventListener('touchend', unlock, { once: true, passive: true });
+    }
+  }
+})();
+</script>
+</body>
+</html>
