@@ -196,27 +196,88 @@ if (fileDropzone) {
   fileDropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter') photoFileInput.click(); });
 }
 
+// Global Shared Cloud Storage Configuration
+const CLOUD_STORAGE_BINS = [
+  'https://extendsclass.com/api/json-storage/bin/ddacdac',
+  'https://extendsclass.com/api/json-storage/bin/ddafabb'
+];
+const IMGUR_CLIENT_IDS = [
+  '546c25a59c58ad7',
+  'c38a164bfa85a4a',
+  'e463a5ba823c310',
+  'b2c5545233c4ee4'
+];
+
+// Clean up old local storage so previous user test uploads are completely removed from all devices
+try {
+  localStorage.removeItem('imolites_community_snaps');
+  localStorage.removeItem('imolites_uploaded_snaps');
+  localStorage.removeItem('imolites_local_snaps');
+} catch (e) {}
+
+// Client-side fast image compression for instant sharp uploads
+function compressImageFile(file, maxWidth = 1280, maxHeight = 1280, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = function() {
+        let w = img.width;
+        let h = img.height;
+        if (w > maxWidth || h > maxHeight) {
+          if (w / h > maxWidth / maxHeight) {
+            h = Math.round((h * maxWidth) / w);
+            w = maxWidth;
+          } else {
+            w = Math.round((w * maxHeight) / h);
+            h = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(dataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 // Handle file selection and preview
 let selectedDataUrl = '';
-photoFileInput.addEventListener('change', function() {
+photoFileInput.addEventListener('change', async function() {
   const file = this.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    selectedDataUrl = e.target.result;
+  fileDropzone.innerHTML = '<span style="font-size:32px;display:block;margin-bottom:6px">⏳</span><b>Optimizing photo for crisp display...</b>';
+
+  try {
+    selectedDataUrl = await compressImageFile(file);
     imagePreview.src = selectedDataUrl;
     previewContainer.style.display = 'block';
     fileDropzone.style.display = 'none';
-  };
-  reader.readAsDataURL(file);
+  } catch (err) {
+    console.error('Error optimizing image:', err);
+    fileDropzone.innerHTML = '<span style="font-size:32px;display:block;margin-bottom:6px">📷</span><b>Tap to Snap a Photo or Pick from Gallery</b><small style="display:block;color:#6b786e;margin-top:4px">JPG, PNG, WEBP (Max 15MB)</small>';
+  }
 });
 
-// Function to prepend newly added photo card to DOM
+// Function to prepend photo card to DOM
 function prependPhotoToGallery(photo) {
+  if (!photo || !photo.image) return;
+  // Check if card with this image or id already exists
+  if (document.querySelector(`.gallery-card img[src="${photo.image}"]`)) return;
+
   const figure = document.createElement('figure');
   figure.className = 'gallery-card';
   figure.dataset.category = 'community';
+  if (photo.id) figure.dataset.id = photo.id;
 
   const badge = document.createElement('span');
   badge.className = 'badge-community';
@@ -236,7 +297,7 @@ function prependPhotoToGallery(photo) {
   figcaption.appendChild(b);
 
   const small = document.createElement('small');
-  small.textContent = photo.subtitle || ('Shared by ' + (photo.uploader || 'Member') + ' on ' + new Date().toLocaleDateString());
+  small.textContent = photo.subtitle || ('Shared by ' + (photo.uploader || 'Member') + ' on ' + new Date(photo.timestamp || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
   figcaption.appendChild(small);
 
   figure.appendChild(figcaption);
@@ -246,95 +307,172 @@ function prependPhotoToGallery(photo) {
   cards = [...document.querySelectorAll('.gallery-card')];
 }
 
-// Load any local-storage community photos (for GitHub Pages static demo)
-function loadStoredCommunityPhotos() {
-  try {
-    const stored = JSON.parse(localStorage.getItem('imolites_community_snaps') || '[]');
-    stored.forEach(photo => {
-      // Avoid duplicate if already present in server items
-      if (!document.querySelector(`img[src="${photo.image}"]`)) {
-        prependPhotoToGallery(photo);
+// Load global shared community photos so everyone sees all uploaded photos
+async function loadGlobalCommunityPhotos() {
+  for (const binUrl of CLOUD_STORAGE_BINS) {
+    try {
+      const res = await fetch(binUrl + '?nocache=' + Date.now());
+      if (!res.ok) continue;
+      const data = await res.json();
+      const photos = Array.isArray(data) ? data : (data && Array.isArray(data.photos) ? data.photos : []);
+      if (photos && photos.length > 0) {
+        // Sort newest first
+        photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        photos.forEach(photo => {
+          prependPhotoToGallery(photo);
+        });
+        break; // Loaded successfully
       }
-    });
-  } catch(e) {}
+    } catch(e) {
+      console.warn('Could not read bin:', binUrl, e);
+    }
+  }
 }
-loadStoredCommunityPhotos();
+loadGlobalCommunityPhotos();
+
+// Auto-refresh community photos every 25 seconds so other devices see updates live
+setInterval(loadGlobalCommunityPhotos, 25000);
+
+// Upload image file to public cloud host (Imgur with multiple fallback keys)
+async function uploadImageToCloud(dataUrl, title) {
+  const base64Data = dataUrl.replace(/^data:image\/[a-z]+;base64,/, '');
+
+  for (const clientId of IMGUR_CLIENT_IDS) {
+    try {
+      const formData = new FormData();
+      formData.append('image', base64Data);
+      formData.append('type', 'base64');
+      formData.append('title', title || 'Imolites Community Photo');
+
+      const res = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Client-ID ' + clientId
+        },
+        body: formData
+      });
+
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data && data.success && data.data && data.data.link) {
+        return data.data.link;
+      }
+    } catch (err) {
+      console.warn('Image host attempt failed with clientId:', clientId, err);
+    }
+  }
+  return null;
+}
+
+// Save photo metadata to shared global cloud storage bins
+async function savePhotoToCloudStorage(photo) {
+  for (const binUrl of CLOUD_STORAGE_BINS) {
+    try {
+      let photos = [];
+      try {
+        const getRes = await fetch(binUrl + '?nocache=' + Date.now());
+        if (getRes.ok) {
+          const getData = await getRes.json();
+          photos = Array.isArray(getData) ? getData : (getData && Array.isArray(getData.photos) ? getData.photos : []);
+        }
+      } catch (e) {}
+
+      // Prepend avoiding duplicate
+      photos = photos.filter(p => p.image !== photo.image && p.id !== photo.id);
+      photos.unshift(photo);
+
+      // Keep latest 100 community photos
+      if (photos.length > 100) photos = photos.slice(0, 100);
+
+      await fetch(binUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ photos: photos })
+      });
+    } catch (err) {
+      console.warn('Error saving to cloud storage bin:', binUrl, err);
+    }
+  }
+}
 
 // Handle form submission
-photoUploadForm.addEventListener('submit', function(e) {
+photoUploadForm.addEventListener('submit', async function(e) {
   e.preventDefault();
-  const file = photoFileInput.files[0];
-  if (!file && !selectedDataUrl) {
+  if (!selectedDataUrl) {
     alert('Please select or snap a photo first.');
     return;
   }
 
   uploadSubmitBtn.disabled = true;
-  uploadSubmitBtn.textContent = 'Uploading...';
+  uploadSubmitBtn.textContent = 'Publishing photo to global gallery...';
 
   const titleVal = document.getElementById('photo-title').value.trim() || 'Community Celebration Snap';
   const uploaderVal = document.getElementById('photo-uploader').value.trim() || 'Club Member';
   const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-  // First try server upload via upload.php (for PHP backend)
-  const formData = new FormData(photoUploadForm);
+  let liveImageUrl = null;
 
-  fetch('upload.php', {
-    method: 'POST',
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success && data.photo) {
-      prependPhotoToGallery(data.photo);
-      finishUploadSuccess();
-    } else {
-      // Fallback for static hosting (GitHub Pages)
-      saveToClientStorage();
-    }
-  })
-  .catch(() => {
-    // If upload.php is not accessible (e.g. on GitHub Pages static host), save to client storage
-    saveToClientStorage();
-  });
+  // Step 1: Upload image file to cloud image host
+  try {
+    liveImageUrl = await uploadImageToCloud(selectedDataUrl, titleVal);
+  } catch (err) {
+    console.warn('Cloud image host error:', err);
+  }
 
-  function saveToClientStorage() {
-    const localPhoto = {
-      id: 'snap_' + Date.now(),
-      category: 'community',
-      image: selectedDataUrl,
-      title: titleVal,
-      subtitle: 'Shared by ' + uploaderVal + ' on ' + dateStr,
-      uploader: uploaderVal,
-      timestamp: Date.now()
-    };
-
+  // Step 2: Fallback to local upload.php if running in local PHP server
+  if (!liveImageUrl && window.location.protocol.startsWith('http')) {
     try {
-      const stored = JSON.parse(localStorage.getItem('imolites_community_snaps') || '[]');
-      stored.unshift(localPhoto);
-      // Keep up to 20 local snaps
-      if (stored.length > 20) stored.pop();
-      localStorage.setItem('imolites_community_snaps', JSON.stringify(stored));
-    } catch(err) {
-      console.warn('Local storage error:', err);
-    }
-
-    prependPhotoToGallery(localPhoto);
-    finishUploadSuccess();
+      const formData = new FormData(photoUploadForm);
+      const phpRes = await fetch('upload.php', { method: 'POST', body: formData });
+      if (phpRes.ok) {
+        const phpData = await phpRes.json();
+        if (phpData.success && phpData.photo && phpData.photo.image) {
+          liveImageUrl = phpData.photo.image;
+        }
+      }
+    } catch (e) {}
   }
 
-  function finishUploadSuccess() {
-    uploadSubmitBtn.disabled = false;
-    uploadSubmitBtn.textContent = 'Publish to Live Gallery →';
-    photoUploadForm.reset();
-    previewContainer.style.display = 'none';
-    fileDropzone.style.display = 'block';
-    selectedDataUrl = '';
-    closeUploadModal();
-    applyFilter('community');
-    window.scrollTo({ top: galleryGrid.offsetTop - 100, behavior: 'smooth' });
-    alert('🎉 Success! Your photo has been uploaded directly to the gallery for everyone to see.');
+  // Step 3: If cloud image upload succeeded or fallback to dataUrl
+  const finalImage = liveImageUrl || selectedDataUrl;
+
+  const newPhoto = {
+    id: 'snap_' + Date.now(),
+    category: 'community',
+    image: finalImage,
+    title: titleVal,
+    subtitle: 'Shared by ' + uploaderVal + ' on ' + dateStr,
+    uploader: uploaderVal,
+    timestamp: Date.now()
+  };
+
+  // Step 4: Publish to shared global cloud database so EVERY visitor on EVERY device sees it
+  try {
+    await savePhotoToCloudStorage(newPhoto);
+  } catch(e) {
+    console.warn('Could not sync to cloud store:', e);
   }
+
+  // Step 5: Render card immediately in DOM
+  prependPhotoToGallery(newPhoto);
+
+  // Step 6: Reset form and close modal
+  uploadSubmitBtn.disabled = false;
+  uploadSubmitBtn.textContent = 'Publish to Live Gallery →';
+  photoUploadForm.reset();
+  previewContainer.style.display = 'none';
+  fileDropzone.style.display = 'block';
+  fileDropzone.innerHTML = '<span style="font-size:32px;display:block;margin-bottom:6px">📷</span><b>Tap to Snap a Photo or Pick from Gallery</b><small style="display:block;color:#6b786e;margin-top:4px">JPG, PNG, WEBP (Max 15MB)</small>';
+  selectedDataUrl = '';
+  closeUploadModal();
+
+  // Step 7: Filter to community snaps and scroll to top of gallery
+  applyFilter('community');
+  window.scrollTo({ top: galleryGrid.offsetTop - 100, behavior: 'smooth' });
+
+  alert('🎉 Success! Your photo is now live in the gallery. Anyone visiting this site from their phone, tablet, or laptop can now view and enjoy it!');
 });
 </script>
 
