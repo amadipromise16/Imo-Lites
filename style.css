@@ -189,7 +189,7 @@ img {
 .hero-full-banner img {
   width: 100%;
   height: auto;
-  aspect-ratio: 1024 / 439;
+  aspect-ratio: 1024 / 341;
   object-fit: cover;
   display: block;
 }
