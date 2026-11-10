@@ -196,11 +196,10 @@ if (fileDropzone) {
   fileDropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter') photoFileInput.click(); });
 }
 
-// Global Shared Cloud Storage Configuration
-const CLOUD_STORAGE_BINS = [
-  'https://extendsclass.com/api/json-storage/bin/ddacdac',
-  'https://extendsclass.com/api/json-storage/bin/ddafabb'
-];
+// Global Shared Cloud Database (Cloudflare Edge KV) & Local Fallback
+const CLOUD_KV_ENDPOINT = 'https://kvs.ix.workers.dev/imolites/community-photos';
+const STORAGE_KEY = 'imolites_community_photos_v3';
+
 const IMGUR_CLIENT_IDS = [
   '546c25a59c58ad7',
   'c38a164bfa85a4a',
@@ -208,15 +207,18 @@ const IMGUR_CLIENT_IDS = [
   'b2c5545233c4ee4'
 ];
 
-// Clean up old local storage so previous user test uploads are completely removed from all devices
-try {
-  localStorage.removeItem('imolites_community_snaps');
-  localStorage.removeItem('imolites_uploaded_snaps');
-  localStorage.removeItem('imolites_local_snaps');
-} catch (e) {}
+// Load cached community snaps immediately on page load so photos never disappear on refresh
+function loadCachedCommunityPhotos() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    if (Array.isArray(cached)) {
+      cached.forEach(photo => prependPhotoToGallery(photo));
+    }
+  } catch(e) {}
+}
 
 // Client-side fast image compression for instant sharp uploads
-function compressImageFile(file, maxWidth = 1280, maxHeight = 1280, quality = 0.82) {
+function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.82) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;
@@ -307,34 +309,36 @@ function prependPhotoToGallery(photo) {
   cards = [...document.querySelectorAll('.gallery-card')];
 }
 
-// Load global shared community photos so everyone sees all uploaded photos
+// Fetch photos from the global Cloudflare edge database
 async function loadGlobalCommunityPhotos() {
-  for (const binUrl of CLOUD_STORAGE_BINS) {
-    try {
-      const res = await fetch(binUrl + '?nocache=' + Date.now());
-      if (!res.ok) continue;
-      const data = await res.json();
-      const photos = Array.isArray(data) ? data : (data && Array.isArray(data.photos) ? data.photos : []);
-      if (photos && photos.length > 0) {
-        // Sort newest first
-        photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        photos.forEach(photo => {
-          prependPhotoToGallery(photo);
-        });
-        break; // Loaded successfully
-      }
-    } catch(e) {
-      console.warn('Could not read bin:', binUrl, e);
+  try {
+    const res = await fetch(CLOUD_KV_ENDPOINT);
+    if (!res.ok) return;
+    const data = await res.json();
+    const photos = (data && Array.isArray(data.photos)) ? data.photos : [];
+    if (photos.length > 0) {
+      // Sort newest first
+      photos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      photos.forEach(photo => prependPhotoToGallery(photo));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
+      } catch(e) {}
     }
+  } catch(err) {
+    console.warn('Could not read global community photos:', err);
   }
 }
+
+// 1. Load instant cache first
+loadCachedCommunityPhotos();
+// 2. Fetch fresh live global data
 loadGlobalCommunityPhotos();
 
-// Auto-refresh community photos every 25 seconds so other devices see updates live
-setInterval(loadGlobalCommunityPhotos, 25000);
+// Auto-sync community photos every 15 seconds so other devices see updates live
+setInterval(loadGlobalCommunityPhotos, 15000);
 
 // Upload image file to public cloud host (Imgur with multiple fallback keys)
-async function uploadImageToCloud(dataUrl, title) {
+async function uploadImageToImgur(dataUrl, title) {
   const base64Data = dataUrl.replace(/^data:image\/[a-z]+;base64,/, '');
 
   for (const clientId of IMGUR_CLIENT_IDS) {
@@ -358,42 +362,48 @@ async function uploadImageToCloud(dataUrl, title) {
         return data.data.link;
       }
     } catch (err) {
-      console.warn('Image host attempt failed with clientId:', clientId, err);
+      console.warn('Imgur attempt failed with clientId:', clientId, err);
     }
   }
   return null;
 }
 
-// Save photo metadata to shared global cloud storage bins
-async function savePhotoToCloudStorage(photo) {
-  for (const binUrl of CLOUD_STORAGE_BINS) {
+// Save photo record to global Cloudflare edge database so everyone sees it
+async function savePhotoToGlobalCloud(photo) {
+  try {
+    let photos = [];
     try {
-      let photos = [];
-      try {
-        const getRes = await fetch(binUrl + '?nocache=' + Date.now());
-        if (getRes.ok) {
-          const getData = await getRes.json();
-          photos = Array.isArray(getData) ? getData : (getData && Array.isArray(getData.photos) ? getData.photos : []);
+      const getRes = await fetch(CLOUD_KV_ENDPOINT);
+      if (getRes.ok) {
+        const getData = await getRes.json();
+        if (getData && Array.isArray(getData.photos)) {
+          photos = getData.photos;
         }
-      } catch (e) {}
+      }
+    } catch(e) {}
 
-      // Prepend avoiding duplicate
-      photos = photos.filter(p => p.image !== photo.image && p.id !== photo.id);
-      photos.unshift(photo);
+    // Prepend photo avoiding duplicate
+    photos = photos.filter(p => p.image !== photo.image && p.id !== photo.id);
+    photos.unshift(photo);
 
-      // Keep latest 100 community photos
-      if (photos.length > 100) photos = photos.slice(0, 100);
+    // Keep up to 50 latest community photos
+    if (photos.length > 50) photos = photos.slice(0, 50);
 
-      await fetch(binUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ photos: photos })
-      });
-    } catch (err) {
-      console.warn('Error saving to cloud storage bin:', binUrl, err);
-    }
+    // Write to Cloudflare edge KV
+    await fetch(CLOUD_KV_ENDPOINT, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ photos: photos })
+    });
+
+    // Update local cache
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
+    } catch(e) {}
+  } catch(err) {
+    console.error('Error saving to global cloud:', err);
   }
 }
 
@@ -414,14 +424,14 @@ photoUploadForm.addEventListener('submit', async function(e) {
 
   let liveImageUrl = null;
 
-  // Step 1: Upload image file to cloud image host
+  // Step 1: Try public image host
   try {
-    liveImageUrl = await uploadImageToCloud(selectedDataUrl, titleVal);
+    liveImageUrl = await uploadImageToImgur(selectedDataUrl, titleVal);
   } catch (err) {
-    console.warn('Cloud image host error:', err);
+    console.warn('Imgur upload error:', err);
   }
 
-  // Step 2: Fallback to local upload.php if running in local PHP server
+  // Step 2: Fallback to local upload.php if available on a PHP server
   if (!liveImageUrl && window.location.protocol.startsWith('http')) {
     try {
       const formData = new FormData(photoUploadForm);
@@ -435,7 +445,7 @@ photoUploadForm.addEventListener('submit', async function(e) {
     } catch (e) {}
   }
 
-  // Step 3: If cloud image upload succeeded or fallback to dataUrl
+  // Step 3: If no external URL returned, use optimized compressed data URL directly
   const finalImage = liveImageUrl || selectedDataUrl;
 
   const newPhoto = {
@@ -448,15 +458,20 @@ photoUploadForm.addEventListener('submit', async function(e) {
     timestamp: Date.now()
   };
 
-  // Step 4: Publish to shared global cloud database so EVERY visitor on EVERY device sees it
+  // Step 4: Render card immediately in DOM and save to local cache
+  prependPhotoToGallery(newPhoto);
   try {
-    await savePhotoToCloudStorage(newPhoto);
+    const localList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    localList.unshift(newPhoto);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(localList));
+  } catch(e) {}
+
+  // Step 5: Publish to shared global cloud database so EVERY visitor on EVERY device sees it
+  try {
+    await savePhotoToGlobalCloud(newPhoto);
   } catch(e) {
     console.warn('Could not sync to cloud store:', e);
   }
-
-  // Step 5: Render card immediately in DOM
-  prependPhotoToGallery(newPhoto);
 
   // Step 6: Reset form and close modal
   uploadSubmitBtn.disabled = false;
