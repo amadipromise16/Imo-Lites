@@ -782,6 +782,47 @@ img {
   z-index: 2;
 }
 
+/* Album Folder Feature */
+.album-folder-card {
+  cursor: pointer;
+  border: 2px solid var(--gold) !important;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.22) !important;
+  transition: all 0.25s ease;
+}
+.album-folder-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(212, 175, 55, 0.38) !important;
+}
+.folder-action-hint {
+  background: #072e1e;
+  color: #f3e0aa;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 14px;
+  text-align: center;
+  border-top: 1px solid rgba(212, 175, 55, 0.35);
+  letter-spacing: 0.02em;
+  transition: background 0.2s;
+}
+.album-folder-card:hover .folder-action-hint {
+  background: #0d4630;
+  color: #ffffff;
+}
+.active-folder-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: linear-gradient(135deg, #072e1e 0%, #0d4630 100%);
+  border: 1.5px solid var(--gold);
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
 /* Lightbox Modal */
 .lightbox {
   position: fixed;

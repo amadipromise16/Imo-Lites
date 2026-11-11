@@ -104,17 +104,36 @@
         <a class="filter-btn" href="videos.html">Watch Videos ↗</a>
       </div>
 
+      <!-- Active Folder Navigation Bar -->
+      <div id="active-folder-bar" class="active-folder-bar" style="display:none;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:26px;">📁</span>
+          <div>
+            <h3 id="folder-bar-title" style="margin:0; font-family:'Playfair Display',serif; color:#f3e0aa; font-size:20px;">Album Folder</h3>
+            <p id="folder-bar-desc" style="margin:2px 0 0; font-size:13px; color:#d0ded5;">Viewing photos in this folder</p>
+          </div>
+        </div>
+        <button type="button" id="btn-close-folder" class="btn btn-outline" style="border-color:var(--gold); color:#f3e0aa; padding:8px 16px; font-size:13px; cursor:pointer;">
+          ← Back to All Albums
+        </button>
+      </div>
+
       <!-- Gallery Grid -->
       <div class="gallery-grid" id="gallery-grid">
-          <figure class="gallery-card" data-category="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+          <figure class="gallery-card album-folder-card" data-category="executive" data-is-folder="true" data-folder-target="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
+              📁 Executive Council Album
+            </span>
             <img alt="Executives" loading="lazy" src="assets/gallery-executives-group.jpg" tabindex="0"/>
             <figcaption>
               <b>Executives</b>
               <small>Imolites in Diaspora Social Club USA • Executive Council</small>
             </figcaption>
+            <div class="folder-action-hint">
+              📁 Click to Open Executive Album &amp; View All Photos →
+            </div>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Prince Chidi Amadi (Odum Igwe 1 of Texas)" loading="lazy" src="assets/exec-chidi-amadi.jpg" tabindex="0"/>
             <figcaption>
@@ -122,7 +141,7 @@
               <small>Public Relations Officer (P.R.O) • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Mr. Obinna Iwuala (Small Body Big Engine)" loading="lazy" src="assets/exec-obinna-iwuala.jpg" tabindex="0"/>
             <figcaption>
@@ -130,7 +149,7 @@
               <small>Provost • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Comrade Aloysius Uzodimma" loading="lazy" src="assets/exec-aloysius-uzodimma.jpg" tabindex="0"/>
             <figcaption>
@@ -138,7 +157,7 @@
               <small>Financial Secretary • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Thank God Nwachukwu" loading="lazy" src="assets/exec-thankgod-nwachukwu.jpg" tabindex="0"/>
             <figcaption>
@@ -146,7 +165,7 @@
               <small>General Secretary • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Elder OK Okoroafor" loading="lazy" src="assets/exec-ok-okoroafor.jpg" tabindex="0"/>
             <figcaption>
@@ -154,7 +173,7 @@
               <small>Vice President • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Hon. Engineer Dike Desmond" loading="lazy" src="assets/exec-dike-desmond.jpg" tabindex="0"/>
             <figcaption>
@@ -162,7 +181,7 @@
               <small>President • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Ms. Chinwendu Okoko" loading="lazy" src="assets/exec-chinwendu-okoko.jpg" tabindex="0"/>
             <figcaption>
@@ -170,7 +189,7 @@
               <small>Treasurer • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive">
+          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Ethics Committee" loading="lazy" src="assets/gallery-ethics-committee.jpg" tabindex="0"/>
             <figcaption>
@@ -178,63 +197,69 @@
               <small>Imolites in Diaspora Social Club USA • Ethics Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card album-folder-card" data-category="events" data-is-folder="true" data-folder-target="events">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
+              📁 2026 Induction Album
+            </span>
             <img alt="Induction Committee" loading="lazy" src="assets/gallery-induction-committee.jpg" tabindex="0"/>
             <figcaption>
               <b>Induction Committee</b>
               <small>2026 Induction & Gala Planning Committee</small>
             </figcaption>
+            <div class="folder-action-hint">
+              📁 Click to Open Induction Album &amp; View All Photos →
+            </div>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Ethelbert Nwachukwu" loading="lazy" src="assets/honoree-ethelbert-nwachukwu.jpg" tabindex="0"/>
             <figcaption>
               <b>Ethelbert Nwachukwu</b>
               <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Triple High Chief Olewike" loading="lazy" src="assets/honoree-olewike.jpg" tabindex="0"/>
             <figcaption>
               <b>Triple High Chief Olewike</b>
               <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Hon. Juliet Nwanya" loading="lazy" src="assets/honoree-juliet-nwanya.jpg" tabindex="0"/>
             <figcaption>
               <b>Hon. Juliet Nwanya</b>
               <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Ms. Jessica Deloach" loading="lazy" src="assets/honoree-jessica-deloach.jpg" tabindex="0"/>
             <figcaption>
               <b>Ms. Jessica Deloach</b>
               <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Chief Ikeoha" loading="lazy" src="assets/honoree-chief-ikeoha.jpg" tabindex="0"/>
             <figcaption>
               <b>Chief Ikeoha</b>
               <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="President Emeritus. Hon. Joseph Frank Nwadike" loading="lazy" src="assets/honoree-joseph-nwadike.jpg" tabindex="0"/>
             <figcaption>
               <b>President Emeritus. Hon. Joseph Frank Nwadike</b>
               <small>President Emeritus • 2026 Induction & End of the Year Party</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Ms. Ugonma Chukwu" loading="lazy" src="assets/honoree-ugonma-chukwu.jpg" tabindex="0"/>
             <figcaption>
               <b>Ms. Ugonma Chukwu</b>
               <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events">
+          <figure class="gallery-card" data-category="events" data-in-folder="events">
             <img alt="Hon. Ihemtuge Chidiebube" loading="lazy" src="assets/honoree-ihemtuge-chidiebube.jpg" tabindex="0"/>
             <figcaption>
               <b>Hon. Ihemtuge Chidiebube</b>
@@ -378,24 +403,107 @@
 </div>
 
 <script>
-// Filter & Lightbox controller
+// Filter & Folder Album Controller
 const buttons = [...document.querySelectorAll('.filter')];
 let cards = [...document.querySelectorAll('.gallery-card')];
+const activeFolderBar = document.getElementById('active-folder-bar');
+const folderBarTitle = document.getElementById('folder-bar-title');
+const folderBarDesc = document.getElementById('folder-bar-desc');
+const btnCloseFolder = document.getElementById('btn-close-folder');
+
+let currentActiveFolder = null;
+
+function openFolder(folderId) {
+  currentActiveFolder = folderId;
+  cards = [...document.querySelectorAll('.gallery-card')];
+
+  if (folderId) {
+    cards.forEach(c => {
+      const isTarget = (c.dataset.folderTarget === folderId) || (c.dataset.inFolder === folderId) || (c.dataset.category === folderId);
+      c.style.display = isTarget ? 'block' : 'none';
+    });
+
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      if (folderId === 'executive') {
+        folderBarTitle.textContent = 'Executive Committee Album';
+        folderBarDesc.textContent = 'Meet the Executive Officers of Imolites in Diaspora Social Club USA';
+      } else if (folderId === 'events') {
+        folderBarTitle.textContent = '2026 Induction & Honorees Album';
+        folderBarDesc.textContent = 'Celebrating our 2026 Induction & End of the Year Party Honorees';
+      } else {
+        folderBarTitle.textContent = folderId.toUpperCase() + ' Album';
+        folderBarDesc.textContent = 'Viewing all photos in this collection';
+      }
+    }
+
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === folderId));
+    const grid = document.getElementById('gallery-grid');
+    if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    if (activeFolderBar) activeFolderBar.style.display = 'none';
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+
+    cards.forEach(c => {
+      if (c.dataset.inFolder) {
+        c.style.display = 'none';
+      } else {
+        c.style.display = 'block';
+      }
+    });
+  }
+}
 
 function applyFilter(v) {
+  if (v === 'executive' || v === 'events') {
+    openFolder(v);
+    return;
+  }
+
+  currentActiveFolder = null;
+  if (activeFolderBar) activeFolderBar.style.display = 'none';
   buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === v));
-  cards.forEach(c => {
-    const show = (v === 'all') || (c.dataset.category === v);
-    c.style.display = show ? 'block' : 'none';
-  });
+
+  if (v === 'all') {
+    openFolder(null);
+  } else {
+    cards.forEach(c => {
+      const show = (c.dataset.category === v);
+      c.style.display = show ? 'block' : 'none';
+    });
+  }
 }
 
 buttons.forEach(btn => {
   btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
 });
 
+if (btnCloseFolder) {
+  btnCloseFolder.addEventListener('click', () => openFolder(null));
+}
+
+function setupFolderClickEvents() {
+  document.querySelectorAll('.gallery-card[data-is-folder="true"]').forEach(card => {
+    if (!card.dataset.hasFolderEvent) {
+      card.dataset.hasFolderEvent = 'true';
+      card.addEventListener('click', function(e) {
+        if (currentActiveFolder === this.dataset.folderTarget) return;
+        e.preventDefault();
+        e.stopPropagation();
+        openFolder(this.dataset.folderTarget);
+      });
+    }
+  });
+}
+setupFolderClickEvents();
+
+// Check URL query parameters
 const urlFilter = new URLSearchParams(window.location.search).get('category');
-if (urlFilter) applyFilter(urlFilter);
+if (urlFilter) {
+  applyFilter(urlFilter);
+} else {
+  openFolder(null);
+}
 
 const lightbox = document.querySelector('.lightbox');
 const lbImg = lightbox.querySelector('img');
@@ -404,13 +512,22 @@ function setupLightboxEvents() {
   document.querySelectorAll('.gallery-card img').forEach(img => {
     if (!img.dataset.hasLb) {
       img.dataset.hasLb = 'true';
-      img.addEventListener('click', () => {
+      img.addEventListener('click', (e) => {
+        const parentCard = img.closest('.gallery-card');
+        if (parentCard && parentCard.dataset.isFolder === 'true' && currentActiveFolder !== parentCard.dataset.folderTarget) {
+          // If on main view, clicking the cover card opens the folder
+          return;
+        }
         lbImg.src = img.src;
         lbImg.alt = img.alt;
         lightbox.classList.add('open');
       });
       img.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
+          const parentCard = img.closest('.gallery-card');
+          if (parentCard && parentCard.dataset.isFolder === 'true' && currentActiveFolder !== parentCard.dataset.folderTarget) {
+            return;
+          }
           lbImg.src = img.src;
           lbImg.alt = img.alt;
           lightbox.classList.add('open');
@@ -637,16 +754,36 @@ function prependPhotoToGallery(photo) {
   if (photo.id && document.querySelector(`.gallery-card[data-id="${photo.id}"]`)) return;
   if (document.querySelector(`.gallery-card img[src="${photo.image}"]`)) return;
 
+  const cat = photo.category || 'community';
   const figure = document.createElement('figure');
   figure.className = 'gallery-card';
-  figure.dataset.category = 'community';
+  figure.dataset.category = cat;
   if (photo.id) figure.dataset.id = photo.id;
 
-  const badge = document.createElement('span');
-  badge.className = 'badge-community';
-  badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-  badge.textContent = 'Community Snap';
-  figure.appendChild(badge);
+  if (cat === 'executive') {
+    figure.dataset.inFolder = 'executive';
+    const badge = document.createElement('span');
+    badge.className = 'badge-executive';
+    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
+    badge.textContent = 'Executive Committee';
+    figure.appendChild(badge);
+    if (currentActiveFolder !== 'executive') figure.style.display = 'none';
+  } else if (cat === 'events') {
+    figure.dataset.inFolder = 'events';
+    const badge = document.createElement('span');
+    badge.className = 'badge-executive';
+    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
+    badge.textContent = '2026 Induction';
+    figure.appendChild(badge);
+    if (currentActiveFolder !== 'events') figure.style.display = 'none';
+  } else {
+    const badge = document.createElement('span');
+    badge.className = 'badge-community';
+    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
+    badge.textContent = 'Community Snap';
+    figure.appendChild(badge);
+    if (currentActiveFolder) figure.style.display = 'none';
+  }
 
   const img = document.createElement('img');
   img.src = photo.image;
@@ -885,9 +1022,10 @@ photoUploadForm.addEventListener('submit', async function(e) {
         <a href="https://www.facebook.com/share/1KKe8uVxz8/?mibextid=wwXIfr" rel="noopener" target="_blank">Official Facebook ↗</a>
         <a href="https://www.tiktok.com/@imolitesusa1?_r=1&amp;_t=ZP-9BIUJp5vLWY" rel="noopener" target="_blank">TikTok @imolitesusa1 ↗</a>
         <a href="https://www.google.com/maps/search/?api=1&amp;query=3338+Broadway+Blvd+Garland+TX+75043" rel="noopener" target="_blank">Event location ↗</a>
+        <a href="admin.html" style="color:var(--gold,#d4af37); font-weight:600;">🔒 Admin Portal</a>
       </div>
     </div>
-    <div class="copyright">© <span id="yr">2026</span> Imolites in Diaspora Social Club USA · Official crest retained without redesign. Gallery contains promotional artwork and creative Imo State illustrations.</div>
+    <div class="copyright">© <span id="yr">2026</span> Imolites in Diaspora Social Club USA · Powered by <strong>Digimadi media</strong> · Official crest retained without redesign.</div>
   </div>
 </footer>
 

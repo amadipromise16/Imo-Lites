@@ -1,14 +1,31 @@
-# Allow public access to uploaded images in uploads folder
-<IfModule mod_authz_core.c>
-    Require all granted
+# Strict Upload Security for Imolites Media Storage
+# Prevents execution of scripts, web shells, and malicious payloads
+
+# Disable script execution engines
+<IfModule mod_php7.c>
+    php_flag engine off
 </IfModule>
-<IfModule !mod_authz_core.c>
-    Order Allow,Deny
-    Allow from all
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php.c>
+    php_flag engine off
 </IfModule>
 
-<FilesMatch "\.(jpg|jpeg|png|webp|gif)$">
-    Header set Access-Control-Allow-Origin "*"
-    Header set Cache-Control "public, max-age=31536000"
+# Force default handler so no server-side handler executes uploaded files
+SetHandler default-handler
+
+# Deny access to any executable, script, or configuration files
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|php8|phps|phar|exe|pl|py|cgi|sh|bash|bat|cmd|js|html|htm|shtml|svg|xml|htaccess|htpasswd)$">
+    Order Deny,Allow
+    Deny from all
 </FilesMatch>
 
+# Allow public access only to verified image types
+<FilesMatch "\.(jpg|jpeg|png|webp|gif)$">
+    Order Allow,Deny
+    Allow from all
+    Header set Access-Control-Allow-Origin "*"
+    Header set Cache-Control "public, max-age=31536000"
+    Header set X-Content-Type-Options "nosniff"
+</FilesMatch>
