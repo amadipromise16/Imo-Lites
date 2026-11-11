@@ -49,6 +49,29 @@ $active_gallery_items = array_values(array_filter($gallery_items, function($p) u
     return !in_array($key, $deletedIds) && !in_array($img, $deletedIds);
 }));
 
+// Load edited photos overrides
+$editedFile = __DIR__ . '/data/edited_photos.json';
+$edits = [];
+if (file_exists($editedFile)) {
+    $edits = json_decode(file_get_contents($editedFile), true) ?: [];
+}
+
+$apply_edits = function(&$item) use ($edits) {
+    $id = $item['id'] ?? '';
+    $img = $item['image'] ?? '';
+    $key = isset($edits[$id]) ? $id : (isset($edits[$img]) ? $img : null);
+    if ($key && isset($edits[$key])) {
+        $e = $edits[$key];
+        if (!empty($e['title'])) { $item['title'] = $e['title']; $item['alt'] = $e['title']; }
+        if (isset($e['subtitle'])) { $item['subtitle'] = $e['subtitle']; }
+        if (!empty($e['category'])) { $item['category'] = $e['category']; }
+    }
+};
+
+foreach ($communityPhotos as &$cp) { $apply_edits($cp); }
+foreach ($adminPhotos as &$ap) { $apply_edits($ap); }
+foreach ($active_gallery_items as &$bp) { $apply_edits($bp); }
+
 // Merge community + admin + base gallery items
 $display_items = array_merge($communityPhotos, $adminPhotos, $active_gallery_items);
 
@@ -281,67 +304,102 @@ const folderBarTitle = document.getElementById('folder-bar-title');
 const folderBarDesc = document.getElementById('folder-bar-desc');
 const btnCloseFolder = document.getElementById('btn-close-folder');
 
-let currentActiveFolder = null;
+let currentSection = 'all';
+let folderExpanded = false;
 
-function openFolder(folderId) {
-  currentActiveFolder = folderId;
+function updateGalleryDisplay() {
   cards = [...document.querySelectorAll('.gallery-card')];
+  buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === currentSection));
 
-  if (folderId) {
-    cards.forEach(c => {
-      const isTarget = (c.dataset.folderTarget === folderId) || (c.dataset.inFolder === folderId) || (c.dataset.category === folderId);
-      c.style.display = isTarget ? 'block' : 'none';
-    });
-
-    if (activeFolderBar) {
-      activeFolderBar.style.display = 'flex';
-      if (folderId === 'executive') {
-        folderBarTitle.textContent = 'Executive Committee Album';
-        folderBarDesc.textContent = 'Meet the Executive Officers of Imolites in Diaspora Social Club USA';
-      } else if (folderId === 'events') {
-        folderBarTitle.textContent = '2026 Induction & Honorees Album';
-        folderBarDesc.textContent = 'Celebrating our 2026 Induction & End of the Year Party Honorees';
-      } else {
-        folderBarTitle.textContent = folderId.toUpperCase() + ' Album';
-        folderBarDesc.textContent = 'Viewing all photos in this collection';
-      }
-    }
-
-    buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === folderId));
-    const grid = document.getElementById('gallery-grid');
-    if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
+  if (currentSection === 'all') {
+    folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
-    buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
-
     cards.forEach(c => {
-      if (c.dataset.inFolder) {
+      // HIDE the two album folder cards AND any in-folder items on 'all'
+      if (c.dataset.isFolder === 'true' || c.dataset.inFolder) {
         c.style.display = 'none';
       } else {
         c.style.display = 'block';
       }
     });
+  } else if (currentSection === 'executive') {
+    if (!folderExpanded) {
+      // Show ONLY the Executives cover card; all officers remain behind it
+      if (activeFolderBar) activeFolderBar.style.display = 'none';
+      cards.forEach(c => {
+        if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'executive') {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    } else {
+      // Folder expanded: show all executive officers + cover card
+      if (activeFolderBar) {
+        activeFolderBar.style.display = 'flex';
+        folderBarTitle.textContent = 'Executive Committee Album';
+        folderBarDesc.textContent = 'Meet the Executive Officers of Imolites in Diaspora Social Club USA';
+        if (btnCloseFolder) btnCloseFolder.textContent = '← Back to Executive Cover';
+      }
+      cards.forEach(c => {
+        if (c.dataset.category === 'executive' || c.dataset.inFolder === 'executive') {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  } else if (currentSection === 'events') {
+    if (!folderExpanded) {
+      // Show ONLY the Induction Committee cover card; all honorees remain behind it
+      if (activeFolderBar) activeFolderBar.style.display = 'none';
+      cards.forEach(c => {
+        if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'events') {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    } else {
+      // Folder expanded: show all induction honorees + cover card
+      if (activeFolderBar) {
+        activeFolderBar.style.display = 'flex';
+        folderBarTitle.textContent = '2026 Induction & Honorees Album';
+        folderBarDesc.textContent = 'Celebrating our 2026 Induction & End of the Year Party Honorees';
+        if (btnCloseFolder) btnCloseFolder.textContent = '← Back to Induction Cover';
+      }
+      cards.forEach(c => {
+        if (c.dataset.category === 'events' || c.dataset.inFolder === 'events') {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+  } else {
+    // Other categories: community, heritage, branding
+    folderExpanded = false;
+    if (activeFolderBar) activeFolderBar.style.display = 'none';
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === currentSection) ? 'block' : 'none';
+    });
   }
 }
 
 function applyFilter(v) {
-  if (v === 'executive' || v === 'events') {
-    openFolder(v);
-    return;
-  }
+  currentSection = v;
+  folderExpanded = false;
+  updateGalleryDisplay();
+  const grid = document.getElementById('gallery-grid');
+  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-  currentActiveFolder = null;
-  if (activeFolderBar) activeFolderBar.style.display = 'none';
-  buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === v));
-
-  if (v === 'all') {
-    openFolder(null);
-  } else {
-    cards.forEach(c => {
-      const show = (c.dataset.category === v);
-      c.style.display = show ? 'block' : 'none';
-    });
-  }
+function openFolder(folderId) {
+  currentSection = folderId;
+  folderExpanded = true;
+  updateGalleryDisplay();
+  const grid = document.getElementById('gallery-grid');
+  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 buttons.forEach(btn => {
@@ -349,7 +407,10 @@ buttons.forEach(btn => {
 });
 
 if (btnCloseFolder) {
-  btnCloseFolder.addEventListener('click', () => openFolder(null));
+  btnCloseFolder.addEventListener('click', () => {
+    folderExpanded = false;
+    updateGalleryDisplay();
+  });
 }
 
 function setupFolderClickEvents() {
@@ -357,7 +418,6 @@ function setupFolderClickEvents() {
     if (!card.dataset.hasFolderEvent) {
       card.dataset.hasFolderEvent = 'true';
       card.addEventListener('click', function(e) {
-        if (currentActiveFolder === this.dataset.folderTarget) return;
         e.preventDefault();
         e.stopPropagation();
         openFolder(this.dataset.folderTarget);
@@ -372,7 +432,7 @@ const urlFilter = new URLSearchParams(window.location.search).get('category');
 if (urlFilter) {
   applyFilter(urlFilter);
 } else {
-  openFolder(null);
+  applyFilter('all');
 }
 
 const lightbox = document.querySelector('.lightbox');

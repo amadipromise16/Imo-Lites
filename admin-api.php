@@ -175,24 +175,62 @@ if ($action === 'list_all') {
         $adminPhotos = json_decode(file_get_contents($adminItemsFile), true) ?: [];
     }
 
-    // Filter out deleted items
+    // Edited items metadata overrides
+    $editedFile = __DIR__ . '/data/edited_photos.json';
+    $edits = [];
+    if (file_exists($editedFile)) {
+        $edits = json_decode(file_get_contents($editedFile), true) ?: [];
+    }
+
+    // Apply edits helper
+    $apply_edits = function(&$item) use ($edits) {
+        $id = $item['id'] ?? '';
+        $img = $item['image'] ?? '';
+        $key = isset($edits[$id]) ? $id : (isset($edits[$img]) ? $img : null);
+        if ($key && isset($edits[$key])) {
+            $e = $edits[$key];
+            if (!empty($e['title'])) { $item['title'] = $e['title']; $item['alt'] = $e['title']; }
+            if (isset($e['subtitle'])) { $item['subtitle'] = $e['subtitle']; }
+            if (!empty($e['category'])) { $item['category'] = $e['category']; }
+        }
+    };
+
+    // Filter out deleted items and apply edits
     $communityPhotos = array_values(array_filter($communityPhotos, function($p) use ($deletedIds) {
         $id = $p['id'] ?? '';
         $img = $p['image'] ?? '';
         return !in_array($id, $deletedIds) && !in_array($img, $deletedIds);
     }));
+    foreach ($communityPhotos as &$cp) { $apply_edits($cp); }
 
     $adminPhotos = array_values(array_filter($adminPhotos, function($p) use ($deletedIds) {
         $id = $p['id'] ?? '';
         $img = $p['image'] ?? '';
         return !in_array($id, $deletedIds) && !in_array($img, $deletedIds);
     }));
+    foreach ($adminPhotos as &$ap) { $apply_edits($ap); }
+
+    // Load base items from data/base_gallery_items.json
+    $baseItems = [];
+    $baseFile = __DIR__ . '/data/base_gallery_items.json';
+    if (file_exists($baseFile)) {
+        $baseItems = json_decode(file_get_contents($baseFile), true) ?: [];
+    }
+    if (empty($baseItems)) {
+        foreach ($gallery_items as $item) {
+            $slug = preg_replace('/[^a-z0-9_-]/i', '_', basename($item['image']));
+            $item['id'] = 'base_' . $slug;
+            $baseItems[] = $item;
+        }
+    }
 
     $filteredBaseItems = [];
-    foreach ($gallery_items as $index => $item) {
-        $key = 'base_' . md5($item['image']);
-        if (!in_array($key, $deletedIds) && !in_array($item['image'], $deletedIds)) {
-            $item['id'] = $key;
+    foreach ($baseItems as $item) {
+        $id = $item['id'] ?? '';
+        $img = $item['image'] ?? '';
+        $legacyKey = 'base_' . md5($img);
+        if (!in_array($id, $deletedIds) && !in_array($img, $deletedIds) && !in_array($legacyKey, $deletedIds)) {
+            $apply_edits($item);
             $filteredBaseItems[] = $item;
         }
     }
@@ -371,5 +409,80 @@ if ($action === 'delete_photo') {
     exit;
 }
 
+// 7. ACTION: EDIT PHOTO DETAILS
+if ($action === 'edit_photo') {
+    $photoId = trim($_POST['id'] ?? '');
+    $imagePath = trim($_POST['image'] ?? '');
+    $newTitle = trim($_POST['title'] ?? '');
+    $newSubtitle = trim($_POST['subtitle'] ?? '');
+    $newCategory = trim($_POST['category'] ?? '');
+
+    if ($photoId === '' && $imagePath === '') {
+        echo json_encode(['success' => false, 'error' => 'No photo ID or image specified for editing.']);
+        exit;
+    }
+
+    $editedFile = __DIR__ . '/data/edited_photos.json';
+    $edits = [];
+    if (file_exists($editedFile)) {
+        $edits = json_decode(file_get_contents($editedFile), true) ?: [];
+    }
+
+    $editKey = $photoId ?: $imagePath;
+    $updatedEntry = [
+        'id'        => $photoId,
+        'image'     => $imagePath,
+        'title'     => htmlspecialchars($newTitle, ENT_QUOTES, 'UTF-8'),
+        'alt'       => htmlspecialchars($newTitle, ENT_QUOTES, 'UTF-8'),
+        'subtitle'  => htmlspecialchars($newSubtitle, ENT_QUOTES, 'UTF-8'),
+        'category'  => $newCategory,
+        'edited_at' => time()
+    ];
+    $edits[$editKey] = $updatedEntry;
+    @file_put_contents($editedFile, json_encode($edits, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+    // Also update community_photos.json if exists
+    if (file_exists($communityFile)) {
+        $comm = json_decode(file_get_contents($communityFile), true) ?: [];
+        $changed = false;
+        foreach ($comm as &$p) {
+            if (($p['id'] ?? '') === $photoId || ($p['image'] ?? '') === $imagePath) {
+                if ($newTitle !== '') { $p['title'] = $newTitle; $p['alt'] = $newTitle; }
+                if ($newSubtitle !== '') { $p['subtitle'] = $newSubtitle; }
+                if ($newCategory !== '') { $p['category'] = $newCategory; }
+                $changed = true;
+            }
+        }
+        if ($changed) {
+            @file_put_contents($communityFile, json_encode($comm, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        }
+    }
+
+    // Also update admin_gallery_items.json if exists
+    if (file_exists($adminItemsFile)) {
+        $adm = json_decode(file_get_contents($adminItemsFile), true) ?: [];
+        $changed = false;
+        foreach ($adm as &$p) {
+            if (($p['id'] ?? '') === $photoId || ($p['image'] ?? '') === $imagePath) {
+                if ($newTitle !== '') { $p['title'] = $newTitle; $p['alt'] = $newTitle; }
+                if ($newSubtitle !== '') { $p['subtitle'] = $newSubtitle; }
+                if ($newCategory !== '') { $p['category'] = $newCategory; }
+                $changed = true;
+            }
+        }
+        if ($changed) {
+            @file_put_contents($adminItemsFile, json_encode($adm, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        }
+    }
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Photo details updated successfully.',
+        'updated' => $updatedEntry
+    ]);
+    exit;
+}
+
 http_response_code(400);
 echo json_encode(['error' => 'Unknown action']);
+

@@ -10,6 +10,61 @@ $meta_description = "Administrative portal to manage and moderate Imolites galle
 $active_page = 'admin';
 $is_logged_in = !empty($_SESSION['imolites_admin_logged_in']);
 $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
+
+// Pre-load data if authenticated
+$preloaded_photos = [];
+$preloaded_deleted = [];
+$preloaded_edits = [];
+
+if ($is_logged_in) {
+    // 1. Base photos
+    $baseFile = __DIR__ . '/data/base_gallery_items.json';
+    $baseItems = file_exists($baseFile) ? (json_decode(file_get_contents($baseFile), true) ?: []) : [];
+
+    // 2. Deleted blacklist
+    $deletedFile = __DIR__ . '/data/deleted_photos.json';
+    if (file_exists($deletedFile)) {
+        $preloaded_deleted = json_decode(file_get_contents($deletedFile), true) ?: [];
+    }
+
+    // 3. Edited metadata overrides
+    $editedFile = __DIR__ . '/data/edited_photos.json';
+    if (file_exists($editedFile)) {
+        $preloaded_edits = json_decode(file_get_contents($editedFile), true) ?: [];
+    }
+
+    // 4. Community photos
+    $communityFile = __DIR__ . '/data/community_photos.json';
+    $commItems = file_exists($communityFile) ? (json_decode(file_get_contents($communityFile), true) ?: []) : [];
+
+    // 5. Admin items
+    $adminItemsFile = __DIR__ . '/data/admin_gallery_items.json';
+    $admItems = file_exists($adminItemsFile) ? (json_decode(file_get_contents($adminItemsFile), true) ?: []) : [];
+
+    // Apply edits & filter deleted
+    $apply_edits = function(&$item) use ($preloaded_edits) {
+        $id = $item['id'] ?? '';
+        $img = $item['image'] ?? '';
+        $key = isset($preloaded_edits[$id]) ? $id : (isset($preloaded_edits[$img]) ? $img : null);
+        if ($key && isset($preloaded_edits[$key])) {
+            $e = $preloaded_edits[$key];
+            if (!empty($e['title'])) { $item['title'] = $e['title']; $item['alt'] = $e['title']; }
+            if (isset($e['subtitle'])) { $item['subtitle'] = $e['subtitle']; }
+            if (!empty($e['category'])) { $item['category'] = $e['category']; }
+        }
+    };
+
+    $allRaw = array_merge($commItems, $admItems, $baseItems);
+    foreach ($allRaw as $item) {
+        $id = $item['id'] ?? '';
+        $img = $item['image'] ?? '';
+        $legacyKey = 'base_' . md5($img);
+        if (!in_array($id, $preloaded_deleted) && !in_array($img, $preloaded_deleted) && !in_array($legacyKey, $preloaded_deleted)) {
+            $apply_edits($item);
+            $preloaded_photos[] = $item;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,9 +76,9 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
   <link rel="icon" href="assets/crest-logo.png?v=2" type="image/png"/>
   <link href="style.css?v=20261111c" rel="stylesheet"/>
   <style>
-    /* Admin Dashboard Specific Styles */
+
     .admin-container {
-      max-width: 1200px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 30px 20px 80px;
     }
@@ -38,7 +93,7 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
       border: 1.5px solid var(--gold);
       border-radius: 14px;
       color: #ffffff;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
     .admin-title-wrap h1 {
@@ -62,15 +117,16 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
       background: #dc3545;
       color: #fff;
       border: none;
-      padding: 9px 18px;
+      padding: 10px 20px;
       border-radius: 6px;
       font-weight: 700;
       font-size: 13px;
       cursor: pointer;
       text-decoration: none;
+      transition: background 0.2s;
     }
     .btn-admin-logout:hover { background: #b02a37; }
-    
+
     /* Login Screen */
     .login-card {
       max-width: 440px;
@@ -139,15 +195,10 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
     }
     .login-btn:hover {
       background: #0d4630;
-      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(7, 46, 30, 0.25);
     }
 
-    /* Admin Dashboard Panels */
-    .admin-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 30px;
-    }
+    /* Stats Bar */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -156,9 +207,9 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
     }
     .stat-card {
       background: #ffffff;
-      border: 1px solid #d5e0d8;
-      border-radius: 10px;
-      padding: 20px;
+      border: 1px solid #d4dfd7;
+      border-radius: 12px;
+      padding: 18px 20px;
       display: flex;
       align-items: center;
       gap: 16px;
@@ -166,112 +217,130 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
     }
     .stat-icon {
       font-size: 32px;
-      line-height: 1;
+      width: 54px;
+      height: 54px;
+      border-radius: 10px;
+      background: #f0f7f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .stat-info b {
       display: block;
-      font-size: 24px;
-      color: #072e1e;
+      font-size: 26px;
       font-family: 'Playfair Display', serif;
+      color: #072e1e;
+      line-height: 1.1;
     }
     .stat-info span {
-      font-size: 13px;
-      color: #63776b;
+      font-size: 12.5px;
+      color: #5d7366;
       font-weight: 600;
+    }
+
+    /* Security Notice */
+    .security-notice {
+      background: #f0f9f4;
+      border: 1px solid #a3d9b8;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      font-size: 13.5px;
+      color: #0d5435;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     /* Upload Box */
     .admin-upload-box {
       background: #ffffff;
-      border: 1.5px solid #d3ded6;
-      border-radius: 12px;
-      padding: 28px;
+      border: 1.5px solid #d4dfd7;
+      border-radius: 14px;
+      padding: 26px 28px;
+      margin-bottom: 34px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-      margin-bottom: 36px;
     }
     .admin-upload-box h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 21px;
       color: #072e1e;
-      margin: 0 0 8px;
+      font-size: 21px;
+      margin: 0 0 6px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .admin-upload-box p {
-      color: #556a5e;
-      font-size: 14px;
-      margin: 0 0 20px;
+      color: #55695e;
+      font-size: 13.5px;
+      margin-bottom: 22px;
     }
     .upload-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 24px;
     }
     @media (max-width: 768px) {
       .upload-row { grid-template-columns: 1fr; }
     }
-    .security-notice {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #eef7f2;
-      border: 1px solid #94cbb0;
-      color: #0d4630;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 12.5px;
-      font-weight: 600;
-      margin-bottom: 18px;
-    }
 
-    /* Photos Management Grid */
+    /* Filter Bar */
     .admin-filter-bar {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
-      align-items: center;
+      margin-bottom: 22px;
     }
     .admin-filter {
       padding: 8px 16px;
-      border-radius: 30px;
-      border: 1.5px solid #c7d7c9;
+      border-radius: 20px;
+      border: 1.5px solid #c9d8ce;
       background: #ffffff;
-      color: #1a4230;
+      color: #072e1e;
       font-weight: 700;
       font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .admin-filter.active, .admin-filter:hover {
+    .admin-filter:hover {
+      border-color: #072e1e;
+      background: #f4f8f5;
+    }
+    .admin-filter.active {
       background: #072e1e;
-      color: #ffffff;
+      color: #f3e0aa;
       border-color: #072e1e;
     }
+
+    /* Photos Grid */
     .admin-photos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 22px;
     }
     .admin-photo-card {
       background: #ffffff;
-      border: 1px solid #d5e0d8;
-      border-radius: 10px;
+      border: 1.5px solid #d5e0d8;
+      border-radius: 12px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      position: relative;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .admin-photo-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.1);
     }
     .admin-photo-card img {
       width: 100%;
-      height: 180px;
+      height: 190px;
       object-fit: cover;
       background: #f1f5f2;
+      border-bottom: 1px solid #e1ebe4;
     }
     .admin-card-body {
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
@@ -280,10 +349,11 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
       display: inline-block;
       font-size: 10.5px;
       font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 12px;
+      padding: 4px 10px;
+      border-radius: 14px;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
       align-self: flex-start;
     }
     .badge-exec-admin {
@@ -306,38 +376,92 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
       color: #ffffff;
     }
     .admin-card-body h4 {
-      margin: 0 0 4px;
+      margin: 0 0 6px;
       font-size: 16px;
       color: #072e1e;
       font-family: 'Playfair Display', serif;
+      line-height: 1.3;
     }
     .admin-card-body small {
       color: #63776b;
-      font-size: 12px;
-      margin-bottom: 12px;
+      font-size: 12.5px;
+      margin-bottom: 14px;
       display: block;
+      line-height: 1.4;
     }
     .admin-card-actions {
       margin-top: auto;
       display: flex;
       gap: 8px;
     }
-    .btn-delete-photo {
-      background: #fee2e2;
-      color: #b91c1c;
-      border: 1px solid #f87171;
+    .btn-edit-photo {
+      flex: 1;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1.5px solid #86efac;
       border-radius: 6px;
-      padding: 7px 12px;
+      padding: 8px 10px;
       font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
-      width: 100%;
       transition: all 0.2s;
+      text-align: center;
+    }
+    .btn-edit-photo:hover {
+      background: #166534;
+      color: #ffffff;
+    }
+    .btn-delete-photo {
+      flex: 1;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1.5px solid #fca5a5;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
     }
     .btn-delete-photo:hover {
       background: #dc2626;
       color: #ffffff;
     }
+
+    /* Edit Modal */
+    .edit-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 25, 17, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .edit-modal-card {
+      background: #ffffff;
+      border-radius: 14px;
+      max-width: 520px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+      border: 2px solid var(--gold);
+      position: relative;
+    }
+    .edit-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+      color: #072e1e;
+    }
+
   </style>
 </head>
 <body>
@@ -345,11 +469,11 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
 
 <div class="admin-container">
   <?php if (!$is_logged_in): ?>
-    <!-- LOGIN VIEW -->
-    <div class="login-card">
+    <!-- STRICT LOGIN VIEW -->
+    <div class="login-card" id="login-card">
       <img src="assets/crest-logo.png?v=2" alt="Imolites Club Crest"/>
       <h2>Admin Login</h2>
-      <p>Sign in to manage gallery photos, sections, and community uploads.</p>
+      <p>Authorized personnel only. Please sign in to manage and moderate gallery photos.</p>
       
       <div id="login-alert" style="display:none; padding:10px 14px; margin-bottom:16px; border-radius:6px; font-size:13px; font-weight:600; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;"></div>
 
@@ -369,11 +493,11 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
       </div>
     </div>
   <?php else: ?>
-    <!-- LOGGED IN DASHBOARD VIEW -->
+    <!-- AUTHORIZED DASHBOARD VIEW -->
     <div class="admin-header">
       <div class="admin-title-wrap">
         <h1>Gallery &amp; Sections Management</h1>
-        <p>Logged in as <strong><?= htmlspecialchars($admin_email, ENT_QUOTES, 'UTF-8') ?></strong> · Full gallery control and photo moderation</p>
+        <p>Logged in as <strong><?= htmlspecialchars($admin_email, ENT_QUOTES, 'UTF-8') ?></strong> · Full gallery control, photo edits, and moderation</p>
       </div>
       <div class="admin-nav-actions">
         <a class="btn btn-outline" href="gallery.php" style="border-color:var(--gold); color:#ffffff; font-size:13px; padding:9px 16px;">View Live Gallery ↗</a>
@@ -386,28 +510,28 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
       <div class="stat-card">
         <div class="stat-icon">🖼️</div>
         <div class="stat-info">
-          <b id="stat-total">--</b>
+          <b id="stat-total"><?= count($preloaded_photos) ?></b>
           <span>Total Gallery Photos</span>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">👔</div>
         <div class="stat-info">
-          <b id="stat-exec">--</b>
+          <b id="stat-exec">0</b>
           <span>Executive Committee</span>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">🎖️</div>
         <div class="stat-info">
-          <b id="stat-induction">--</b>
+          <b id="stat-induction">0</b>
           <span>2026 Induction Honorees</span>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">📸</div>
         <div class="stat-info">
-          <b id="stat-comm">--</b>
+          <b id="stat-comm">0</b>
           <span>Community Snaps</span>
         </div>
       </div>
@@ -415,7 +539,7 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
 
     <!-- Antivirus Shield Banner -->
     <div class="security-notice">
-      <span>🛡️</span>
+      <span style="font-size:24px;">🛡️</span>
       <span><strong>Antivirus &amp; Upload Sanitizer Active:</strong> All uploads undergo deep magic-byte inspection, executable code scanning, and GD pixel re-encoding to block viruses, web shells, and malicious payloads.</span>
     </div>
 
@@ -482,17 +606,17 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
         <h2 style="font-family:'Playfair Display',serif; color:#072e1e; font-size:24px; margin:0;">
           Manage Gallery Photos &amp; Moderation
         </h2>
-        <small style="color:#63776b;">Click "Delete Photo" to immediately remove any unwanted or inappropriate photo.</small>
+        <small style="color:#63776b;">Use "Edit Details" to change titles/sections, or "Delete Photo" to permanently remove any unwanted photo.</small>
       </div>
 
       <!-- Filters -->
       <div class="admin-filter-bar">
-        <button class="admin-filter active" data-filter="all">All Photos</button>
-        <button class="admin-filter" data-filter="community">📸 Community Uploads</button>
-        <button class="admin-filter" data-filter="executive">👔 Executive Committee</button>
-        <button class="admin-filter" data-filter="events">🎖️ 2026 Induction</button>
-        <button class="admin-filter" data-filter="heritage">🏛️ Heritage Artwork</button>
-        <button class="admin-filter" data-filter="branding">🦅 Official Crest</button>
+        <button class="admin-filter active" data-filter="all">All Photos (<span id="cnt-all">0</span>)</button>
+        <button class="admin-filter" data-filter="executive">👔 Executive (<span id="cnt-exec">0</span>)</button>
+        <button class="admin-filter" data-filter="events">🎖️ 2026 Induction (<span id="cnt-events">0</span>)</button>
+        <button class="admin-filter" data-filter="community">📸 Community (<span id="cnt-comm">0</span>)</button>
+        <button class="admin-filter" data-filter="heritage">🏛️ Heritage (<span id="cnt-heritage">0</span>)</button>
+        <button class="admin-filter" data-filter="branding">🦅 Official Crest (<span id="cnt-branding">0</span>)</button>
       </div>
 
       <!-- Grid -->
@@ -502,6 +626,50 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
         </div>
       </div>
     </section>
+
+    <!-- Edit Modal Dialog -->
+    <div id="admin-edit-modal" class="edit-modal-backdrop" style="display:none;" role="dialog" aria-modal="true">
+      <div class="edit-modal-card">
+        <button class="edit-modal-close" id="close-edit-modal-btn" type="button" aria-label="Close dialog">&times;</button>
+        <h3 style="font-family:'Playfair Display',serif; color:#072e1e; font-size:22px; margin:0 0 6px;">✏️ Edit Photo Details</h3>
+        <p style="color:#576d60; font-size:13.5px; margin-bottom:18px;">Update the photo's title, subtitle/role, or move it to a different section.</p>
+        
+        <div style="text-align:center; margin-bottom:16px;">
+          <img id="edit-preview-thumb" src="" alt="Photo thumbnail" style="max-height:130px; border-radius:8px; border:2px solid var(--gold); box-shadow:0 4px 12px rgba(0,0,0,0.15);"/>
+        </div>
+
+        <form id="admin-edit-form">
+          <input type="hidden" id="edit-photo-id"/>
+          <input type="hidden" id="edit-photo-image"/>
+
+          <div class="form-group">
+            <label for="edit-photo-title">Title / Person's Name *</label>
+            <input type="text" id="edit-photo-title" required/>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-photo-subtitle">Role / Subtitle</label>
+            <input type="text" id="edit-photo-subtitle"/>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-photo-category">Gallery Section *</label>
+            <select id="edit-photo-category" required>
+              <option value="executive">👔 Executive Committee</option>
+              <option value="events">🎖️ 2026 Induction Honorees</option>
+              <option value="community">📸 Community Snaps</option>
+              <option value="heritage">🏛️ Imo State Artwork &amp; Landmarks</option>
+              <option value="branding">🦅 Official Crest &amp; Swag</option>
+            </select>
+          </div>
+
+          <div style="display:flex; gap:12px; margin-top:22px;">
+            <button type="button" id="cancel-edit-btn" style="flex:1; padding:12px; background:#e5e7eb; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Cancel</button>
+            <button type="submit" id="save-edit-btn" class="login-btn" style="flex:2; padding:12px; font-size:14px;">💾 Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
   <?php endif; ?>
 </div>
 
@@ -512,12 +680,11 @@ $admin_email = $_SESSION['imolites_admin_email'] ?? 'imolitesusa2@gmail';
 </footer>
 
 <script>
-// Cloud Edge KV Sync Endpoint
 const CLOUD_KV_ENDPOINT = 'https://kvs.ix.workers.dev/imolites/community-photos';
 const STORAGE_KEY = 'imolites_community_photos_v6';
 
 <?php if (!$is_logged_in): ?>
-// Login Form Controller
+// Login Controller
 const loginForm = document.getElementById('admin-login-form');
 const loginAlert = document.getElementById('login-alert');
 const loginBtn = document.getElementById('login-btn');
@@ -544,7 +711,6 @@ loginForm?.addEventListener('submit', async function(e) {
     const data = await res.json();
 
     if (data.success) {
-      // Store local token for GitHub Pages fallback
       localStorage.setItem('imolites_admin_token', 'logged_in');
       localStorage.setItem('imolites_admin_email', email);
       window.location.reload();
@@ -555,7 +721,6 @@ loginForm?.addEventListener('submit', async function(e) {
       loginBtn.textContent = 'Log In to Admin Portal →';
     }
   } catch (err) {
-    // Client-side fallback if server-side is running in static environment
     if ((email.toLowerCase() === 'imolitesusa2@gmail' || email.toLowerCase() === 'imolitesusa2@gmail.com') && password === 'imolitesusa450') {
       localStorage.setItem('imolites_admin_token', 'logged_in');
       localStorage.setItem('imolites_admin_email', email);
@@ -569,8 +734,9 @@ loginForm?.addEventListener('submit', async function(e) {
   }
 });
 <?php else: ?>
-// Logged in Dashboard Controller
-let allPhotosList = [];
+// Authorized Dashboard Controller
+window.SERVER_PHOTOS = <?= json_encode($preloaded_photos) ?>;
+let allPhotosList = window.SERVER_PHOTOS || [];
 let activeAdminFilter = 'all';
 let selectedAdminDataUrl = '';
 
@@ -584,6 +750,18 @@ const adminUploadForm = document.getElementById('admin-upload-form');
 const adminSubmitBtn = document.getElementById('admin-submit-btn');
 const uploadStatusAlert = document.getElementById('upload-status-alert');
 const adminPhotosGrid = document.getElementById('admin-photos-grid');
+
+// Edit modal elements
+const editModal = document.getElementById('admin-edit-modal');
+const closeEditModalBtn = document.getElementById('close-edit-modal-btn');
+const cancelEditBtn = document.getElementById('cancel-edit-btn');
+const adminEditForm = document.getElementById('admin-edit-form');
+const editPhotoId = document.getElementById('edit-photo-id');
+const editPhotoImage = document.getElementById('edit-photo-image');
+const editPhotoTitle = document.getElementById('edit-photo-title');
+const editPhotoSubtitle = document.getElementById('edit-photo-subtitle');
+const editPhotoCategory = document.getElementById('edit-photo-category');
+const editPreviewThumb = document.getElementById('edit-preview-thumb');
 
 // Stat elements
 const statTotal = document.getElementById('stat-total');
@@ -600,16 +778,14 @@ logoutBtn?.addEventListener('click', async function() {
   window.location.reload();
 });
 
-// File picker trigger
+// File picker
 adminDropzone?.addEventListener('click', () => adminFileInput.click());
 adminChangeFileBtn?.addEventListener('click', () => adminFileInput.click());
 
-// Image compression and sanitization preview
 adminFileInput?.addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
 
-  // Check file size (max 15MB)
   if (file.size > 15 * 1024 * 1024) {
     alert('File is too large. Please select a photo under 15MB.');
     return;
@@ -619,17 +795,13 @@ adminFileInput?.addEventListener('change', function() {
   reader.onload = function(e) {
     const img = new Image();
     img.onload = function() {
-      // Re-encode via canvas for client sanitization and fast transmission
-      let w = img.width;
-      let h = img.height;
-      const maxDim = 1400;
+      let w = img.width, h = img.height, maxDim = 1400;
       if (w > maxDim || h > maxDim) {
         if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
         else { w = Math.round((w * maxDim) / h); h = maxDim; }
       }
       const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
+      canvas.width = w; canvas.height = h;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, w, h);
       selectedAdminDataUrl = canvas.toDataURL('image/jpeg', 0.85);
@@ -643,40 +815,28 @@ adminFileInput?.addEventListener('change', function() {
   reader.readAsDataURL(file);
 });
 
-// Fetch all photos
-async function fetchAdminPhotos() {
-  try {
-    const res = await fetch('admin-api.php?action=list_all');
-    if (!res.ok) throw new Error('API request failed');
-    const data = await res.json();
-
-    const comm = data.community_photos || [];
-    const adm = data.admin_photos || [];
-    const base = data.base_photos || [];
-
-    allPhotosList = [...comm, ...adm, ...base];
-    updateStats(allPhotosList);
+// Filter buttons
+document.querySelectorAll('.admin-filter').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.admin-filter').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    activeAdminFilter = this.dataset.filter;
     renderAdminGrid();
-  } catch (err) {
-    // Fallback: fetch from public endpoints
-    console.warn('Falling back to direct photo read:', err);
-    try {
-      const pRes = await fetch('upload.php');
-      const pData = await pRes.json();
-      allPhotosList = pData.photos || [];
-      updateStats(allPhotosList);
-      renderAdminGrid();
-    } catch(e) {
-      adminPhotosGrid.innerHTML = '<div style="padding:30px; text-align:center; color:#c53030;">Could not load photos list.</div>';
-    }
-  }
-}
+  });
+});
 
 function updateStats(photos) {
   if (statTotal) statTotal.textContent = photos.length;
   if (statExec) statExec.textContent = photos.filter(p => p.category === 'executive').length;
   if (statInduction) statInduction.textContent = photos.filter(p => p.category === 'events').length;
   if (statComm) statComm.textContent = photos.filter(p => p.category === 'community').length;
+
+  document.getElementById('cnt-all') && (document.getElementById('cnt-all').textContent = photos.length);
+  document.getElementById('cnt-exec') && (document.getElementById('cnt-exec').textContent = photos.filter(p => p.category === 'executive').length);
+  document.getElementById('cnt-events') && (document.getElementById('cnt-events').textContent = photos.filter(p => p.category === 'events').length);
+  document.getElementById('cnt-comm') && (document.getElementById('cnt-comm').textContent = photos.filter(p => p.category === 'community').length);
+  document.getElementById('cnt-heritage') && (document.getElementById('cnt-heritage').textContent = photos.filter(p => p.category === 'heritage').length);
+  document.getElementById('cnt-branding') && (document.getElementById('cnt-branding').textContent = photos.filter(p => p.category === 'branding').length);
 }
 
 function renderAdminGrid() {
@@ -713,6 +873,9 @@ function renderAdminGrid() {
         <h4>${photoTitle}</h4>
         <small>${photoSubtitle}</small>
         <div class="admin-card-actions">
+          <button type="button" class="btn-edit-photo" data-id="${photoId}" data-image="${photo.image}">
+            ✏️ Edit Details
+          </button>
           <button type="button" class="btn-delete-photo" data-id="${photoId}" data-image="${photo.image}">
             🗑️ Delete Photo
           </button>
@@ -723,12 +886,34 @@ function renderAdminGrid() {
     adminPhotosGrid.appendChild(card);
   });
 
-  // Attach delete handlers
+  // Attach Edit handlers
+  document.querySelectorAll('.btn-edit-photo').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = this.dataset.id;
+      const img = this.dataset.image;
+      const photo = allPhotosList.find(p => (p.id === id || p.image === img));
+      if (!photo) return;
+
+      editPhotoId.value = id;
+      editPhotoImage.value = img;
+      editPhotoTitle.value = photo.title || photo.alt || '';
+      editPhotoSubtitle.value = photo.subtitle || '';
+      editPhotoCategory.value = photo.category || 'community';
+      editPreviewThumb.src = photo.image;
+
+      editModal.style.display = 'flex';
+    });
+  });
+
+  // Attach Delete handlers
   document.querySelectorAll('.btn-delete-photo').forEach(btn => {
     btn.addEventListener('click', async function() {
       const id = this.dataset.id;
       const img = this.dataset.image;
-      if (!confirm('Are you sure you want to permanently delete this photo? It will be removed from the live website immediately.')) {
+      const photo = allPhotosList.find(p => (p.id === id || p.image === img));
+      const title = photo ? (photo.title || 'this photo') : 'this photo';
+
+      if (!confirm(`Are you sure you want to permanently delete "${title}"? It will be removed from the live website immediately.`)) {
         return;
       }
 
@@ -741,66 +926,78 @@ function renderAdminGrid() {
         formData.append('id', id);
         formData.append('image', img);
 
-        const res = await fetch('admin-api.php?action=delete_photo', {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
+        await fetch('admin-api.php?action=delete_photo', { method: 'POST', body: formData });
+      } catch(e) {}
 
-        // Also delete from Cloudflare edge KV
-        try {
-          const kvRes = await fetch(CLOUD_KV_ENDPOINT);
-          if (kvRes.ok) {
-            const kvData = await kvRes.json();
-            if (kvData && Array.isArray(kvData.photos)) {
-              const updated = kvData.photos.filter(p => (p.id !== id && p.image !== img));
-              await fetch(CLOUD_KV_ENDPOINT, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ photos: updated })
-              });
-            }
-          }
-        } catch(e) {}
-
-        // Remove from local array and re-render
-        allPhotosList = allPhotosList.filter(p => p.id !== id && p.image !== img);
-        updateStats(allPhotosList);
-        renderAdminGrid();
-        alert('Photo has been successfully deleted from the gallery!');
-      } catch (err) {
-        alert('Error deleting photo: ' + err.message);
-      }
+      // Remove locally
+      allPhotosList = allPhotosList.filter(p => !(p.id === id || p.image === img));
+      updateStats(allPhotosList);
+      renderAdminGrid();
     });
   });
 }
 
-// Category filter tabs
-document.querySelectorAll('.admin-filter').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.admin-filter').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    activeAdminFilter = this.dataset.filter;
-    renderAdminGrid();
-  });
+// Edit Form submit
+adminEditForm?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const id = editPhotoId.value;
+  const img = editPhotoImage.value;
+  const newTitle = editPhotoTitle.value.trim();
+  const newSubtitle = editPhotoSubtitle.value.trim();
+  const newCategory = editPhotoCategory.value;
+
+  const saveBtn = document.getElementById('save-edit-btn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving...';
+
+  try {
+    const formData = new FormData();
+    formData.append('action', 'edit_photo');
+    formData.append('id', id);
+    formData.append('image', img);
+    formData.append('title', newTitle);
+    formData.append('subtitle', newSubtitle);
+    formData.append('category', newCategory);
+
+    await fetch('admin-api.php?action=edit_photo', { method: 'POST', body: formData });
+  } catch(e) {}
+
+  // Update in local memory
+  const photo = allPhotosList.find(p => (p.id === id || p.image === img));
+  if (photo) {
+    photo.title = newTitle;
+    photo.alt = newTitle;
+    photo.subtitle = newSubtitle;
+    photo.category = newCategory;
+  }
+
+  saveBtn.disabled = false;
+  saveBtn.textContent = '💾 Save Changes';
+  editModal.style.display = 'none';
+
+  updateStats(allPhotosList);
+  renderAdminGrid();
 });
 
-// Upload form submission
+closeEditModalBtn?.addEventListener('click', () => editModal.style.display = 'none');
+cancelEditBtn?.addEventListener('click', () => editModal.style.display = 'none');
+editModal?.addEventListener('click', (e) => { if (e.target === editModal) editModal.style.display = 'none'; });
+
+// Admin Upload Form
 adminUploadForm?.addEventListener('submit', async function(e) {
   e.preventDefault();
+  const title = document.getElementById('photo-title').value.trim();
+  const subtitle = document.getElementById('photo-subtitle').value.trim();
+  const category = document.getElementById('photo-category').value;
 
-  if (!selectedAdminDataUrl) {
-    alert('Please select a photo to upload.');
+  if (!selectedAdminDataUrl && !adminFileInput.files[0]) {
+    alert('Please choose a photo to upload.');
     return;
   }
 
   adminSubmitBtn.disabled = true;
-  adminSubmitBtn.textContent = '🛡️ Scanning for Viruses & Publishing...';
+  adminSubmitBtn.textContent = '🛡️ Scanning with Antivirus & Publishing...';
   uploadStatusAlert.style.display = 'none';
-
-  const category = document.getElementById('photo-category').value;
-  const title = document.getElementById('photo-title').value.trim();
-  const subtitle = document.getElementById('photo-subtitle').value.trim();
 
   try {
     const formData = new FormData();
@@ -808,7 +1005,11 @@ adminUploadForm?.addEventListener('submit', async function(e) {
     formData.append('category', category);
     formData.append('title', title);
     formData.append('subtitle', subtitle);
-    formData.append('image_data', selectedAdminDataUrl);
+    if (selectedAdminDataUrl) {
+      formData.append('image_data', selectedAdminDataUrl);
+    } else if (adminFileInput.files[0]) {
+      formData.append('photo', adminFileInput.files[0]);
+    }
 
     const res = await fetch('admin-api.php?action=upload_photo', {
       method: 'POST',
@@ -816,69 +1017,56 @@ adminUploadForm?.addEventListener('submit', async function(e) {
     });
     const data = await res.json();
 
-    if (!data.success) {
-      throw new Error(data.error || 'Upload failed');
+    if (data.success && data.photo) {
+      allPhotosList.unshift(data.photo);
+      updateStats(allPhotosList);
+      renderAdminGrid();
+
+      uploadStatusAlert.className = '';
+      uploadStatusAlert.style.display = 'block';
+      uploadStatusAlert.style.background = '#ecfdf5';
+      uploadStatusAlert.style.color = '#065f46';
+      uploadStatusAlert.style.border = '1.5px solid #6ee7b7';
+      uploadStatusAlert.textContent = '🎉 ' + data.message;
+
+      adminUploadForm.reset();
+      selectedAdminDataUrl = '';
+      adminImagePreview.src = '';
+      adminPreviewWrap.style.display = 'none';
+      adminDropzone.style.display = 'block';
+    } else {
+      throw new Error(data.error || 'Upload failed.');
     }
-
-    // Sync to Cloudflare Edge KV so everyone across the world sees it instantly
-    const newPhoto = data.photo || {
-      id: 'admin_' + Date.now(),
-      category: category,
-      title: title,
-      subtitle: subtitle,
-      image: selectedAdminDataUrl,
-      timestamp: Date.now()
-    };
-
-    try {
-      let cloudPhotos = [];
-      const getRes = await fetch(CLOUD_KV_ENDPOINT);
-      if (getRes.ok) {
-        const getData = await getRes.json();
-        if (getData && Array.isArray(getData.photos)) {
-          cloudPhotos = getData.photos;
-        }
-      }
-      cloudPhotos.unshift(newPhoto);
-      await fetch(CLOUD_KV_ENDPOINT, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ photos: cloudPhotos.slice(0, 70) })
-      });
-    } catch(e) {}
-
-    // Show success message
-    uploadStatusAlert.style.background = '#e6fffa';
-    uploadStatusAlert.style.color = '#047857';
-    uploadStatusAlert.style.border = '1px solid #10b981';
-    uploadStatusAlert.textContent = '🎉 ' + data.message;
-    uploadStatusAlert.style.display = 'block';
-
-    // Reset form
-    adminUploadForm.reset();
-    selectedAdminDataUrl = '';
-    adminPreviewWrap.style.display = 'none';
-    adminDropzone.style.display = 'block';
-
-    // Refresh photos list
-    allPhotosList.unshift(newPhoto);
-    updateStats(allPhotosList);
-    renderAdminGrid();
-
   } catch (err) {
-    uploadStatusAlert.style.background = '#fee2e2';
-    uploadStatusAlert.style.color = '#b91c1c';
-    uploadStatusAlert.style.border = '1px solid #f87171';
-    uploadStatusAlert.textContent = '❌ ' + err.message;
     uploadStatusAlert.style.display = 'block';
-  } finally {
-    adminSubmitBtn.disabled = false;
-    adminSubmitBtn.textContent = '🚀 Scan & Publish Live to Gallery →';
+    uploadStatusAlert.style.background = '#fef2f2';
+    uploadStatusAlert.style.color = '#991b1b';
+    uploadStatusAlert.style.border = '1.5px solid #fca5a5';
+    uploadStatusAlert.textContent = '❌ ' + (err.message || 'Error uploading photo.');
   }
+
+  adminSubmitBtn.disabled = false;
+  adminSubmitBtn.textContent = '🚀 Scan & Publish Live to Gallery →';
 });
 
-// Initial load
-fetchAdminPhotos();
+// Initial render
+updateStats(allPhotosList);
+renderAdminGrid();
+
+// Fetch fresh list from API in background
+(async function refreshFromApi() {
+  try {
+    const res = await fetch('admin-api.php?action=list_all');
+    if (res.ok) {
+      const d = await res.json();
+      if (d.success) {
+        allPhotosList = [...(d.community_photos||[]), ...(d.admin_photos||[]), ...(d.base_photos||[])];
+        updateStats(allPhotosList);
+        renderAdminGrid();
+      }
+    }
+  } catch(e) {}
+})();
 <?php endif; ?>
 </script>
 </body>

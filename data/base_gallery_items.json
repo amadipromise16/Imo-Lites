@@ -1,0 +1,262 @@
+[
+  {
+    "id": "base_gallery-executives-group",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": true,
+    "image": "assets/gallery-executives-group.jpg",
+    "alt": "Executives",
+    "title": "Executives",
+    "subtitle": "Imolites in Diaspora Social Club USA • Executive Council"
+  },
+  {
+    "id": "base_exec-chidi-amadi",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-chidi-amadi.jpg",
+    "alt": "Prince Chidi Amadi (Odum Igwe 1 of Texas)",
+    "title": "Prince Chidi Amadi (Odum Igwe 1 of Texas)",
+    "subtitle": "Public Relations Officer (P.R.O) • Executive Committee"
+  },
+  {
+    "id": "base_exec-obinna-iwuala",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-obinna-iwuala.jpg",
+    "alt": "Mr. Obinna Iwuala (Small Body Big Engine)",
+    "title": "Mr. Obinna Iwuala (Small Body Big Engine)",
+    "subtitle": "Provost • Executive Committee"
+  },
+  {
+    "id": "base_exec-aloysius-uzodimma",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-aloysius-uzodimma.jpg",
+    "alt": "Comrade Aloysius Uzodimma",
+    "title": "Comrade Aloysius Uzodimma",
+    "subtitle": "Financial Secretary • Executive Committee"
+  },
+  {
+    "id": "base_exec-thankgod-nwachukwu",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-thankgod-nwachukwu.jpg",
+    "alt": "Thank God Nwachukwu",
+    "title": "Thank God Nwachukwu",
+    "subtitle": "General Secretary • Executive Committee"
+  },
+  {
+    "id": "base_exec-ok-okoroafor",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-ok-okoroafor.jpg",
+    "alt": "Elder OK Okoroafor",
+    "title": "Elder OK Okoroafor",
+    "subtitle": "Vice President • Executive Committee"
+  },
+  {
+    "id": "base_exec-dike-desmond",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-dike-desmond.jpg",
+    "alt": "Hon. Engineer Dike Desmond",
+    "title": "Hon. Engineer Dike Desmond",
+    "subtitle": "President • Executive Committee"
+  },
+  {
+    "id": "base_exec-chinwendu-okoko",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-chinwendu-okoko.jpg",
+    "alt": "Ms. Chinwendu Okoko",
+    "title": "Ms. Chinwendu Okoko",
+    "subtitle": "Treasurer • Executive Committee"
+  },
+  {
+    "id": "base_gallery-ethics-committee",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/gallery-ethics-committee.jpg",
+    "alt": "Ethics Committee",
+    "title": "Ethics Committee",
+    "subtitle": "Imolites in Diaspora Social Club USA • Ethics Committee"
+  },
+  {
+    "id": "base_gallery-induction-committee",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": true,
+    "image": "assets/gallery-induction-committee.jpg",
+    "alt": "Induction Committee",
+    "title": "Induction Committee",
+    "subtitle": "2026 Induction & Gala Planning Committee"
+  },
+  {
+    "id": "base_honoree-ethelbert-nwachukwu",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-ethelbert-nwachukwu.jpg",
+    "alt": "Ethelbert Nwachukwu",
+    "title": "Ethelbert Nwachukwu",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_honoree-olewike",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-olewike.jpg",
+    "alt": "Triple High Chief Olewike",
+    "title": "Triple High Chief Olewike",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_honoree-juliet-nwanya",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-juliet-nwanya.jpg",
+    "alt": "Hon. Juliet Nwanya",
+    "title": "Hon. Juliet Nwanya",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_honoree-jessica-deloach",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-jessica-deloach.jpg",
+    "alt": "Ms. Jessica Deloach",
+    "title": "Ms. Jessica Deloach",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_honoree-chief-ikeoha",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-chief-ikeoha.jpg",
+    "alt": "Chief Ikeoha",
+    "title": "Chief Ikeoha",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_honoree-joseph-nwadike",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-joseph-nwadike.jpg",
+    "alt": "President Emeritus. Hon. Joseph Frank Nwadike",
+    "title": "President Emeritus. Hon. Joseph Frank Nwadike",
+    "subtitle": "President Emeritus • 2026 Induction & End of the Year Party"
+  },
+  {
+    "id": "base_honoree-ugonma-chukwu",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-ugonma-chukwu.jpg",
+    "alt": "Ms. Ugonma Chukwu",
+    "title": "Ms. Ugonma Chukwu",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_honoree-ihemtuge-chidiebube",
+    "category": "events",
+    "folder_id": "events",
+    "is_folder_cover": false,
+    "image": "assets/honoree-ihemtuge-chidiebube.jpg",
+    "alt": "Hon. Ihemtuge Chidiebube",
+    "title": "Hon. Ihemtuge Chidiebube",
+    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+  },
+  {
+    "id": "base_gallery-imolites-family",
+    "category": "community",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/gallery-imolites-family.jpg",
+    "alt": "Imolites, One Family",
+    "title": "Imolites, One Family",
+    "subtitle": "General Assembly & Members Celebration"
+  },
+  {
+    "id": "base_gallery-one-family-1",
+    "category": "community",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/gallery-one-family-1.jpg",
+    "alt": "Imolites, One Family",
+    "title": "Imolites, One Family",
+    "subtitle": "Fellowship & Unity in Diaspora"
+  },
+  {
+    "id": "base_gallery-one-family-2",
+    "category": "community",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/gallery-one-family-2.jpg",
+    "alt": "Imolites, One Family",
+    "title": "Imolites, One Family",
+    "subtitle": "Community Fellowship & Brotherhood"
+  },
+  {
+    "id": "base_official-logo",
+    "category": "branding",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/official-logo.png",
+    "alt": "Official Imolites Crest",
+    "title": "Official Imolites Crest",
+    "subtitle": "The club-approved official emblem, preserved as supplied."
+  },
+  {
+    "id": "base_merchandise",
+    "category": "branding",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/merchandise.webp",
+    "alt": "Official crest on shirts, hats, jackets and accessories",
+    "title": "Official Crest on Apparel",
+    "subtitle": "Official crest on shirts, hats, jackets and club accessories."
+  },
+  {
+    "id": "base_heritage-map",
+    "category": "heritage",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/heritage-map.webp",
+    "alt": "Imo State — Land of Opportunity",
+    "title": "Imo State — Land of Opportunity",
+    "subtitle": "Illustrated Imo State map artwork from our creative collection."
+  },
+  {
+    "id": "base_heritage-mosaic",
+    "category": "heritage",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/heritage-mosaic.webp",
+    "alt": "Imo State Heritage & Opportunity",
+    "title": "Imo State Heritage & Opportunity",
+    "subtitle": "Artistic cultural mosaic inspired by Imo State."
+  },
+  {
+    "id": "base_heritage-landmarks",
+    "category": "heritage",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/heritage-landmarks.webp",
+    "alt": "Imo State Landmarks",
+    "title": "Imo State Landmarks",
+    "subtitle": "Creative landmark collage celebrating Imo State."
+  }
+]
