@@ -1,7 +1,65 @@
 <?php
 // Gallery items data for Imolites in Diaspora Social Club USA
 $gallery_items = [
+    // Executive Committee
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-chidi-amadi.jpg',
+        'alt'      => 'Prince Chidi Amadi (Odum Igwe 1 of Texas)',
+        'title'    => 'Prince Chidi Amadi (Odum Igwe 1 of Texas)',
+        'subtitle' => 'Public Relations Officer (P.R.O) • Executive Committee',
+    ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-obinna-iwuala.jpg',
+        'alt'      => 'Mr. Obinna Iwuala (Small Body Big Engine)',
+        'title'    => 'Mr. Obinna Iwuala (Small Body Big Engine)',
+        'subtitle' => 'Provost • Executive Committee',
+    ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-aloysius-uzodimma.jpg',
+        'alt'      => 'Comrade Aloysius Uzodimma',
+        'title'    => 'Comrade Aloysius Uzodimma',
+        'subtitle' => 'Financial Secretary • Executive Committee',
+    ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-thankgod-nwachukwu.jpg',
+        'alt'      => 'Thank God Nwachukwu',
+        'title'    => 'Thank God Nwachukwu',
+        'subtitle' => 'General Secretary • Executive Committee',
+    ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-ok-okoroafor.jpg',
+        'alt'      => 'Elder OK Okoroafor',
+        'title'    => 'Elder OK Okoroafor',
+        'subtitle' => 'Vice President • Executive Committee',
+    ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-dike-desmond.jpg',
+        'alt'      => 'Hon. Engineer Dike Desmond',
+        'title'    => 'Hon. Engineer Dike Desmond',
+        'subtitle' => 'President • Executive Committee',
+    ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/exec-chinwendu-okoko.jpg',
+        'alt'      => 'Ms. Chinwendu Okoko',
+        'title'    => 'Ms. Chinwendu Okoko',
+        'subtitle' => 'Treasurer • Executive Committee',
+    ],
+
     // 2026 Induction & End of the Year Party Honorees & Dignitaries
+    [
+        'category' => 'events',
+        'image'    => 'assets/honoree-ethelbert-nwachukwu.jpg',
+        'alt'      => 'Ethelbert Nwachukwu',
+        'title'    => 'Ethelbert Nwachukwu',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
+    ],
     [
         'category' => 'events',
         'image'    => 'assets/honoree-olewike.jpg',
@@ -63,46 +121,9 @@ $gallery_items = [
     [
         'category' => 'branding',
         'image'    => 'assets/merchandise.webp',
-        'alt'      => 'Original Crest on Merchandise',
-        'title'    => 'Original Crest on Merchandise',
-        'subtitle' => 'Approved-crest concept mockups for polos, hats, jackets, patches and online use.',
-    ],
-
-    // Events & Invitations
-    [
-        'category' => 'events',
-        'image'    => 'assets/gala-poster.webp',
-        'alt'      => '2026 Induction & End-of-Year Celebration',
-        'title'    => '2026 Induction & End-of-Year Celebration',
-        'subtitle' => 'Official event invitation, November 14, 2026.',
-    ],
-    [
-        'category' => 'events',
-        'image'    => 'assets/gala-invitation.webp',
-        'alt'      => 'Burgundy & Gold Gala Invitation',
-        'title'    => 'Burgundy & Gold Gala Invitation',
-        'subtitle' => 'Promotional artwork for the upcoming celebration.',
-    ],
-    [
-        'category' => 'events',
-        'image'    => 'assets/ceremony-invitation.webp',
-        'alt'      => 'Induction Ceremony Invitation',
-        'title'    => 'Induction Ceremony Invitation',
-        'subtitle' => 'Member-focused ceremony artwork.',
-    ],
-    [
-        'category' => 'events',
-        'image'    => 'assets/year-end-gala.webp',
-        'alt'      => 'End-of-Year Gala Announcement',
-        'title'    => 'End-of-Year Gala Announcement',
-        'subtitle' => 'Formal invitation artwork.',
-    ],
-    [
-        'category' => 'events',
-        'image'    => 'assets/digital-brochure.webp',
-        'alt'      => 'Digital Brochure Promotion',
-        'title'    => 'Digital Brochure Promotion',
-        'subtitle' => 'Creative artwork celebrating the club’s community and digital brochure.',
+        'alt'      => 'Official crest on shirts, hats, jackets and accessories',
+        'title'    => 'Official Crest on Apparel',
+        'subtitle' => 'Official crest on shirts, hats, jackets and club accessories.',
     ],
 
     // Cultural & Heritage Artwork
@@ -126,20 +147,6 @@ $gallery_items = [
         'alt'      => 'Imo State Landmarks',
         'title'    => 'Imo State Landmarks',
         'subtitle' => 'Creative landmark collage celebrating Imo State.',
-    ],
-    [
-        'category' => 'heritage',
-        'image'    => 'assets/owerri-city.webp',
-        'alt'      => 'Golden-Hour City Vision',
-        'title'    => 'Golden-Hour City Vision',
-        'subtitle' => 'AI-created conceptual Nigerian city scene, not documentary photography.',
-    ],
-    [
-        'category' => 'heritage',
-        'image'    => 'assets/owerri-lake.webp',
-        'alt'      => 'Owerri-Inspired Cityscape',
-        'title'    => 'Owerri-Inspired Cityscape',
-        'subtitle' => 'AI-created imaginative cityscape, not a verified real-world photograph.',
     ],
 ];
 

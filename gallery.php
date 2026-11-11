@@ -48,8 +48,9 @@ require __DIR__ . '/includes/header.php';
       <!-- Filter Bar -->
       <div aria-label="Filter gallery" class="filterbar" role="group">
         <button class="filter active" data-filter="all">All images</button>
+        <button class="filter" data-filter="executive">Executive Committee</button>
+        <button class="filter" data-filter="events">2026 Induction Honorees</button>
         <button class="filter" data-filter="community">Community snaps</button>
-        <button class="filter" data-filter="events">Events &amp; invitations</button>
         <button class="filter" data-filter="heritage">Imo State artwork</button>
         <button class="filter" data-filter="branding">Official crest &amp; swag</button>
         <a class="filter-btn" href="videos<?= $ext ?>">Watch Videos ↗</a>
@@ -64,6 +65,8 @@ require __DIR__ . '/includes/header.php';
           <figure class="gallery-card" data-category="<?= htmlspecialchars($item['category'], ENT_QUOTES, 'UTF-8') ?>" <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
             <?php if ($isCommunity): ?>
               <span class="badge-community">Community Snap</span>
+            <?php elseif ($item['category'] === 'executive'): ?>
+              <span class="badge-executive">Executive Committee</span>
             <?php endif; ?>
             <img alt="<?= htmlspecialchars($item['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
             <figcaption>
