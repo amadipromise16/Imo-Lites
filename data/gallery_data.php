@@ -4,6 +4,13 @@ $gallery_items = [
     // Executive Committee
     [
         'category' => 'executive',
+        'image'    => 'assets/gallery-executives-group.jpg',
+        'alt'      => 'Executives',
+        'title'    => 'Executives',
+        'subtitle' => 'Imolites in Diaspora Social Club USA • Executive Council',
+    ],
+    [
+        'category' => 'executive',
         'image'    => 'assets/exec-chidi-amadi.jpg',
         'alt'      => 'Prince Chidi Amadi (Odum Igwe 1 of Texas)',
         'title'    => 'Prince Chidi Amadi (Odum Igwe 1 of Texas)',
@@ -51,8 +58,22 @@ $gallery_items = [
         'title'    => 'Ms. Chinwendu Okoko',
         'subtitle' => 'Treasurer • Executive Committee',
     ],
+    [
+        'category' => 'executive',
+        'image'    => 'assets/gallery-ethics-committee.jpg',
+        'alt'      => 'Ethics Committee',
+        'title'    => 'Ethics Committee',
+        'subtitle' => 'Imolites in Diaspora Social Club USA • Ethics Committee',
+    ],
 
-    // 2026 Induction & End of the Year Party Honorees & Dignitaries
+    // 2026 Induction Committee & Honorees
+    [
+        'category' => 'events',
+        'image'    => 'assets/gallery-induction-committee.jpg',
+        'alt'      => 'Induction Committee',
+        'title'    => 'Induction Committee',
+        'subtitle' => '2026 Induction & Gala Planning Committee',
+    ],
     [
         'category' => 'events',
         'image'    => 'assets/honoree-ethelbert-nwachukwu.jpg',
@@ -108,6 +129,29 @@ $gallery_items = [
         'alt'      => 'Hon. Ihemtuge Chidiebube',
         'title'    => 'Hon. Ihemtuge Chidiebube',
         'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
+    ],
+
+    // Community & Fellowship — Imolites One Family
+    [
+        'category' => 'community',
+        'image'    => 'assets/gallery-imolites-family.jpg',
+        'alt'      => 'Imolites, One Family',
+        'title'    => 'Imolites, One Family',
+        'subtitle' => 'General Assembly & Members Celebration',
+    ],
+    [
+        'category' => 'community',
+        'image'    => 'assets/gallery-one-family-1.jpg',
+        'alt'      => 'Imolites, One Family',
+        'title'    => 'Imolites, One Family',
+        'subtitle' => 'Fellowship & Unity in Diaspora',
+    ],
+    [
+        'category' => 'community',
+        'image'    => 'assets/gallery-one-family-2.jpg',
+        'alt'      => 'Imolites, One Family',
+        'title'    => 'Imolites, One Family',
+        'subtitle' => 'Community Fellowship & Brotherhood',
     ],
 
     // Official Club Branding & Crest

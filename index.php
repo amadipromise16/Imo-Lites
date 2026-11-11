@@ -108,7 +108,7 @@ require __DIR__ . '/includes/header.php';
       <div>
         <div class="eyebrow">Our Motto &amp; Spirit</div>
         <h2 class="title">A community that feels like home.</h2>
-        <p class="intro">We honor our traditions while creating opportunities for the next generation to know where they come from—and to build where they are going.</p>
+        <p class="intro">We honor our traditions while creating opportunities for the next generation to know where they come from, and to build where they are going.</p>
         <div style="margin-top:24px">
           <a class="btn" href="about<?= $ext ?>">Learn More About Us</a>
         </div>

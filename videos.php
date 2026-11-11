@@ -38,8 +38,19 @@ require __DIR__ . '/includes/header.php';
         </article>
       </div>
 
-      <p class="small-note" style="margin-top:28px">Video descriptions are intentionally neutral until approved captions are provided.</p>
-      
+      <div style="margin-top:36px; padding:26px 28px; background:linear-gradient(135deg, #072e1e 0%, #0d4630 100%); border:1.5px solid var(--gold); border-radius:12px; text-align:center; color:#fff;">
+        <h3 style="font-family:'Playfair Display',serif; color:#ffffff; font-size:22px; margin:0 0 8px;">View More of Our Videos on TikTok and Facebook</h3>
+        <p style="color:#d0ded5; font-size:14.5px; max-width:620px; margin:0 auto 18px;">Stay entertained and connected with event highlights, cultural dances, celebration clips, and member spotlights directly on our official social channels.</p>
+        <div style="display:inline-flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+          <a class="btn" href="https://www.tiktok.com/@imolitesusa1?_r=1&amp;_t=ZP-9BIUJp5vLWY" rel="noopener" target="_blank" style="display:inline-flex; align-items:center; gap:8px;">
+            <span>🎵 Watch on TikTok</span> ↗
+          </a>
+          <a class="btn btn-outline" href="https://www.facebook.com/share/1KKe8uVxz8/?mibextid=wwXIfr" rel="noopener" target="_blank" style="display:inline-flex; align-items:center; gap:8px; border-color:var(--gold); color:#ffffff;">
+            <span>📘 Watch on Facebook</span> ↗
+          </a>
+        </div>
+      </div>
+
       <div class="center" style="margin-top:40px;text-align:center">
         <a class="btn" href="gallery<?= $ext ?>">Explore Cultural Gallery →</a>
       </div>
@@ -48,4 +59,3 @@ require __DIR__ . '/includes/header.php';
 </main>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
-
