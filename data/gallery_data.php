@@ -1,30 +1,58 @@
 <?php
 // Gallery items data for Imolites in Diaspora Social Club USA
 $gallery_items = [
+    // 2026 Induction & End of the Year Party Honorees & Dignitaries
     [
         'category' => 'events',
-        'image'    => 'assets/ceremony-invitation.webp',
-        'alt'      => 'Induction night invitation',
-        'caption'  => 'Induction night invitation',
-    ],
-    [
-        'category' => 'events',
-        'image'    => 'assets/gala-invitation.webp',
-        'alt'      => 'Induction and end-of-year invitation',
-        'caption'  => 'Induction and end-of-year invitation',
+        'image'    => 'assets/honoree-olewike.jpg',
+        'alt'      => 'Triple High Chief Olewike',
+        'title'    => 'Triple High Chief Olewike',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
     ],
     [
         'category' => 'events',
-        'image'    => 'assets/gala-poster.webp',
-        'alt'      => 'November 14, 2026 ceremony announcement',
-        'caption'  => 'November 14, 2026 ceremony announcement',
+        'image'    => 'assets/honoree-juliet-nwanya.jpg',
+        'alt'      => 'Hon. Juliet Nwanya',
+        'title'    => 'Hon. Juliet Nwanya',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
     ],
     [
-        'category' => 'branding',
-        'image'    => 'assets/merchandise.webp',
-        'alt'      => 'Official crest on shirts, hats, jackets and accessories',
-        'caption'  => 'Official crest on shirts, hats, jackets and accessories',
+        'category' => 'events',
+        'image'    => 'assets/honoree-jessica-deloach.jpg',
+        'alt'      => 'Ms. Jessica Deloach',
+        'title'    => 'Ms. Jessica Deloach',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
     ],
+    [
+        'category' => 'events',
+        'image'    => 'assets/honoree-chief-ikeoha.jpg',
+        'alt'      => 'Chief Ikeoha',
+        'title'    => 'Chief Ikeoha',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
+    ],
+    [
+        'category' => 'events',
+        'image'    => 'assets/honoree-joseph-nwadike.jpg',
+        'alt'      => 'President Emeritus. Hon. Joseph Frank Nwadike',
+        'title'    => 'President Emeritus. Hon. Joseph Frank Nwadike',
+        'subtitle' => 'President Emeritus • 2026 Induction & End of the Year Party',
+    ],
+    [
+        'category' => 'events',
+        'image'    => 'assets/honoree-ugonma-chukwu.jpg',
+        'alt'      => 'Ms. Ugonma Chukwu',
+        'title'    => 'Ms. Ugonma Chukwu',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
+    ],
+    [
+        'category' => 'events',
+        'image'    => 'assets/honoree-ihemtuge-chidiebube.jpg',
+        'alt'      => 'Hon. Ihemtuge Chidiebube',
+        'title'    => 'Hon. Ihemtuge Chidiebube',
+        'subtitle' => '2026 Induction & End of the Year Party • Nov 14, 2026',
+    ],
+
+    // Official Club Branding & Crest
     [
         'category' => 'branding',
         'image'    => 'assets/official-logo.png',
@@ -39,33 +67,35 @@ $gallery_items = [
         'title'    => 'Original Crest on Merchandise',
         'subtitle' => 'Approved-crest concept mockups for polos, hats, jackets, patches and online use.',
     ],
+
+    // Events & Invitations
     [
         'category' => 'events',
         'image'    => 'assets/gala-poster.webp',
         'alt'      => '2026 Induction & End-of-Year Celebration',
         'title'    => '2026 Induction & End-of-Year Celebration',
-        'subtitle' => 'Previously created official event invitation, November 14, 2026.',
+        'subtitle' => 'Official event invitation, November 14, 2026.',
     ],
     [
         'category' => 'events',
         'image'    => 'assets/gala-invitation.webp',
         'alt'      => 'Burgundy & Gold Gala Invitation',
         'title'    => 'Burgundy & Gold Gala Invitation',
-        'subtitle' => 'Previously created promotional artwork for the upcoming celebration.',
+        'subtitle' => 'Promotional artwork for the upcoming celebration.',
     ],
     [
         'category' => 'events',
         'image'    => 'assets/ceremony-invitation.webp',
         'alt'      => 'Induction Ceremony Invitation',
         'title'    => 'Induction Ceremony Invitation',
-        'subtitle' => 'Previously created member-focused ceremony artwork.',
+        'subtitle' => 'Member-focused ceremony artwork.',
     ],
     [
         'category' => 'events',
         'image'    => 'assets/year-end-gala.webp',
         'alt'      => 'End-of-Year Gala Announcement',
         'title'    => 'End-of-Year Gala Announcement',
-        'subtitle' => 'Previously created formal invitation artwork.',
+        'subtitle' => 'Formal invitation artwork.',
     ],
     [
         'category' => 'events',
@@ -74,6 +104,8 @@ $gallery_items = [
         'title'    => 'Digital Brochure Promotion',
         'subtitle' => 'Creative artwork celebrating the club’s community and digital brochure.',
     ],
+
+    // Cultural & Heritage Artwork
     [
         'category' => 'heritage',
         'image'    => 'assets/heritage-map.webp',
@@ -126,4 +158,3 @@ $video_items = [
         'description' => 'Club media • 35 sec',
     ],
 ];
-

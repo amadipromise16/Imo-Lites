@@ -682,6 +682,21 @@ img {
   color: #072e1e;
 }
 
+/* Upload Success Modal & Highlights */
+.upload-modal-card.success-card {
+  max-width: 440px;
+  text-align: center;
+  border-radius: 16px;
+  padding: 34px 28px;
+}
+
+.newly-uploaded-highlight {
+  outline: 3px solid var(--gold) !important;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.85) !important;
+  transform: scale(1.02);
+  transition: all 0.4s ease;
+}
+
 /* Gallery Grid */
 .gallery-grid {
   display: grid;

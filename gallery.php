@@ -6,6 +6,12 @@ $communityPhotos = [];
 $communityFile = __DIR__ . '/data/community_photos.json';
 if (file_exists($communityFile)) {
     $communityPhotos = json_decode(file_get_contents($communityFile), true) ?: [];
+    // Ensure test photo from Nov 10 2:59 PM is filtered out
+    $communityPhotos = array_values(array_filter($communityPhotos, function($p) {
+        $sub = strtolower($p['subtitle'] ?? '');
+        $tit = strtolower($p['title'] ?? '');
+        return !(strpos($sub, '2:59 pm') !== false || (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
+    }));
 }
 
 // Merge community photos first so new snaps appear prominently
@@ -122,6 +128,33 @@ require __DIR__ . '/includes/header.php';
   </div>
 </div>
 
+<!-- Upload Success Celebration Modal -->
+<div class="upload-modal" id="upload-success-modal" aria-hidden="true" role="dialog">
+  <div class="upload-modal-card success-card">
+    <button class="modal-close" id="close-success-btn" aria-label="Close modal">&times;</button>
+    <div style="font-size: 50px; margin-bottom: 8px;">🎉</div>
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-size: 23px; color: #072e1e; margin-bottom: 8px;">
+      You have successfully uploaded your photo!
+    </h3>
+    <p style="color: #4a5c52; font-size: 14px; line-height: 1.5; margin-bottom: 18px;">
+      Your photo is now published live in our community gallery for members and visitors worldwide to see.
+    </p>
+
+    <div id="success-photo-preview-wrap" style="margin: 0 auto 20px; width: 150px; height: 150px; border-radius: 12px; overflow: hidden; border: 3px solid var(--gold); box-shadow: 0 6px 20px rgba(0,0,0,0.18);">
+      <img id="success-photo-thumb" src="" alt="Uploaded photo preview" style="width: 100%; height: 100%; object-fit: cover; display: block;"/>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <button type="button" class="btn" id="btn-view-gallery" style="width: 100%; font-size: 15px; padding: 13px 20px;">
+        View Gallery →
+      </button>
+      <button type="button" class="btn btn-outline" id="btn-upload-more" style="width: 100%; border-color: #c9a050; color: #072e1e;">
+        Upload Another Photo
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 // Filter & Lightbox controller
 const buttons = [...document.querySelectorAll('.filter')];
@@ -175,6 +208,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     lightbox.classList.remove('open');
     closeUploadModal();
+    closeSuccessModal();
   }
 });
 
@@ -191,6 +225,15 @@ const photoUploadForm = document.getElementById('photo-upload-form');
 const uploadSubmitBtn = document.getElementById('upload-submit-btn');
 const galleryGrid = document.getElementById('gallery-grid');
 
+// Success Modal Elements
+const uploadSuccessModal = document.getElementById('upload-success-modal');
+const closeSuccessBtn = document.getElementById('close-success-btn');
+const btnViewGallery = document.getElementById('btn-view-gallery');
+const btnUploadMore = document.getElementById('btn-upload-more');
+const successPhotoThumb = document.getElementById('success-photo-thumb');
+
+let lastUploadedPhotoId = null;
+
 function openUploadModal() {
   uploadModal.classList.add('open');
   uploadModal.setAttribute('aria-hidden', 'false');
@@ -203,13 +246,67 @@ function closeUploadModal() {
   document.body.style.overflow = '';
 }
 
+function openSuccessModal(photo) {
+  if (!uploadSuccessModal) return;
+  lastUploadedPhotoId = photo ? photo.id : null;
+  if (successPhotoThumb && photo && photo.image) {
+    successPhotoThumb.src = photo.image;
+  }
+  uploadSuccessModal.classList.add('open');
+  uploadSuccessModal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSuccessModal() {
+  if (!uploadSuccessModal) return;
+  uploadSuccessModal.classList.remove('open');
+  uploadSuccessModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
 if (openUploadBtn) openUploadBtn.addEventListener('click', openUploadModal);
 if (closeUploadBtn) closeUploadBtn.addEventListener('click', closeUploadModal);
+if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', closeSuccessModal);
 if (changePhotoBtn) changePhotoBtn.addEventListener('click', () => photoFileInput.click());
+
+if (btnUploadMore) {
+  btnUploadMore.addEventListener('click', function() {
+    closeSuccessModal();
+    openUploadModal();
+  });
+}
+
+if (btnViewGallery) {
+  btnViewGallery.addEventListener('click', function() {
+    closeSuccessModal();
+    applyFilter('community');
+    setTimeout(() => {
+      let targetCard = null;
+      if (lastUploadedPhotoId) {
+        targetCard = document.querySelector(`.gallery-card[data-id="${lastUploadedPhotoId}"]`);
+      }
+      if (!targetCard) {
+        targetCard = document.querySelector('.gallery-card[data-category="community"]');
+      }
+      if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetCard.classList.add('newly-uploaded-highlight');
+        setTimeout(() => targetCard.classList.remove('newly-uploaded-highlight'), 5000);
+      } else {
+        window.scrollTo({ top: galleryGrid.offsetTop - 80, behavior: 'smooth' });
+      }
+    }, 200);
+  });
+}
 
 uploadModal.addEventListener('click', function(e) {
   if (e.target === uploadModal) closeUploadModal();
 });
+if (uploadSuccessModal) {
+  uploadSuccessModal.addEventListener('click', function(e) {
+    if (e.target === uploadSuccessModal) closeSuccessModal();
+  });
+}
 
 if (fileDropzone) {
   fileDropzone.addEventListener('click', () => photoFileInput.click());
@@ -218,10 +315,11 @@ if (fileDropzone) {
 
 // Global Shared Cloud Database & Local Fallback
 const CLOUD_KV_ENDPOINT = 'https://kvs.ix.workers.dev/imolites/community-photos';
-const STORAGE_KEY = 'imolites_community_photos_v5';
+const STORAGE_KEY = 'imolites_community_photos_v6';
 
 // Clear test caches from user's phone and laptop
 try {
+  localStorage.removeItem('imolites_community_photos_v5');
   localStorage.removeItem('imolites_community_photos_v4');
   localStorage.removeItem('imolites_community_photos_v3');
   localStorage.removeItem('imolites_community_snaps');
@@ -229,12 +327,30 @@ try {
   localStorage.removeItem('imolites_local_snaps');
 } catch(e) {}
 
+function isTestPhoto(p) {
+  if (!p) return false;
+  const sub = (p.subtitle || '').toLowerCase();
+  const tit = (p.title || '').toLowerCase();
+  if (sub.includes('2:59 pm') || (sub.includes('nov 10, 2026') && tit.includes('community celebration snap'))) {
+    return true;
+  }
+  return false;
+}
+
+// Remove any test card that might be in initial HTML
+document.querySelectorAll('.gallery-card[data-category="community"]').forEach(card => {
+  const text = card.textContent.toLowerCase();
+  if (text.includes('2:59 pm') || (text.includes('nov 10, 2026') && text.includes('community celebration snap'))) {
+    card.remove();
+  }
+});
+
 // Load cached community snaps immediately on page load
 function loadCachedCommunityPhotos() {
   try {
     const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     if (Array.isArray(cached)) {
-      cached.forEach(photo => prependPhotoToGallery(photo));
+      cached.filter(p => !isTestPhoto(p)).forEach(photo => prependPhotoToGallery(photo));
     }
   } catch(e) {}
 }
@@ -294,7 +410,7 @@ photoFileInput.addEventListener('change', async function() {
 
 // Function to prepend photo card to DOM
 function prependPhotoToGallery(photo) {
-  if (!photo || !photo.image) return;
+  if (!photo || !photo.image || isTestPhoto(photo)) return;
   // Check if card with this image or id already exists
   if (photo.id && document.querySelector(`.gallery-card[data-id="${photo.id}"]`)) return;
   if (document.querySelector(`.gallery-card img[src="${photo.image}"]`)) return;
@@ -362,10 +478,11 @@ async function loadGlobalCommunityPhotos() {
     console.warn('Could not read global community photos:', err);
   }
 
-  // Deduplicate by ID and image
+  // Deduplicate and filter test photos
   const seen = new Set();
   const uniquePhotos = [];
   for (const p of remotePhotos) {
+    if (isTestPhoto(p)) continue;
     const key = p.id || p.image;
     if (key && !seen.has(key)) {
       seen.add(key);
@@ -401,13 +518,13 @@ async function savePhotoToGlobalCloud(photo) {
       if (getRes.ok) {
         const getData = await getRes.json();
         if (getData && Array.isArray(getData.photos)) {
-          photos = getData.photos;
+          photos = getData.photos.filter(p => !isTestPhoto(p));
         }
       }
     } catch(e) {}
 
     // Prepend photo avoiding duplicate
-    photos = photos.filter(p => p.image !== photo.image && p.id !== photo.id);
+    photos = photos.filter(p => p.image !== photo.image && p.id !== photo.id && !isTestPhoto(p));
     photos.unshift(photo);
 
     // Keep up to 50 latest community photos
@@ -492,7 +609,7 @@ photoUploadForm.addEventListener('submit', async function(e) {
   prependPhotoToGallery(newPhoto);
   try {
     const localList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const filtered = localList.filter(p => p.id !== newPhoto.id && p.image !== newPhoto.image);
+    const filtered = localList.filter(p => p.id !== newPhoto.id && p.image !== newPhoto.image && !isTestPhoto(p));
     filtered.unshift(newPhoto);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   } catch(e) {}
@@ -508,7 +625,7 @@ photoUploadForm.addEventListener('submit', async function(e) {
     console.warn('Could not sync to cloud store:', e);
   }
 
-  // Step 5: Reset form and close modal
+  // Step 5: Reset form and close upload modal
   uploadSubmitBtn.disabled = false;
   uploadSubmitBtn.textContent = 'Publish to Live Gallery →';
   photoUploadForm.reset();
@@ -518,11 +635,8 @@ photoUploadForm.addEventListener('submit', async function(e) {
   selectedDataUrl = '';
   closeUploadModal();
 
-  // Step 6: Filter to community snaps and scroll to top of gallery
-  applyFilter('community');
-  window.scrollTo({ top: galleryGrid.offsetTop - 100, behavior: 'smooth' });
-
-  alert('🎉 Success! Your photo is now published live in the gallery. Anyone visiting this site from their phone, tablet, or laptop worldwide can now view it!');
+  // Step 6: Show gorgeous celebration modal with "View Gallery" button!
+  openSuccessModal(newPhoto);
 });
 </script>
 

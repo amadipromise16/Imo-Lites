@@ -20,12 +20,20 @@ if (!file_exists(__DIR__ . '/data')) {
     @mkdir(__DIR__ . '/data', 0777, true);
 }
 
+// Filter out legacy test photos
+function is_test_entry($p) {
+    $sub = strtolower($p['subtitle'] ?? '');
+    $tit = strtolower($p['title'] ?? '');
+    return (strpos($sub, '2:59 pm') !== false || (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
+}
+
 // Handle GET: return all photos
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $photos = [];
     if (file_exists($dataFile)) {
         $json = @file_get_contents($dataFile);
         $photos = json_decode($json, true) ?: [];
+        $photos = array_values(array_filter($photos, function($p) { return !is_test_entry($p); }));
     }
     echo json_encode(['success' => true, 'photos' => $photos]);
     exit;
