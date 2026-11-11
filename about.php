@@ -22,7 +22,7 @@ require __DIR__ . '/includes/header.php';
         <div class="eyebrow">Our Roots &amp; Mission</div>
         <h2 class="title">Honoring traditions, building the future.</h2>
         <p class="intro">From the heart of Imo State to communities across America, we celebrate the bonds that connect us. Imolites in Diaspora Social Club USA is a gathering place for friendship, cultural expression, family, and meaningful progress.</p>
-        <p class="intro">We honor our traditions while creating opportunities for the next generation to know where they come from, and to build where they are going.</p>
+        <p class="intro">We honor our traditions while creating opportunities for in next generation to know where they come from, and to build where they are going.</p>
         <div class="actions" style="justify-content:flex-start">
           <a class="btn" href="values<?= $ext ?>">Discover Our Purpose →</a>
           <a class="btn btn-outline" style="color:#072e1e;border-color:#072e1e" href="gallery<?= $ext ?>">Explore Our Gallery</a>

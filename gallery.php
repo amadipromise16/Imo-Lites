@@ -36,6 +36,48 @@ require __DIR__ . '/includes/header.php';
 
   <section class="section">
     <div class="wrap">
+      <style>
+        /* Bulletproof gallery badge styling across all servers and browser cache states */
+        .gallery-card { position: relative !important; }
+        .badge-executive {
+          position: absolute !important;
+          top: 12px !important;
+          left: 12px !important;
+          background: linear-gradient(135deg, #042115 0%, #0d4630 60%, #b8860b 100%) !important;
+          color: #ffffff !important;
+          border: 1px solid #d4af37 !important;
+          font-size: 11px !important;
+          font-weight: 800 !important;
+          padding: 4px 10px !important;
+          border-radius: 20px !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.06em !important;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+          z-index: 2 !important;
+          display: inline-block !important;
+          margin: 0 !important;
+          line-height: normal !important;
+        }
+        .badge-community {
+          position: absolute !important;
+          top: 12px !important;
+          left: 12px !important;
+          background: linear-gradient(135deg, #072e1e 0%, #0d4630 100%) !important;
+          color: #ffffff !important;
+          border: 1px solid #d4af37 !important;
+          font-size: 11px !important;
+          font-weight: 800 !important;
+          padding: 4px 10px !important;
+          border-radius: 20px !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.06em !important;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+          z-index: 2 !important;
+          display: inline-block !important;
+          margin: 0 !important;
+          line-height: normal !important;
+        }
+      </style>
       <!-- Interactive Snap & Share Photo Bar -->
       <div class="snap-upload-bar">
         <div>
@@ -64,9 +106,9 @@ require __DIR__ . '/includes/header.php';
         ?>
           <figure class="gallery-card" data-category="<?= htmlspecialchars($item['category'], ENT_QUOTES, 'UTF-8') ?>" <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
             <?php if ($isCommunity): ?>
-              <span class="badge-community">Community Snap</span>
+              <span class="badge-community" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Community Snap</span>
             <?php elseif ($item['category'] === 'executive'): ?>
-              <span class="badge-executive">Executive Committee</span>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <?php endif; ?>
             <img alt="<?= htmlspecialchars($item['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
             <figcaption>
@@ -425,6 +467,7 @@ function prependPhotoToGallery(photo) {
 
   const badge = document.createElement('span');
   badge.className = 'badge-community';
+  badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
   badge.textContent = 'Community Snap';
   figure.appendChild(badge);
 
