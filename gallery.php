@@ -180,6 +180,8 @@ require __DIR__ . '/includes/header.php';
           $itemId = $item['id'] ?? '';
           $folderId = $item['folder_id'] ?? ($category === 'executive' ? 'executive' : '');
           $isFolderCover = !empty($item['is_folder_cover']);
+          // Hide executive, trustees, induction_committee, and events (2026 honorees) on initial load of 'all'
+          $hideOnAll = in_array($category, ['executive', 'trustees', 'induction_committee', 'events']) || $isFolderCover || !empty($folderId);
 
           $cardClasses = ['gallery-card'];
           if ($isFolderCover) $cardClasses[] = 'album-folder-card';
@@ -188,7 +190,8 @@ require __DIR__ . '/includes/header.php';
                   data-category="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>" 
                   <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
                   <?= $isFolderCover ? 'data-is-folder="true" data-folder-target="' . htmlspecialchars($folderId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
-                  <?= (!$isFolderCover && $folderId) ? 'data-in-folder="' . htmlspecialchars($folderId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
+                  <?= (!$isFolderCover && $folderId) ? 'data-in-folder="' . htmlspecialchars($folderId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
+                  <?= $hideOnAll ? 'style="display:none;"' : '' ?>>
             
             <?php if ($isFolderCover): ?>
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
@@ -199,7 +202,7 @@ require __DIR__ . '/includes/header.php';
             <?php elseif ($category === 'executive'): ?>
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <?php elseif ($category === 'trustees'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Board of Trustees</span>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Board of Trustees &amp; Founder</span>
             <?php elseif ($category === 'induction_committee'): ?>
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Induction Committee</span>
             <?php elseif ($category === 'events'): ?>
@@ -323,7 +326,8 @@ function updateGalleryDisplay() {
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
       const cat = c.dataset.category;
-      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
+      // HIDE executive, trustees, induction_committee, AND events (2026 induction honorees) on 'all'
+      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || cat === 'events' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
         c.style.display = 'none';
       } else {
         c.style.display = 'block';
@@ -358,7 +362,7 @@ function updateGalleryDisplay() {
     folderExpanded = true;
     if (activeFolderBar) {
       activeFolderBar.style.display = 'flex';
-      folderBarTitle.textContent = '🏛️ Board of Trustees & Founder';
+      folderBarTitle.textContent = '🏛️ Board of Trustees & Founder Album';
       folderBarDesc.textContent = 'Honoring the Visionary Founder and Board of Trustees of Imolites in Diaspora Social Club USA';
       if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
     }
@@ -377,12 +381,18 @@ function updateGalleryDisplay() {
       c.style.display = (c.dataset.category === 'induction_committee') ? 'block' : 'none';
     });
   } else if (currentSection === 'events') {
-    folderExpanded = false;
-    if (activeFolderBar) activeFolderBar.style.display = 'none';
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '🎖️ 2026 Induction Honorees Album';
+      folderBarDesc.textContent = 'Celebrating the distinguished honorees of our 2026 Induction & End of the Year Party';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
+    }
     cards.forEach(c => {
       c.style.display = (c.dataset.category === 'events') ? 'block' : 'none';
     });
   } else {
+    // Other categories: community, heritage, branding
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
@@ -413,7 +423,7 @@ buttons.forEach(btn => {
 
 if (btnCloseFolder) {
   btnCloseFolder.addEventListener('click', () => {
-    if (currentSection === 'executive') {
+    if (currentSection === 'executive' && folderExpanded) {
       folderExpanded = false;
       updateGalleryDisplay();
     } else {

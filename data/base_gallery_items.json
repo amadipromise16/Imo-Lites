@@ -110,6 +110,26 @@
     "subtitle": "Founder, Current President, Member of the Board of Trustees"
   },
   {
+    "id": "trustees_founders_council",
+    "category": "trustees",
+    "folder_id": null,
+    "is_folder_cover": false,
+    "image": "assets/gallery-trustees-founders-1.jpg",
+    "alt": "Board of Trustees and Founders",
+    "title": "Board of Trustees and Founders",
+    "subtitle": "Founding Leadership & Trustees Council • Imolites in Diaspora Social Club USA"
+  },
+  {
+    "id": "trustees_founders_assembly",
+    "category": "trustees",
+    "folder_id": null,
+    "is_folder_cover": false,
+    "image": "assets/gallery-trustees-founders-2.jpg",
+    "alt": "Board of Trustees and Founders",
+    "title": "Board of Trustees and Founders",
+    "subtitle": "Board of Trustees & Founding Leadership • Imolites in Diaspora Social Club USA"
+  },
+  {
     "id": "induction_committee_group",
     "category": "induction_committee",
     "folder_id": null,
