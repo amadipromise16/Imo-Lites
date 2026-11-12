@@ -1,35 +1,66 @@
 <?php
+// Bulletproof error suppression for clean production render
+ini_set('display_errors', '0');
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+
 require_once __DIR__ . '/data/gallery_data.php';
 
-// Load persistent community photos
+// 1. Base gallery items (always guaranteed array)
+$base_items = function_exists('get_base_gallery_items') ? get_base_gallery_items() : [];
+if (empty($base_items)) {
+    $baseFile = __DIR__ . '/data/base_gallery_items.json';
+    if (file_exists($baseFile)) {
+        $base_items = json_decode(@file_get_contents($baseFile), true) ?: [];
+    }
+}
+if (!is_array($base_items)) {
+    $base_items = [];
+}
+
+// 2. Load persistent community photos
 $communityPhotos = [];
 $communityFile = __DIR__ . '/data/community_photos.json';
 if (file_exists($communityFile)) {
-    $communityPhotos = json_decode(file_get_contents($communityFile), true) ?: [];
-    // Ensure test photo from Nov 10 2:59 PM is filtered out
-    $communityPhotos = array_values(array_filter($communityPhotos, function($p) {
-        $sub = strtolower($p['subtitle'] ?? '');
-        $tit = strtolower($p['title'] ?? '');
-        return !(strpos($sub, '2:59 pm') !== false || (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
-    }));
+    $rawComm = @file_get_contents($communityFile);
+    $communityPhotos = $rawComm ? (json_decode($rawComm, true) ?: []) : [];
+    if (is_array($communityPhotos)) {
+        // Ensure test photo from Nov 10 2:59 PM is filtered out
+        $communityPhotos = array_values(array_filter($communityPhotos, function($p) {
+            if (!is_array($p)) return false;
+            $sub = strtolower($p['subtitle'] ?? '');
+            $tit = strtolower($p['title'] ?? '');
+            return !(strpos($sub, '2:59 pm') !== false || (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
+        }));
+    } else {
+        $communityPhotos = [];
+    }
 }
 
-// Load admin-added custom photos
+// 3. Load admin-added custom photos
 $adminPhotos = [];
 $adminFile = __DIR__ . '/data/admin_gallery_items.json';
 if (file_exists($adminFile)) {
-    $adminPhotos = json_decode(file_get_contents($adminFile), true) ?: [];
+    $rawAdm = @file_get_contents($adminFile);
+    $adminPhotos = $rawAdm ? (json_decode($rawAdm, true) ?: []) : [];
+    if (!is_array($adminPhotos)) {
+        $adminPhotos = [];
+    }
 }
 
-// Load deleted photos blacklist
+// 4. Load deleted photos blacklist
 $deletedIds = [];
 $deletedFile = __DIR__ . '/data/deleted_photos.json';
 if (file_exists($deletedFile)) {
-    $deletedIds = json_decode(file_get_contents($deletedFile), true) ?: [];
+    $rawDel = @file_get_contents($deletedFile);
+    $deletedIds = $rawDel ? (json_decode($rawDel, true) ?: []) : [];
+}
+if (!is_array($deletedIds)) {
+    $deletedIds = [];
 }
 
 // Filter community photos
 $communityPhotos = array_values(array_filter($communityPhotos, function($p) use ($deletedIds) {
+    if (!is_array($p)) return false;
     $id = $p['id'] ?? '';
     $img = $p['image'] ?? '';
     return !in_array($id, $deletedIds) && !in_array($img, $deletedIds);
@@ -37,30 +68,38 @@ $communityPhotos = array_values(array_filter($communityPhotos, function($p) use 
 
 // Filter admin photos
 $adminPhotos = array_values(array_filter($adminPhotos, function($p) use ($deletedIds) {
+    if (!is_array($p)) return false;
     $id = $p['id'] ?? '';
     $img = $p['image'] ?? '';
     return !in_array($id, $deletedIds) && !in_array($img, $deletedIds);
 }));
 
 // Filter base gallery items
-$active_gallery_items = array_values(array_filter($gallery_items, function($p) use ($deletedIds) {
+$active_gallery_items = array_values(array_filter($base_items, function($p) use ($deletedIds) {
+    if (!is_array($p)) return false;
     $img = $p['image'] ?? '';
+    $id = $p['id'] ?? '';
     $key = 'base_' . md5($img);
-    return !in_array($key, $deletedIds) && !in_array($img, $deletedIds);
+    return !in_array($key, $deletedIds) && !in_array($img, $deletedIds) && !in_array($id, $deletedIds);
 }));
 
-// Load edited photos overrides
+// 5. Load edited photos overrides
 $editedFile = __DIR__ . '/data/edited_photos.json';
 $edits = [];
 if (file_exists($editedFile)) {
-    $edits = json_decode(file_get_contents($editedFile), true) ?: [];
+    $rawEd = @file_get_contents($editedFile);
+    $edits = $rawEd ? (json_decode($rawEd, true) ?: []) : [];
+    if (!is_array($edits)) {
+        $edits = [];
+    }
 }
 
 $apply_edits = function(&$item) use ($edits) {
+    if (!is_array($item)) return;
     $id = $item['id'] ?? '';
     $img = $item['image'] ?? '';
     $key = isset($edits[$id]) ? $id : (isset($edits[$img]) ? $img : null);
-    if ($key && isset($edits[$key])) {
+    if ($key && isset($edits[$key]) && is_array($edits[$key])) {
         $e = $edits[$key];
         if (!empty($e['title'])) { $item['title'] = $e['title']; $item['alt'] = $e['title']; }
         if (isset($e['subtitle'])) { $item['subtitle'] = $e['subtitle']; }
@@ -69,8 +108,11 @@ $apply_edits = function(&$item) use ($edits) {
 };
 
 foreach ($communityPhotos as &$cp) { $apply_edits($cp); }
+unset($cp);
 foreach ($adminPhotos as &$ap) { $apply_edits($ap); }
+unset($ap);
 foreach ($active_gallery_items as &$bp) { $apply_edits($bp); }
+unset($bp);
 
 // Merge community + admin + base gallery items
 $display_items = array_merge($communityPhotos, $adminPhotos, $active_gallery_items);
@@ -209,7 +251,7 @@ require __DIR__ . '/includes/header.php';
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <?php endif; ?>
 
-            <img alt="<?= htmlspecialchars($item['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
+            <img alt="<?= htmlspecialchars($item['alt'] ?? ($item['title'] ?? 'Imolites Gallery Photo'), ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
             
             <figcaption>
               <?php if (!empty($item['title'])): ?>

@@ -353,3 +353,6 @@ function get_all_gallery_items() {
     }
     return $result;
 }
+
+// Global variable export for backwards compatibility
+$gallery_items = get_base_gallery_items();
