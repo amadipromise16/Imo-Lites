@@ -248,7 +248,7 @@ if ($action === 'list_all') {
 // 5. ACTION: ADMIN UPLOAD PHOTO TO ANY SECTION
 if ($action === 'upload_photo') {
     $category = trim($_POST['category'] ?? 'executive');
-    $allowedCategories = ['executive', 'events', 'community', 'heritage', 'branding'];
+    $allowedCategories = ['executive', 'trustees', 'induction_committee', 'events', 'community', 'heritage', 'branding'];
     if (!in_array($category, $allowedCategories)) {
         $category = 'executive';
     }
@@ -266,8 +266,18 @@ if ($action === 'upload_photo') {
     if ($subtitle === '') {
         if ($category === 'executive') {
             $subtitle = 'Executive Committee • Added by Admin on ' . $dateStr;
+        } elseif ($category === 'trustees') {
+            $subtitle = 'Board of Trustees & Founder • Added by Admin on ' . $dateStr;
+        } elseif ($category === 'induction_committee') {
+            $subtitle = '2026 Induction Committee • Added by Admin on ' . $dateStr;
         } elseif ($category === 'events') {
-            $subtitle = '2026 Induction & Gala • Added by Admin on ' . $dateStr;
+            $subtitle = '2026 Induction Honorees • Added by Admin on ' . $dateStr;
+        } elseif ($category === 'community') {
+            $subtitle = 'Club Family Photo • Added by Admin on ' . $dateStr;
+        } else {
+            $subtitle = 'Official Club Media • Added on ' . $dateStr;
+        }
+    }
         } elseif ($category === 'community') {
             $subtitle = 'Club Family Photo • Added by Admin on ' . $dateStr;
         } else {

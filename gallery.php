@@ -149,6 +149,8 @@ require __DIR__ . '/includes/header.php';
       <div aria-label="Filter gallery" class="filterbar" role="group">
         <button class="filter active" data-filter="all">All images</button>
         <button class="filter" data-filter="executive">Executive Committee</button>
+        <button class="filter" data-filter="trustees">Board of Trustees &amp; Founder</button>
+        <button class="filter" data-filter="induction_committee">Induction Committee</button>
         <button class="filter" data-filter="events">2026 Induction Honorees</button>
         <button class="filter" data-filter="community">Community snaps</button>
         <button class="filter" data-filter="heritage">Imo State artwork</button>
@@ -176,7 +178,7 @@ require __DIR__ . '/includes/header.php';
           $category = $item['category'] ?? 'community';
           $isCommunity = ($category === 'community');
           $itemId = $item['id'] ?? '';
-          $folderId = $item['folder_id'] ?? ($category === 'executive' ? 'executive' : ($category === 'events' ? 'events' : ''));
+          $folderId = $item['folder_id'] ?? ($category === 'executive' ? 'executive' : '');
           $isFolderCover = !empty($item['is_folder_cover']);
 
           $cardClasses = ['gallery-card'];
@@ -190,12 +192,18 @@ require __DIR__ . '/includes/header.php';
             
             <?php if ($isFolderCover): ?>
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
-                📁 <?= ($folderId === 'executive') ? 'Executive Council Album' : '2026 Induction Album' ?>
+                📁 Executive Council Album
               </span>
             <?php elseif ($isCommunity): ?>
               <span class="badge-community" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Community Snap</span>
             <?php elseif ($category === 'executive'): ?>
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+            <?php elseif ($category === 'trustees'): ?>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Board of Trustees</span>
+            <?php elseif ($category === 'induction_committee'): ?>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Induction Committee</span>
+            <?php elseif ($category === 'events'): ?>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <?php endif; ?>
 
             <img alt="<?= htmlspecialchars($item['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
@@ -213,13 +221,12 @@ require __DIR__ . '/includes/header.php';
 
             <?php if ($isFolderCover): ?>
               <div class="folder-action-hint">
-                📁 Click to Open <?= ($folderId === 'executive') ? 'Executive' : 'Induction' ?> Album &amp; View All Photos →
+                📁 Click to Open Executive Album &amp; View All Photos →
               </div>
             <?php endif; ?>
           </figure>
         <?php endforeach; ?>
       </div>
-
       <p class="small-note" style="margin-top:30px">Gallery notice: Some Imo State images are AI-generated artistic interpretations and should not be presented as verified photographs of specific locations. Event artwork is from earlier club creative projects. Community photos are contributed by club members.</p>
     </div>
   </section>
@@ -315,8 +322,8 @@ function updateGalleryDisplay() {
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
-      // HIDE the two album folder cards AND any in-folder items on 'all'
-      if (c.dataset.isFolder === 'true' || c.dataset.inFolder) {
+      const cat = c.dataset.category;
+      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
         c.style.display = 'none';
       } else {
         c.style.display = 'block';
@@ -324,7 +331,6 @@ function updateGalleryDisplay() {
     });
   } else if (currentSection === 'executive') {
     if (!folderExpanded) {
-      // Show ONLY the Executives cover card; all officers remain behind it
       if (activeFolderBar) activeFolderBar.style.display = 'none';
       cards.forEach(c => {
         if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'executive') {
@@ -334,7 +340,6 @@ function updateGalleryDisplay() {
         }
       });
     } else {
-      // Folder expanded: show all executive officers + cover card
       if (activeFolderBar) {
         activeFolderBar.style.display = 'flex';
         folderBarTitle.textContent = 'Executive Committee Album';
@@ -349,35 +354,35 @@ function updateGalleryDisplay() {
         }
       });
     }
-  } else if (currentSection === 'events') {
-    if (!folderExpanded) {
-      // Show ONLY the Induction Committee cover card; all honorees remain behind it
-      if (activeFolderBar) activeFolderBar.style.display = 'none';
-      cards.forEach(c => {
-        if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'events') {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
-    } else {
-      // Folder expanded: show all induction honorees + cover card
-      if (activeFolderBar) {
-        activeFolderBar.style.display = 'flex';
-        folderBarTitle.textContent = '2026 Induction & Honorees Album';
-        folderBarDesc.textContent = 'Celebrating our 2026 Induction & End of the Year Party Honorees';
-        if (btnCloseFolder) btnCloseFolder.textContent = '← Back to Induction Cover';
-      }
-      cards.forEach(c => {
-        if (c.dataset.category === 'events' || c.dataset.inFolder === 'events') {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
+  } else if (currentSection === 'trustees') {
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '🏛️ Board of Trustees & Founder';
+      folderBarDesc.textContent = 'Honoring the Visionary Founder and Board of Trustees of Imolites in Diaspora Social Club USA';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
     }
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'trustees') ? 'block' : 'none';
+    });
+  } else if (currentSection === 'induction_committee') {
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '🤝 2026 Induction Planning Committee';
+      folderBarDesc.textContent = 'The dedicated committee members organizing and putting the 2026 Induction Gala together';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
+    }
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'induction_committee') ? 'block' : 'none';
+    });
+  } else if (currentSection === 'events') {
+    folderExpanded = false;
+    if (activeFolderBar) activeFolderBar.style.display = 'none';
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'events') ? 'block' : 'none';
+    });
   } else {
-    // Other categories: community, heritage, branding
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
@@ -408,8 +413,12 @@ buttons.forEach(btn => {
 
 if (btnCloseFolder) {
   btnCloseFolder.addEventListener('click', () => {
-    folderExpanded = false;
-    updateGalleryDisplay();
+    if (currentSection === 'executive') {
+      folderExpanded = false;
+      updateGalleryDisplay();
+    } else {
+      applyFilter('all');
+    }
   });
 }
 

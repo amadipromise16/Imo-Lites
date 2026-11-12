@@ -201,24 +201,24 @@ if ($is_logged_in) {
     /* Stats Bar */
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
       margin-bottom: 28px;
     }
     .stat-card {
       background: #ffffff;
       border: 1px solid #d4dfd7;
       border-radius: 12px;
-      padding: 18px 20px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.04);
     }
     .stat-icon {
-      font-size: 32px;
-      width: 54px;
-      height: 54px;
+      font-size: 28px;
+      width: 48px;
+      height: 48px;
       border-radius: 10px;
       background: #f0f7f2;
       display: flex;
@@ -227,13 +227,13 @@ if ($is_logged_in) {
     }
     .stat-info b {
       display: block;
-      font-size: 26px;
+      font-size: 24px;
       font-family: 'Playfair Display', serif;
       color: #072e1e;
       line-height: 1.1;
     }
     .stat-info span {
-      font-size: 12.5px;
+      font-size: 12px;
       color: #5d7366;
       font-weight: 600;
     }
@@ -292,13 +292,13 @@ if ($is_logged_in) {
       margin-bottom: 22px;
     }
     .admin-filter {
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
       border: 1.5px solid #c9d8ce;
       background: #ffffff;
       color: #072e1e;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12.5px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -334,7 +334,7 @@ if ($is_logged_in) {
     }
     .admin-photo-card img {
       width: 100%;
-      height: 190px;
+      height: 200px;
       object-fit: cover;
       background: #f1f5f2;
       border-bottom: 1px solid #e1ebe4;
@@ -360,6 +360,16 @@ if ($is_logged_in) {
       background: #042115;
       color: #ffffff;
       border: 1px solid var(--gold);
+    }
+    .badge-trustees-admin {
+      background: #072e1e;
+      color: #f3e0aa;
+      border: 1.5px solid var(--gold);
+    }
+    .badge-induct-comm-admin {
+      background: #14532d;
+      color: #ffffff;
+      border: 1px solid #86efac;
     }
     .badge-comm-admin {
       background: #0d4630;
@@ -522,6 +532,20 @@ if ($is_logged_in) {
         </div>
       </div>
       <div class="stat-card">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-info">
+          <b id="stat-trustees">0</b>
+          <span>Board of Trustees</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🤝</div>
+        <div class="stat-info">
+          <b id="stat-induct-comm">0</b>
+          <span>Induction Committee</span>
+        </div>
+      </div>
+      <div class="stat-card">
         <div class="stat-icon">🎖️</div>
         <div class="stat-info">
           <b id="stat-induction">0</b>
@@ -546,7 +570,7 @@ if ($is_logged_in) {
     <!-- Admin Photo Upload Form -->
     <section class="admin-upload-box">
       <h3><span>📤</span> Add Photo to Any Gallery Section</h3>
-      <p>Upload a photo and assign it directly to a gallery section (Executive Committee, 2026 Induction Honorees, Community, etc.). It will appear live immediately with matching club design.</p>
+      <p>Upload a photo and assign it directly to any gallery section. It will appear live immediately with matching club design.</p>
       
       <div id="upload-status-alert" style="display:none; padding:12px 16px; margin-bottom:18px; border-radius:8px; font-size:14px; font-weight:600;"></div>
 
@@ -557,9 +581,11 @@ if ($is_logged_in) {
               <label for="photo-category">Gallery Section / Folder *</label>
               <select id="photo-category" name="category" required>
                 <option value="executive">👔 Executive Committee (Executive Council Folder)</option>
-                <option value="events">🎖️ 2026 Induction Honorees &amp; Committee</option>
+                <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
+                <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
+                <option value="events">🎖️ 2026 Induction Honorees</option>
                 <option value="community">📸 Community Snaps &amp; Family</option>
-                <option value="heritage">🏛️ Imo State Artwork &amp; Landmarks</option>
+                <option value="heritage">🎨 Imo State Artwork &amp; Landmarks</option>
                 <option value="branding">🦅 Official Crest &amp; Swag</option>
               </select>
             </div>
@@ -613,10 +639,12 @@ if ($is_logged_in) {
       <div class="admin-filter-bar">
         <button class="admin-filter active" data-filter="all">All Photos (<span id="cnt-all">0</span>)</button>
         <button class="admin-filter" data-filter="executive">👔 Executive (<span id="cnt-exec">0</span>)</button>
-        <button class="admin-filter" data-filter="events">🎖️ 2026 Induction (<span id="cnt-events">0</span>)</button>
+        <button class="admin-filter" data-filter="trustees">🏛️ Trustees &amp; Founder (<span id="cnt-trustees">0</span>)</button>
+        <button class="admin-filter" data-filter="induction_committee">🤝 Induction Comm (<span id="cnt-induct-comm">0</span>)</button>
+        <button class="admin-filter" data-filter="events">🎖️ 2026 Honorees (<span id="cnt-events">0</span>)</button>
         <button class="admin-filter" data-filter="community">📸 Community (<span id="cnt-comm">0</span>)</button>
-        <button class="admin-filter" data-filter="heritage">🏛️ Heritage (<span id="cnt-heritage">0</span>)</button>
-        <button class="admin-filter" data-filter="branding">🦅 Official Crest (<span id="cnt-branding">0</span>)</button>
+        <button class="admin-filter" data-filter="heritage">🎨 Heritage (<span id="cnt-heritage">0</span>)</button>
+        <button class="admin-filter" data-filter="branding">🦅 Crest (<span id="cnt-branding">0</span>)</button>
       </div>
 
       <!-- Grid -->
@@ -656,9 +684,11 @@ if ($is_logged_in) {
             <label for="edit-photo-category">Gallery Section *</label>
             <select id="edit-photo-category" required>
               <option value="executive">👔 Executive Committee</option>
+              <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
+              <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
               <option value="events">🎖️ 2026 Induction Honorees</option>
               <option value="community">📸 Community Snaps</option>
-              <option value="heritage">🏛️ Imo State Artwork &amp; Landmarks</option>
+              <option value="heritage">🎨 Imo State Artwork &amp; Landmarks</option>
               <option value="branding">🦅 Official Crest &amp; Swag</option>
             </select>
           </div>
@@ -766,6 +796,8 @@ const editPreviewThumb = document.getElementById('edit-preview-thumb');
 // Stat elements
 const statTotal = document.getElementById('stat-total');
 const statExec = document.getElementById('stat-exec');
+const statTrustees = document.getElementById('stat-trustees');
+const statInductComm = document.getElementById('stat-induct-comm');
 const statInduction = document.getElementById('stat-induction');
 const statComm = document.getElementById('stat-comm');
 
@@ -828,11 +860,15 @@ document.querySelectorAll('.admin-filter').forEach(btn => {
 function updateStats(photos) {
   if (statTotal) statTotal.textContent = photos.length;
   if (statExec) statExec.textContent = photos.filter(p => p.category === 'executive').length;
+  if (statTrustees) statTrustees.textContent = photos.filter(p => p.category === 'trustees').length;
+  if (statInductComm) statInductComm.textContent = photos.filter(p => p.category === 'induction_committee').length;
   if (statInduction) statInduction.textContent = photos.filter(p => p.category === 'events').length;
   if (statComm) statComm.textContent = photos.filter(p => p.category === 'community').length;
 
   document.getElementById('cnt-all') && (document.getElementById('cnt-all').textContent = photos.length);
   document.getElementById('cnt-exec') && (document.getElementById('cnt-exec').textContent = photos.filter(p => p.category === 'executive').length);
+  document.getElementById('cnt-trustees') && (document.getElementById('cnt-trustees').textContent = photos.filter(p => p.category === 'trustees').length);
+  document.getElementById('cnt-induct-comm') && (document.getElementById('cnt-induct-comm').textContent = photos.filter(p => p.category === 'induction_committee').length);
   document.getElementById('cnt-events') && (document.getElementById('cnt-events').textContent = photos.filter(p => p.category === 'events').length);
   document.getElementById('cnt-comm') && (document.getElementById('cnt-comm').textContent = photos.filter(p => p.category === 'community').length);
   document.getElementById('cnt-heritage') && (document.getElementById('cnt-heritage').textContent = photos.filter(p => p.category === 'heritage').length);
@@ -859,8 +895,10 @@ function renderAdminGrid() {
     let badgeClass = 'badge-other-admin';
     let badgeLabel = photo.category || 'Photo';
     if (photo.category === 'executive') { badgeClass = 'badge-exec-admin'; badgeLabel = 'Executive'; }
+    else if (photo.category === 'trustees') { badgeClass = 'badge-trustees-admin'; badgeLabel = 'Trustees & Founder'; }
+    else if (photo.category === 'induction_committee') { badgeClass = 'badge-induct-comm-admin'; badgeLabel = 'Induction Comm'; }
     else if (photo.category === 'community') { badgeClass = 'badge-comm-admin'; badgeLabel = 'Community Snap'; }
-    else if (photo.category === 'events') { badgeClass = 'badge-event-admin'; badgeLabel = '2026 Induction'; }
+    else if (photo.category === 'events') { badgeClass = 'badge-event-admin'; badgeLabel = '2026 Honoree'; }
 
     const photoId = photo.id || photo.image;
     const photoTitle = photo.title || photo.alt || 'Photo';
@@ -929,7 +967,6 @@ function renderAdminGrid() {
         await fetch('admin-api.php?action=delete_photo', { method: 'POST', body: formData });
       } catch(e) {}
 
-      // Remove locally
       allPhotosList = allPhotosList.filter(p => !(p.id === id || p.image === img));
       updateStats(allPhotosList);
       renderAdminGrid();
@@ -962,7 +999,6 @@ adminEditForm?.addEventListener('submit', async function(e) {
     await fetch('admin-api.php?action=edit_photo', { method: 'POST', body: formData });
   } catch(e) {}
 
-  // Update in local memory
   const photo = allPhotosList.find(p => (p.id === id || p.image === img));
   if (photo) {
     photo.title = newTitle;

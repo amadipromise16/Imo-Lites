@@ -133,24 +133,24 @@
     /* Stats Bar */
     .stats-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
       margin-bottom: 28px;
     }
     .stat-card {
       background: #ffffff;
       border: 1px solid #d4dfd7;
       border-radius: 12px;
-      padding: 18px 20px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.04);
     }
     .stat-icon {
-      font-size: 32px;
-      width: 54px;
-      height: 54px;
+      font-size: 28px;
+      width: 48px;
+      height: 48px;
       border-radius: 10px;
       background: #f0f7f2;
       display: flex;
@@ -159,13 +159,13 @@
     }
     .stat-info b {
       display: block;
-      font-size: 26px;
+      font-size: 24px;
       font-family: 'Playfair Display', serif;
       color: #072e1e;
       line-height: 1.1;
     }
     .stat-info span {
-      font-size: 12.5px;
+      font-size: 12px;
       color: #5d7366;
       font-weight: 600;
     }
@@ -224,13 +224,13 @@
       margin-bottom: 22px;
     }
     .admin-filter {
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
       border: 1.5px solid #c9d8ce;
       background: #ffffff;
       color: #072e1e;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12.5px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -266,7 +266,7 @@
     }
     .admin-photo-card img {
       width: 100%;
-      height: 190px;
+      height: 200px;
       object-fit: cover;
       background: #f1f5f2;
       border-bottom: 1px solid #e1ebe4;
@@ -292,6 +292,16 @@
       background: #042115;
       color: #ffffff;
       border: 1px solid var(--gold);
+    }
+    .badge-trustees-admin {
+      background: #072e1e;
+      color: #f3e0aa;
+      border: 1.5px solid var(--gold);
+    }
+    .badge-induct-comm-admin {
+      background: #14532d;
+      color: #ffffff;
+      border: 1px solid #86efac;
     }
     .badge-comm-admin {
       background: #0d4630;
@@ -442,7 +452,7 @@
       <div class="stat-card">
         <div class="stat-icon">🖼️</div>
         <div class="stat-info">
-          <b id="stat-total">26</b>
+          <b id="stat-total">28</b>
           <span>Total Gallery Photos</span>
         </div>
       </div>
@@ -454,9 +464,23 @@
         </div>
       </div>
       <div class="stat-card">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-info">
+          <b id="stat-trustees">2</b>
+          <span>Board of Trustees</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🤝</div>
+        <div class="stat-info">
+          <b id="stat-induct-comm">1</b>
+          <span>Induction Committee</span>
+        </div>
+      </div>
+      <div class="stat-card">
         <div class="stat-icon">🎖️</div>
         <div class="stat-info">
-          <b id="stat-induction">9</b>
+          <b id="stat-induction">8</b>
           <span>2026 Induction Honorees</span>
         </div>
       </div>
@@ -478,7 +502,7 @@
     <!-- Admin Photo Upload Form -->
     <section class="admin-upload-box">
       <h3><span>📤</span> Add Photo to Any Gallery Section</h3>
-      <p>Upload a photo and assign it directly to a gallery section (Executive Committee, 2026 Induction Honorees, Community, etc.). It will appear live immediately with matching club design.</p>
+      <p>Upload a photo and assign it directly to any gallery section. It will appear live immediately with matching club design.</p>
       
       <div id="upload-status-alert" style="display:none; padding:12px 16px; margin-bottom:18px; border-radius:8px; font-size:14px; font-weight:600;"></div>
 
@@ -489,9 +513,11 @@
               <label for="photo-category">Gallery Section / Folder *</label>
               <select id="photo-category" name="category" required>
                 <option value="executive">👔 Executive Committee (Executive Council Folder)</option>
-                <option value="events">🎖️ 2026 Induction Honorees &amp; Committee</option>
+                <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
+                <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
+                <option value="events">🎖️ 2026 Induction Honorees</option>
                 <option value="community">📸 Community Snaps &amp; Family</option>
-                <option value="heritage">🏛️ Imo State Artwork &amp; Landmarks</option>
+                <option value="heritage">🎨 Imo State Artwork &amp; Landmarks</option>
                 <option value="branding">🦅 Official Crest &amp; Swag</option>
               </select>
             </div>
@@ -545,10 +571,12 @@
       <div class="admin-filter-bar">
         <button class="admin-filter active" data-filter="all">All Photos (<span id="cnt-all">0</span>)</button>
         <button class="admin-filter" data-filter="executive">👔 Executive (<span id="cnt-exec">0</span>)</button>
-        <button class="admin-filter" data-filter="events">🎖️ 2026 Induction (<span id="cnt-events">0</span>)</button>
+        <button class="admin-filter" data-filter="trustees">🏛️ Trustees &amp; Founder (<span id="cnt-trustees">0</span>)</button>
+        <button class="admin-filter" data-filter="induction_committee">🤝 Induction Comm (<span id="cnt-induct-comm">0</span>)</button>
+        <button class="admin-filter" data-filter="events">🎖️ 2026 Honorees (<span id="cnt-events">0</span>)</button>
         <button class="admin-filter" data-filter="community">📸 Community (<span id="cnt-comm">0</span>)</button>
-        <button class="admin-filter" data-filter="heritage">🏛️ Heritage (<span id="cnt-heritage">0</span>)</button>
-        <button class="admin-filter" data-filter="branding">🦅 Official Crest (<span id="cnt-branding">0</span>)</button>
+        <button class="admin-filter" data-filter="heritage">🎨 Heritage (<span id="cnt-heritage">0</span>)</button>
+        <button class="admin-filter" data-filter="branding">🦅 Crest (<span id="cnt-branding">0</span>)</button>
       </div>
 
       <!-- Grid -->
@@ -588,9 +616,11 @@
             <label for="edit-photo-category">Gallery Section *</label>
             <select id="edit-photo-category" required>
               <option value="executive">👔 Executive Committee</option>
+              <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
+              <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
               <option value="events">🎖️ 2026 Induction Honorees</option>
               <option value="community">📸 Community Snaps</option>
-              <option value="heritage">🏛️ Imo State Artwork &amp; Landmarks</option>
+              <option value="heritage">🎨 Imo State Artwork &amp; Landmarks</option>
               <option value="branding">🦅 Official Crest &amp; Swag</option>
             </select>
           </div>
@@ -612,10 +642,10 @@
 </footer>
 
 <script>
-// All 26 Base Photos Embedded Directly
+// All 28 Base Photos Embedded Directly
 const BASE_GALLERY_PHOTOS = [
   {
-    "id": "base_gallery-executives-group",
+    "id": "exec_cover_group",
     "category": "executive",
     "folder_id": "executive",
     "is_folder_cover": true,
@@ -625,77 +655,77 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "Imolites in Diaspora Social Club USA • Executive Council"
   },
   {
-    "id": "base_exec-chidi-amadi",
-    "category": "executive",
-    "folder_id": "executive",
-    "is_folder_cover": false,
-    "image": "assets/exec-chidi-amadi.jpg",
-    "alt": "Prince Chidi Amadi (Odum Igwe 1 of Texas)",
-    "title": "Prince Chidi Amadi (Odum Igwe 1 of Texas)",
-    "subtitle": "Public Relations Officer (P.R.O) • Executive Committee"
-  },
-  {
-    "id": "base_exec-obinna-iwuala",
-    "category": "executive",
-    "folder_id": "executive",
-    "is_folder_cover": false,
-    "image": "assets/exec-obinna-iwuala.jpg",
-    "alt": "Mr. Obinna Iwuala (Small Body Big Engine)",
-    "title": "Mr. Obinna Iwuala (Small Body Big Engine)",
-    "subtitle": "Provost • Executive Committee"
-  },
-  {
-    "id": "base_exec-aloysius-uzodimma",
-    "category": "executive",
-    "folder_id": "executive",
-    "is_folder_cover": false,
-    "image": "assets/exec-aloysius-uzodimma.jpg",
-    "alt": "Comrade Aloysius Uzodimma",
-    "title": "Comrade Aloysius Uzodimma",
-    "subtitle": "Financial Secretary • Executive Committee"
-  },
-  {
-    "id": "base_exec-thankgod-nwachukwu",
-    "category": "executive",
-    "folder_id": "executive",
-    "is_folder_cover": false,
-    "image": "assets/exec-thankgod-nwachukwu.jpg",
-    "alt": "Thank God Nwachukwu",
-    "title": "Thank God Nwachukwu",
-    "subtitle": "General Secretary • Executive Committee"
-  },
-  {
-    "id": "base_exec-ok-okoroafor",
-    "category": "executive",
-    "folder_id": "executive",
-    "is_folder_cover": false,
-    "image": "assets/exec-ok-okoroafor.jpg",
-    "alt": "Elder OK Okoroafor",
-    "title": "Elder OK Okoroafor",
-    "subtitle": "Vice President • Executive Committee"
-  },
-  {
-    "id": "base_exec-dike-desmond",
+    "id": "exec_dike_desmond",
     "category": "executive",
     "folder_id": "executive",
     "is_folder_cover": false,
     "image": "assets/exec-dike-desmond.jpg",
     "alt": "Hon. Engineer Dike Desmond",
     "title": "Hon. Engineer Dike Desmond",
-    "subtitle": "President • Executive Committee"
+    "subtitle": "Founder, Current President • Executive Committee"
   },
   {
-    "id": "base_exec-chinwendu-okoko",
+    "id": "exec_ok_okoroafor",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-ok-okoroafor.jpg",
+    "alt": "Elder Ok Okoroafor",
+    "title": "Elder Ok Okoroafor",
+    "subtitle": "Office of the Vice President • Executive Committee"
+  },
+  {
+    "id": "exec_thankgod_nwachukwu",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-thankgod-nwachukwu.jpg",
+    "alt": "Thank God Nwachukwu",
+    "title": "Thank God Nwachukwu",
+    "subtitle": "Office of the General Secretary • Executive Committee"
+  },
+  {
+    "id": "exec_aloysius_uzodimma",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-aloysius-uzodimma.jpg",
+    "alt": "Comrade Aloysius Uzodimma",
+    "title": "Comrade Aloysius Uzodimma",
+    "subtitle": "Office of the Financial Secretary • Executive Committee"
+  },
+  {
+    "id": "exec_chinwendu_okoko",
     "category": "executive",
     "folder_id": "executive",
     "is_folder_cover": false,
     "image": "assets/exec-chinwendu-okoko.jpg",
-    "alt": "Ms. Chinwendu Okoko",
-    "title": "Ms. Chinwendu Okoko",
-    "subtitle": "Treasurer • Executive Committee"
+    "alt": "Chinwendu Okoko",
+    "title": "Chinwendu Okoko",
+    "subtitle": "Office of the Treasurer • Executive Committee"
   },
   {
-    "id": "base_gallery-ethics-committee",
+    "id": "exec_chidi_amadi",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-chidi-amadi.jpg",
+    "alt": "Prince Chidi Amadi",
+    "title": "Prince Chidi Amadi",
+    "subtitle": "Odumigwe 1 of Texas • Office of Public Relations"
+  },
+  {
+    "id": "exec_obinna_iwuala",
+    "category": "executive",
+    "folder_id": "executive",
+    "is_folder_cover": false,
+    "image": "assets/exec-obinna-iwuala.jpg",
+    "alt": "Obinna Iwuala",
+    "title": "Obinna Iwuala",
+    "subtitle": "AKA Obi na Dallas • Office of the Provost"
+  },
+  {
+    "id": "exec_ethics_committee",
     "category": "executive",
     "folder_id": "executive",
     "is_folder_cover": false,
@@ -705,97 +735,117 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "Imolites in Diaspora Social Club USA • Ethics Committee"
   },
   {
-    "id": "base_gallery-induction-committee",
-    "category": "events",
-    "folder_id": "events",
+    "id": "trustees_cover_group",
+    "category": "trustees",
+    "folder_id": "trustees",
     "is_folder_cover": true,
-    "image": "assets/gallery-induction-committee.jpg",
-    "alt": "Induction Committee",
-    "title": "Induction Committee",
-    "subtitle": "2026 Induction & Gala Planning Committee"
+    "image": "assets/gallery-trustees-founder.jpg",
+    "alt": "Board of Trustees and Founder",
+    "title": "Board of Trustees and Founder",
+    "subtitle": "Board of Trustees & Founder • Imolites in Diaspora Social Club USA"
   },
   {
-    "id": "base_honoree-ethelbert-nwachukwu",
+    "id": "trustees_dike_desmond",
+    "category": "trustees",
+    "folder_id": "trustees",
+    "is_folder_cover": false,
+    "image": "assets/exec-dike-desmond.jpg",
+    "alt": "Hon. Engineer Dike Desmond",
+    "title": "Hon. Engineer Dike Desmond",
+    "subtitle": "Founder, Current President, Member of the Board of Trustees"
+  },
+  {
+    "id": "induction_committee_group",
+    "category": "induction_committee",
+    "folder_id": "induction_committee",
+    "is_folder_cover": true,
+    "image": "assets/gallery-induction-committee.jpg",
+    "alt": "2026 Induction Planning Committee",
+    "title": "2026 Induction Planning Committee",
+    "subtitle": "2026 Induction & Gala Planning Committee • The Team Putting the Event Together"
+  },
+  {
+    "id": "honoree_ethelbert_nwachukwu",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-ethelbert-nwachukwu.jpg",
     "alt": "Ethelbert Nwachukwu",
     "title": "Ethelbert Nwachukwu",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_honoree-olewike",
+    "id": "honoree_olewike",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-olewike.jpg",
     "alt": "Triple High Chief Olewike",
     "title": "Triple High Chief Olewike",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_honoree-juliet-nwanya",
+    "id": "honoree_juliet_nwanya",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-juliet-nwanya.jpg",
     "alt": "Hon. Juliet Nwanya",
     "title": "Hon. Juliet Nwanya",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_honoree-jessica-deloach",
+    "id": "honoree_jessica_deloach",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-jessica-deloach.jpg",
     "alt": "Ms. Jessica Deloach",
     "title": "Ms. Jessica Deloach",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_honoree-chief-ikeoha",
+    "id": "honoree_chief_ikeoha",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-chief-ikeoha.jpg",
     "alt": "Chief Ikeoha",
     "title": "Chief Ikeoha",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_honoree-joseph-nwadike",
+    "id": "honoree_joseph_nwadike",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-joseph-nwadike.jpg",
     "alt": "President Emeritus. Hon. Joseph Frank Nwadike",
     "title": "President Emeritus. Hon. Joseph Frank Nwadike",
-    "subtitle": "President Emeritus • 2026 Induction & End of the Year Party"
+    "subtitle": "President Emeritus • 2026 Induction Honoree"
   },
   {
-    "id": "base_honoree-ugonma-chukwu",
+    "id": "honoree_ugonma_chukwu",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-ugonma-chukwu.jpg",
     "alt": "Ms. Ugonma Chukwu",
     "title": "Ms. Ugonma Chukwu",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_honoree-ihemtuge-chidiebube",
+    "id": "honoree_ihemtuge_chidiebube",
     "category": "events",
-    "folder_id": "events",
+    "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/honoree-ihemtuge-chidiebube.jpg",
     "alt": "Hon. Ihemtuge Chidiebube",
     "title": "Hon. Ihemtuge Chidiebube",
-    "subtitle": "2026 Induction & End of the Year Party • Nov 14, 2026"
+    "subtitle": "2026 Induction & End of the Year Party Honoree • Nov 14, 2026"
   },
   {
-    "id": "base_gallery-imolites-family",
+    "id": "comm_imolites_family",
     "category": "community",
     "folder_id": "",
     "is_folder_cover": false,
@@ -805,7 +855,7 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "General Assembly & Members Celebration"
   },
   {
-    "id": "base_gallery-one-family-1",
+    "id": "comm_one_family_1",
     "category": "community",
     "folder_id": "",
     "is_folder_cover": false,
@@ -815,7 +865,7 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "Fellowship & Unity in Diaspora"
   },
   {
-    "id": "base_gallery-one-family-2",
+    "id": "comm_one_family_2",
     "category": "community",
     "folder_id": "",
     "is_folder_cover": false,
@@ -825,7 +875,7 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "Community Fellowship & Brotherhood"
   },
   {
-    "id": "base_official-logo",
+    "id": "brand_official_logo",
     "category": "branding",
     "folder_id": "",
     "is_folder_cover": false,
@@ -835,17 +885,17 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "The club-approved official emblem, preserved as supplied."
   },
   {
-    "id": "base_merchandise",
+    "id": "brand_merchandise",
     "category": "branding",
     "folder_id": "",
     "is_folder_cover": false,
     "image": "assets/merchandise.webp",
-    "alt": "Official crest on shirts, hats, jackets and accessories",
+    "alt": "Official Crest on Apparel",
     "title": "Official Crest on Apparel",
     "subtitle": "Official crest on shirts, hats, jackets and club accessories."
   },
   {
-    "id": "base_heritage-map",
+    "id": "herit_map",
     "category": "heritage",
     "folder_id": "",
     "is_folder_cover": false,
@@ -855,7 +905,7 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "Illustrated Imo State map artwork from our creative collection."
   },
   {
-    "id": "base_heritage-mosaic",
+    "id": "herit_mosaic",
     "category": "heritage",
     "folder_id": "",
     "is_folder_cover": false,
@@ -865,7 +915,7 @@ const BASE_GALLERY_PHOTOS = [
     "subtitle": "Artistic cultural mosaic inspired by Imo State."
   },
   {
-    "id": "base_heritage-landmarks",
+    "id": "herit_landmarks",
     "category": "heritage",
     "folder_id": "",
     "is_folder_cover": false,
@@ -960,6 +1010,8 @@ const editPreviewThumb = document.getElementById('edit-preview-thumb');
 
 const statTotal = document.getElementById('stat-total');
 const statExec = document.getElementById('stat-exec');
+const statTrustees = document.getElementById('stat-trustees');
+const statInductComm = document.getElementById('stat-induct-comm');
 const statInduction = document.getElementById('stat-induction');
 const statComm = document.getElementById('stat-comm');
 
@@ -1086,11 +1138,15 @@ document.querySelectorAll('.admin-filter').forEach(btn => {
 function updateStats(photos) {
   if (statTotal) statTotal.textContent = photos.length;
   if (statExec) statExec.textContent = photos.filter(p => p.category === 'executive').length;
+  if (statTrustees) statTrustees.textContent = photos.filter(p => p.category === 'trustees').length;
+  if (statInductComm) statInductComm.textContent = photos.filter(p => p.category === 'induction_committee').length;
   if (statInduction) statInduction.textContent = photos.filter(p => p.category === 'events').length;
   if (statComm) statComm.textContent = photos.filter(p => p.category === 'community').length;
 
   document.getElementById('cnt-all') && (document.getElementById('cnt-all').textContent = photos.length);
   document.getElementById('cnt-exec') && (document.getElementById('cnt-exec').textContent = photos.filter(p => p.category === 'executive').length);
+  document.getElementById('cnt-trustees') && (document.getElementById('cnt-trustees').textContent = photos.filter(p => p.category === 'trustees').length);
+  document.getElementById('cnt-induct-comm') && (document.getElementById('cnt-induct-comm').textContent = photos.filter(p => p.category === 'induction_committee').length);
   document.getElementById('cnt-events') && (document.getElementById('cnt-events').textContent = photos.filter(p => p.category === 'events').length);
   document.getElementById('cnt-comm') && (document.getElementById('cnt-comm').textContent = photos.filter(p => p.category === 'community').length);
   document.getElementById('cnt-heritage') && (document.getElementById('cnt-heritage').textContent = photos.filter(p => p.category === 'heritage').length);
@@ -1117,8 +1173,10 @@ function renderAdminGrid() {
     let badgeClass = 'badge-other-admin';
     let badgeLabel = photo.category || 'Photo';
     if (photo.category === 'executive') { badgeClass = 'badge-exec-admin'; badgeLabel = 'Executive'; }
+    else if (photo.category === 'trustees') { badgeClass = 'badge-trustees-admin'; badgeLabel = 'Trustees & Founder'; }
+    else if (photo.category === 'induction_committee') { badgeClass = 'badge-induct-comm-admin'; badgeLabel = 'Induction Comm'; }
     else if (photo.category === 'community') { badgeClass = 'badge-comm-admin'; badgeLabel = 'Community Snap'; }
-    else if (photo.category === 'events') { badgeClass = 'badge-event-admin'; badgeLabel = '2026 Induction'; }
+    else if (photo.category === 'events') { badgeClass = 'badge-event-admin'; badgeLabel = '2026 Honoree'; }
 
     const photoId = photo.id || photo.image;
     const photoTitle = photo.title || photo.alt || 'Photo';

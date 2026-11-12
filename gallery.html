@@ -97,6 +97,8 @@
       <div aria-label="Filter gallery" class="filterbar" role="group">
         <button class="filter active" data-filter="all">All images</button>
         <button class="filter" data-filter="executive">Executive Committee</button>
+        <button class="filter" data-filter="trustees">Board of Trustees &amp; Founder</button>
+        <button class="filter" data-filter="induction_committee">Induction Committee</button>
         <button class="filter" data-filter="events">2026 Induction Honorees</button>
         <button class="filter" data-filter="community">Community snaps</button>
         <button class="filter" data-filter="heritage">Imo State artwork</button>
@@ -120,76 +122,72 @@
 
       <!-- Gallery Grid -->
       <div class="gallery-grid" id="gallery-grid">
-          <figure class="gallery-card album-folder-card" data-category="executive" data-is-folder="true" data-folder-target="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
-              📁 Executive Council Album
-            </span>
+          <figure class="gallery-card album-folder-card" data-category="executive" data-id="exec_cover_group" data-is-folder="true" data-folder-target="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">📁 Executive Council Album</span>
             <img alt="Executives" loading="lazy" src="assets/gallery-executives-group.jpg" tabindex="0"/>
             <figcaption>
               <b>Executives</b>
               <small>Imolites in Diaspora Social Club USA • Executive Council</small>
             </figcaption>
-            <div class="folder-action-hint">
-              📁 Click to Open Executive Album &amp; View All Photos →
-            </div>
+            <div class="folder-action-hint">📁 Click to Open Executive Album &amp; View All Photos →</div>
           </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <img alt="Prince Chidi Amadi (Odum Igwe 1 of Texas)" loading="lazy" src="assets/exec-chidi-amadi.jpg" tabindex="0"/>
-            <figcaption>
-              <b>Prince Chidi Amadi (Odum Igwe 1 of Texas)</b>
-              <small>Public Relations Officer (P.R.O) • Executive Committee</small>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <img alt="Mr. Obinna Iwuala (Small Body Big Engine)" loading="lazy" src="assets/exec-obinna-iwuala.jpg" tabindex="0"/>
-            <figcaption>
-              <b>Mr. Obinna Iwuala (Small Body Big Engine)</b>
-              <small>Provost • Executive Committee</small>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <img alt="Comrade Aloysius Uzodimma" loading="lazy" src="assets/exec-aloysius-uzodimma.jpg" tabindex="0"/>
-            <figcaption>
-              <b>Comrade Aloysius Uzodimma</b>
-              <small>Financial Secretary • Executive Committee</small>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <img alt="Thank God Nwachukwu" loading="lazy" src="assets/exec-thankgod-nwachukwu.jpg" tabindex="0"/>
-            <figcaption>
-              <b>Thank God Nwachukwu</b>
-              <small>General Secretary • Executive Committee</small>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <img alt="Elder OK Okoroafor" loading="lazy" src="assets/exec-ok-okoroafor.jpg" tabindex="0"/>
-            <figcaption>
-              <b>Elder OK Okoroafor</b>
-              <small>Vice President • Executive Committee</small>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
+          <figure class="gallery-card" data-category="executive" data-id="exec_dike_desmond" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Hon. Engineer Dike Desmond" loading="lazy" src="assets/exec-dike-desmond.jpg" tabindex="0"/>
             <figcaption>
               <b>Hon. Engineer Dike Desmond</b>
-              <small>President • Executive Committee</small>
+              <small>Founder, Current President • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
+          <figure class="gallery-card" data-category="executive" data-id="exec_ok_okoroafor" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <img alt="Ms. Chinwendu Okoko" loading="lazy" src="assets/exec-chinwendu-okoko.jpg" tabindex="0"/>
+            <img alt="Elder Ok Okoroafor" loading="lazy" src="assets/exec-ok-okoroafor.jpg" tabindex="0"/>
             <figcaption>
-              <b>Ms. Chinwendu Okoko</b>
-              <small>Treasurer • Executive Committee</small>
+              <b>Elder Ok Okoroafor</b>
+              <small>Office of the Vice President • Executive Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="executive" data-in-folder="executive">
+          <figure class="gallery-card" data-category="executive" data-id="exec_thankgod_nwachukwu" data-in-folder="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+            <img alt="Thank God Nwachukwu" loading="lazy" src="assets/exec-thankgod-nwachukwu.jpg" tabindex="0"/>
+            <figcaption>
+              <b>Thank God Nwachukwu</b>
+              <small>Office of the General Secretary • Executive Committee</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="executive" data-id="exec_aloysius_uzodimma" data-in-folder="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+            <img alt="Comrade Aloysius Uzodimma" loading="lazy" src="assets/exec-aloysius-uzodimma.jpg" tabindex="0"/>
+            <figcaption>
+              <b>Comrade Aloysius Uzodimma</b>
+              <small>Office of the Financial Secretary • Executive Committee</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="executive" data-id="exec_chinwendu_okoko" data-in-folder="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+            <img alt="Chinwendu Okoko" loading="lazy" src="assets/exec-chinwendu-okoko.jpg" tabindex="0"/>
+            <figcaption>
+              <b>Chinwendu Okoko</b>
+              <small>Office of the Treasurer • Executive Committee</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="executive" data-id="exec_chidi_amadi" data-in-folder="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+            <img alt="Prince Chidi Amadi" loading="lazy" src="assets/exec-chidi-amadi.jpg" tabindex="0"/>
+            <figcaption>
+              <b>Prince Chidi Amadi</b>
+              <small>Odumigwe 1 of Texas • Office of Public Relations</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="executive" data-id="exec_obinna_iwuala" data-in-folder="executive">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
+            <img alt="Obinna Iwuala" loading="lazy" src="assets/exec-obinna-iwuala.jpg" tabindex="0"/>
+            <figcaption>
+              <b>Obinna Iwuala</b>
+              <small>AKA Obi na Dallas • Office of the Provost</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="executive" data-id="exec_ethics_committee" data-in-folder="executive">
             <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
             <img alt="Ethics Committee" loading="lazy" src="assets/gallery-ethics-committee.jpg" tabindex="0"/>
             <figcaption>
@@ -197,76 +195,95 @@
               <small>Imolites in Diaspora Social Club USA • Ethics Committee</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card album-folder-card" data-category="events" data-is-folder="true" data-folder-target="events">
-            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
-              📁 2026 Induction Album
-            </span>
-            <img alt="Induction Committee" loading="lazy" src="assets/gallery-induction-committee.jpg" tabindex="0"/>
+          <figure class="gallery-card" data-category="trustees" data-id="trustees_cover_group">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Board of Trustees</span>
+            <img alt="Board of Trustees and Founder" loading="lazy" src="assets/gallery-trustees-founder.jpg" tabindex="0"/>
             <figcaption>
-              <b>Induction Committee</b>
-              <small>2026 Induction & Gala Planning Committee</small>
+              <b>Board of Trustees and Founder</b>
+              <small>Board of Trustees & Founder • Imolites in Diaspora Social Club USA</small>
             </figcaption>
-            <div class="folder-action-hint">
-              📁 Click to Open Induction Album &amp; View All Photos →
-            </div>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="trustees" data-id="trustees_dike_desmond">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Board of Trustees</span>
+            <img alt="Hon. Engineer Dike Desmond" loading="lazy" src="assets/exec-dike-desmond.jpg" tabindex="0"/>
+            <figcaption>
+              <b>Hon. Engineer Dike Desmond</b>
+              <small>Founder, Current President, Member of the Board of Trustees</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="induction_committee" data-id="induction_committee_group">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Induction Committee</span>
+            <img alt="2026 Induction Planning Committee" loading="lazy" src="assets/gallery-induction-committee.jpg" tabindex="0"/>
+            <figcaption>
+              <b>2026 Induction Planning Committee</b>
+              <small>2026 Induction & Gala Planning Committee • The Team Putting the Event Together</small>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="events" data-id="honoree_ethelbert_nwachukwu">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Ethelbert Nwachukwu" loading="lazy" src="assets/honoree-ethelbert-nwachukwu.jpg" tabindex="0"/>
             <figcaption>
               <b>Ethelbert Nwachukwu</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_olewike">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Triple High Chief Olewike" loading="lazy" src="assets/honoree-olewike.jpg" tabindex="0"/>
             <figcaption>
               <b>Triple High Chief Olewike</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_juliet_nwanya">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Hon. Juliet Nwanya" loading="lazy" src="assets/honoree-juliet-nwanya.jpg" tabindex="0"/>
             <figcaption>
               <b>Hon. Juliet Nwanya</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_jessica_deloach">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Ms. Jessica Deloach" loading="lazy" src="assets/honoree-jessica-deloach.jpg" tabindex="0"/>
             <figcaption>
               <b>Ms. Jessica Deloach</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_chief_ikeoha">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Chief Ikeoha" loading="lazy" src="assets/honoree-chief-ikeoha.jpg" tabindex="0"/>
             <figcaption>
               <b>Chief Ikeoha</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_joseph_nwadike">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="President Emeritus. Hon. Joseph Frank Nwadike" loading="lazy" src="assets/honoree-joseph-nwadike.jpg" tabindex="0"/>
             <figcaption>
               <b>President Emeritus. Hon. Joseph Frank Nwadike</b>
-              <small>President Emeritus • 2026 Induction & End of the Year Party</small>
+              <small>President Emeritus • 2026 Induction Honoree</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_ugonma_chukwu">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Ms. Ugonma Chukwu" loading="lazy" src="assets/honoree-ugonma-chukwu.jpg" tabindex="0"/>
             <figcaption>
               <b>Ms. Ugonma Chukwu</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="events" data-in-folder="events">
+          <figure class="gallery-card" data-category="events" data-id="honoree_ihemtuge_chidiebube">
+            <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
             <img alt="Hon. Ihemtuge Chidiebube" loading="lazy" src="assets/honoree-ihemtuge-chidiebube.jpg" tabindex="0"/>
             <figcaption>
               <b>Hon. Ihemtuge Chidiebube</b>
-              <small>2026 Induction & End of the Year Party • Nov 14, 2026</small>
+              <small>2026 Induction & End of the Year Party Honoree • Nov 14, 2026</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="community">
+          <figure class="gallery-card" data-category="community" data-id="comm_imolites_family">
             <span class="badge-community" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Community Snap</span>
             <img alt="Imolites, One Family" loading="lazy" src="assets/gallery-imolites-family.jpg" tabindex="0"/>
             <figcaption>
@@ -274,7 +291,7 @@
               <small>General Assembly & Members Celebration</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="community">
+          <figure class="gallery-card" data-category="community" data-id="comm_one_family_1">
             <span class="badge-community" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Community Snap</span>
             <img alt="Imolites, One Family" loading="lazy" src="assets/gallery-one-family-1.jpg" tabindex="0"/>
             <figcaption>
@@ -282,7 +299,7 @@
               <small>Fellowship & Unity in Diaspora</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="community">
+          <figure class="gallery-card" data-category="community" data-id="comm_one_family_2">
             <span class="badge-community" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Community Snap</span>
             <img alt="Imolites, One Family" loading="lazy" src="assets/gallery-one-family-2.jpg" tabindex="0"/>
             <figcaption>
@@ -290,35 +307,40 @@
               <small>Community Fellowship & Brotherhood</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="branding">
+          <figure class="gallery-card" data-category="branding" data-id="brand_official_logo">
+            
             <img alt="Official Imolites Crest" loading="lazy" src="assets/official-logo.png" tabindex="0"/>
             <figcaption>
               <b>Official Imolites Crest</b>
               <small>The club-approved official emblem, preserved as supplied.</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="branding">
-            <img alt="Official crest on shirts, hats, jackets and accessories" loading="lazy" src="assets/merchandise.webp" tabindex="0"/>
+          <figure class="gallery-card" data-category="branding" data-id="brand_merchandise">
+            
+            <img alt="Official Crest on Apparel" loading="lazy" src="assets/merchandise.webp" tabindex="0"/>
             <figcaption>
               <b>Official Crest on Apparel</b>
               <small>Official crest on shirts, hats, jackets and club accessories.</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="heritage">
+          <figure class="gallery-card" data-category="heritage" data-id="herit_map">
+            
             <img alt="Imo State — Land of Opportunity" loading="lazy" src="assets/heritage-map.webp" tabindex="0"/>
             <figcaption>
               <b>Imo State — Land of Opportunity</b>
               <small>Illustrated Imo State map artwork from our creative collection.</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="heritage">
+          <figure class="gallery-card" data-category="heritage" data-id="herit_mosaic">
+            
             <img alt="Imo State Heritage & Opportunity" loading="lazy" src="assets/heritage-mosaic.webp" tabindex="0"/>
             <figcaption>
               <b>Imo State Heritage & Opportunity</b>
               <small>Artistic cultural mosaic inspired by Imo State.</small>
             </figcaption>
           </figure>
-          <figure class="gallery-card" data-category="heritage">
+          <figure class="gallery-card" data-category="heritage" data-id="herit_landmarks">
+            
             <img alt="Imo State Landmarks" loading="lazy" src="assets/heritage-landmarks.webp" tabindex="0"/>
             <figcaption>
               <b>Imo State Landmarks</b>
@@ -326,7 +348,6 @@
             </figcaption>
           </figure>
       </div>
-
       <p class="small-note" style="margin-top:30px">Gallery notice: Some Imo State images are AI-generated artistic interpretations and should not be presented as verified photographs of specific locations. Event artwork is from earlier club creative projects. Community photos are contributed by club members.</p>
     </div>
   </section>
@@ -422,8 +443,8 @@ function updateGalleryDisplay() {
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
-      // HIDE the two album folder cards AND any in-folder items on 'all'
-      if (c.dataset.isFolder === 'true' || c.dataset.inFolder) {
+      const cat = c.dataset.category;
+      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
         c.style.display = 'none';
       } else {
         c.style.display = 'block';
@@ -431,7 +452,6 @@ function updateGalleryDisplay() {
     });
   } else if (currentSection === 'executive') {
     if (!folderExpanded) {
-      // Show ONLY the Executives cover card; all officers remain behind it
       if (activeFolderBar) activeFolderBar.style.display = 'none';
       cards.forEach(c => {
         if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'executive') {
@@ -441,7 +461,6 @@ function updateGalleryDisplay() {
         }
       });
     } else {
-      // Folder expanded: show all executive officers + cover card
       if (activeFolderBar) {
         activeFolderBar.style.display = 'flex';
         folderBarTitle.textContent = 'Executive Committee Album';
@@ -456,35 +475,35 @@ function updateGalleryDisplay() {
         }
       });
     }
-  } else if (currentSection === 'events') {
-    if (!folderExpanded) {
-      // Show ONLY the Induction Committee cover card; all honorees remain behind it
-      if (activeFolderBar) activeFolderBar.style.display = 'none';
-      cards.forEach(c => {
-        if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'events') {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
-    } else {
-      // Folder expanded: show all induction honorees + cover card
-      if (activeFolderBar) {
-        activeFolderBar.style.display = 'flex';
-        folderBarTitle.textContent = '2026 Induction & Honorees Album';
-        folderBarDesc.textContent = 'Celebrating our 2026 Induction & End of the Year Party Honorees';
-        if (btnCloseFolder) btnCloseFolder.textContent = '← Back to Induction Cover';
-      }
-      cards.forEach(c => {
-        if (c.dataset.category === 'events' || c.dataset.inFolder === 'events') {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
+  } else if (currentSection === 'trustees') {
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '🏛️ Board of Trustees & Founder';
+      folderBarDesc.textContent = 'Honoring the Visionary Founder and Board of Trustees of Imolites in Diaspora Social Club USA';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
     }
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'trustees') ? 'block' : 'none';
+    });
+  } else if (currentSection === 'induction_committee') {
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '🤝 2026 Induction Planning Committee';
+      folderBarDesc.textContent = 'The dedicated committee members organizing and putting the 2026 Induction Gala together';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
+    }
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'induction_committee') ? 'block' : 'none';
+    });
+  } else if (currentSection === 'events') {
+    folderExpanded = false;
+    if (activeFolderBar) activeFolderBar.style.display = 'none';
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'events') ? 'block' : 'none';
+    });
   } else {
-    // Other categories: community, heritage, branding
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
@@ -515,8 +534,12 @@ buttons.forEach(btn => {
 
 if (btnCloseFolder) {
   btnCloseFolder.addEventListener('click', () => {
-    folderExpanded = false;
-    updateGalleryDisplay();
+    if (currentSection === 'executive') {
+      folderExpanded = false;
+      updateGalleryDisplay();
+    } else {
+      applyFilter('all');
+    }
   });
 }
 

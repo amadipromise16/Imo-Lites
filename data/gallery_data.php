@@ -1,231 +1,335 @@
 <?php
-// Gallery items data for Imolites in Diaspora Social Club USA
-$gallery_items = [
-    // Executive Committee
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'is_folder_cover' => true,
-        'image'           => 'assets/gallery-executives-group.jpg',
-        'alt'             => 'Executives',
-        'title'           => 'Executives',
-        'subtitle'        => 'Imolites in Diaspora Social Club USA • Executive Council',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-chidi-amadi.jpg',
-        'alt'             => 'Prince Chidi Amadi (Odum Igwe 1 of Texas)',
-        'title'           => 'Prince Chidi Amadi (Odum Igwe 1 of Texas)',
-        'subtitle'        => 'Public Relations Officer (P.R.O) • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-obinna-iwuala.jpg',
-        'alt'             => 'Mr. Obinna Iwuala (Small Body Big Engine)',
-        'title'           => 'Mr. Obinna Iwuala (Small Body Big Engine)',
-        'subtitle'        => 'Provost • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-aloysius-uzodimma.jpg',
-        'alt'             => 'Comrade Aloysius Uzodimma',
-        'title'           => 'Comrade Aloysius Uzodimma',
-        'subtitle'        => 'Financial Secretary • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-thankgod-nwachukwu.jpg',
-        'alt'             => 'Thank God Nwachukwu',
-        'title'           => 'Thank God Nwachukwu',
-        'subtitle'        => 'General Secretary • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-ok-okoroafor.jpg',
-        'alt'             => 'Elder OK Okoroafor',
-        'title'           => 'Elder OK Okoroafor',
-        'subtitle'        => 'Vice President • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-dike-desmond.jpg',
-        'alt'             => 'Hon. Engineer Dike Desmond',
-        'title'           => 'Hon. Engineer Dike Desmond',
-        'subtitle'        => 'President • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/exec-chinwendu-okoko.jpg',
-        'alt'             => 'Ms. Chinwendu Okoko',
-        'title'           => 'Ms. Chinwendu Okoko',
-        'subtitle'        => 'Treasurer • Executive Committee',
-    ],
-    [
-        'category'        => 'executive',
-        'folder_id'       => 'executive',
-        'image'           => 'assets/gallery-ethics-committee.jpg',
-        'alt'             => 'Ethics Committee',
-        'title'           => 'Ethics Committee',
-        'subtitle'        => 'Imolites in Diaspora Social Club USA • Ethics Committee',
-    ],
+/**
+ * Gallery Data Provider
+ * Returns list of base official club media, plus community uploads and admin items.
+ */
 
-    // 2026 Induction Committee & Honorees
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'is_folder_cover' => true,
-        'image'           => 'assets/gallery-induction-committee.jpg',
-        'alt'             => 'Induction Committee',
-        'title'           => 'Induction Committee',
-        'subtitle'        => '2026 Induction & Gala Planning Committee',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-ethelbert-nwachukwu.jpg',
-        'alt'             => 'Ethelbert Nwachukwu',
-        'title'           => 'Ethelbert Nwachukwu',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-olewike.jpg',
-        'alt'             => 'Triple High Chief Olewike',
-        'title'           => 'Triple High Chief Olewike',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-juliet-nwanya.jpg',
-        'alt'             => 'Hon. Juliet Nwanya',
-        'title'           => 'Hon. Juliet Nwanya',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-jessica-deloach.jpg',
-        'alt'             => 'Ms. Jessica Deloach',
-        'title'           => 'Ms. Jessica Deloach',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-chief-ikeoha.jpg',
-        'alt'             => 'Chief Ikeoha',
-        'title'           => 'Chief Ikeoha',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-joseph-nwadike.jpg',
-        'alt'             => 'President Emeritus. Hon. Joseph Frank Nwadike',
-        'title'           => 'President Emeritus. Hon. Joseph Frank Nwadike',
-        'subtitle'        => 'President Emeritus • 2026 Induction & End of the Year Party',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-ugonma-chukwu.jpg',
-        'alt'             => 'Ms. Ugonma Chukwu',
-        'title'           => 'Ms. Ugonma Chukwu',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
-    [
-        'category'        => 'events',
-        'folder_id'       => 'events',
-        'image'           => 'assets/honoree-ihemtuge-chidiebube.jpg',
-        'alt'             => 'Hon. Ihemtuge Chidiebube',
-        'title'           => 'Hon. Ihemtuge Chidiebube',
-        'subtitle'        => '2026 Induction & End of the Year Party • Nov 14, 2026',
-    ],
+function get_base_gallery_items() {
+    return [
+        [
+            'id' => 'exec_cover_group',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => true,
+            'image' => 'assets/gallery-executives-group.jpg',
+            'alt' => 'Executives',
+            'title' => 'Executives',
+            'subtitle' => 'Imolites in Diaspora Social Club USA • Executive Council'
+        ],
+        [
+            'id' => 'exec_dike_desmond',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-dike-desmond.jpg',
+            'alt' => 'Hon. Engineer Dike Desmond',
+            'title' => 'Hon. Engineer Dike Desmond',
+            'subtitle' => 'Founder, Current President • Executive Committee'
+        ],
+        [
+            'id' => 'exec_ok_okoroafor',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-ok-okoroafor.jpg',
+            'alt' => 'Elder Ok Okoroafor',
+            'title' => 'Elder Ok Okoroafor',
+            'subtitle' => 'Office of the Vice President • Executive Committee'
+        ],
+        [
+            'id' => 'exec_thankgod_nwachukwu',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-thankgod-nwachukwu.jpg',
+            'alt' => 'Thank God Nwachukwu',
+            'title' => 'Thank God Nwachukwu',
+            'subtitle' => 'Office of the General Secretary • Executive Committee'
+        ],
+        [
+            'id' => 'exec_aloysius_uzodimma',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-aloysius-uzodimma.jpg',
+            'alt' => 'Comrade Aloysius Uzodimma',
+            'title' => 'Comrade Aloysius Uzodimma',
+            'subtitle' => 'Office of the Financial Secretary • Executive Committee'
+        ],
+        [
+            'id' => 'exec_chinwendu_okoko',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-chinwendu-okoko.jpg',
+            'alt' => 'Chinwendu Okoko',
+            'title' => 'Chinwendu Okoko',
+            'subtitle' => 'Office of the Treasurer • Executive Committee'
+        ],
+        [
+            'id' => 'exec_chidi_amadi',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-chidi-amadi.jpg',
+            'alt' => 'Prince Chidi Amadi',
+            'title' => 'Prince Chidi Amadi',
+            'subtitle' => 'Odumigwe 1 of Texas • Office of Public Relations'
+        ],
+        [
+            'id' => 'exec_obinna_iwuala',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-obinna-iwuala.jpg',
+            'alt' => 'Obinna Iwuala',
+            'title' => 'Obinna Iwuala',
+            'subtitle' => 'AKA Obi na Dallas • Office of the Provost'
+        ],
+        [
+            'id' => 'exec_ethics_committee',
+            'category' => 'executive',
+            'folder_id' => 'executive',
+            'is_folder_cover' => false,
+            'image' => 'assets/gallery-ethics-committee.jpg',
+            'alt' => 'Ethics Committee',
+            'title' => 'Ethics Committee',
+            'subtitle' => 'Imolites in Diaspora Social Club USA • Ethics Committee'
+        ],
+        [
+            'id' => 'trustees_cover_group',
+            'category' => 'trustees',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/gallery-trustees-founder.jpg',
+            'alt' => 'Board of Trustees and Founder',
+            'title' => 'Board of Trustees and Founder',
+            'subtitle' => 'Board of Trustees & Founder • Imolites in Diaspora Social Club USA'
+        ],
+        [
+            'id' => 'trustees_dike_desmond',
+            'category' => 'trustees',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/exec-dike-desmond.jpg',
+            'alt' => 'Hon. Engineer Dike Desmond',
+            'title' => 'Hon. Engineer Dike Desmond',
+            'subtitle' => 'Founder, Current President, Member of the Board of Trustees'
+        ],
+        [
+            'id' => 'induction_committee_group',
+            'category' => 'induction_committee',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/gallery-induction-committee.jpg',
+            'alt' => '2026 Induction Planning Committee',
+            'title' => '2026 Induction Planning Committee',
+            'subtitle' => '2026 Induction & Gala Planning Committee • The Team Putting the Event Together'
+        ],
+        [
+            'id' => 'honoree_ethelbert_nwachukwu',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-ethelbert-nwachukwu.jpg',
+            'alt' => 'Ethelbert Nwachukwu',
+            'title' => 'Ethelbert Nwachukwu',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'honoree_olewike',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-olewike.jpg',
+            'alt' => 'Triple High Chief Olewike',
+            'title' => 'Triple High Chief Olewike',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'honoree_juliet_nwanya',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-juliet-nwanya.jpg',
+            'alt' => 'Hon. Juliet Nwanya',
+            'title' => 'Hon. Juliet Nwanya',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'honoree_jessica_deloach',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-jessica-deloach.jpg',
+            'alt' => 'Ms. Jessica Deloach',
+            'title' => 'Ms. Jessica Deloach',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'honoree_chief_ikeoha',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-chief-ikeoha.jpg',
+            'alt' => 'Chief Ikeoha',
+            'title' => 'Chief Ikeoha',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'honoree_joseph_nwadike',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-joseph-nwadike.jpg',
+            'alt' => 'President Emeritus. Hon. Joseph Frank Nwadike',
+            'title' => 'President Emeritus. Hon. Joseph Frank Nwadike',
+            'subtitle' => 'President Emeritus • 2026 Induction Honoree'
+        ],
+        [
+            'id' => 'honoree_ugonma_chukwu',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-ugonma-chukwu.jpg',
+            'alt' => 'Ms. Ugonma Chukwu',
+            'title' => 'Ms. Ugonma Chukwu',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'honoree_ihemtuge_chidiebube',
+            'category' => 'events',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/honoree-ihemtuge-chidiebube.jpg',
+            'alt' => 'Hon. Ihemtuge Chidiebube',
+            'title' => 'Hon. Ihemtuge Chidiebube',
+            'subtitle' => '2026 Induction & End of the Year Party Honoree • Nov 14, 2026'
+        ],
+        [
+            'id' => 'comm_imolites_family',
+            'category' => 'community',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/gallery-imolites-family.jpg',
+            'alt' => 'Imolites, One Family',
+            'title' => 'Imolites, One Family',
+            'subtitle' => 'General Assembly & Members Celebration'
+        ],
+        [
+            'id' => 'comm_one_family_1',
+            'category' => 'community',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/gallery-one-family-1.jpg',
+            'alt' => 'Imolites, One Family',
+            'title' => 'Imolites, One Family',
+            'subtitle' => 'Fellowship & Unity in Diaspora'
+        ],
+        [
+            'id' => 'comm_one_family_2',
+            'category' => 'community',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/gallery-one-family-2.jpg',
+            'alt' => 'Imolites, One Family',
+            'title' => 'Imolites, One Family',
+            'subtitle' => 'Community Fellowship & Brotherhood'
+        ],
+        [
+            'id' => 'brand_official_logo',
+            'category' => 'branding',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/official-logo.png',
+            'alt' => 'Official Imolites Crest',
+            'title' => 'Official Imolites Crest',
+            'subtitle' => 'The club-approved official emblem, preserved as supplied.'
+        ],
+        [
+            'id' => 'brand_merchandise',
+            'category' => 'branding',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/merchandise.webp',
+            'alt' => 'Official Crest on Apparel',
+            'title' => 'Official Crest on Apparel',
+            'subtitle' => 'Official crest on shirts, hats, jackets and club accessories.'
+        ],
+        [
+            'id' => 'herit_map',
+            'category' => 'heritage',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/heritage-map.webp',
+            'alt' => 'Imo State — Land of Opportunity',
+            'title' => 'Imo State — Land of Opportunity',
+            'subtitle' => 'Illustrated Imo State map artwork from our creative collection.'
+        ],
+        [
+            'id' => 'herit_mosaic',
+            'category' => 'heritage',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/heritage-mosaic.webp',
+            'alt' => 'Imo State Heritage & Opportunity',
+            'title' => 'Imo State Heritage & Opportunity',
+            'subtitle' => 'Artistic cultural mosaic inspired by Imo State.'
+        ],
+        [
+            'id' => 'herit_landmarks',
+            'category' => 'heritage',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/heritage-landmarks.webp',
+            'alt' => 'Imo State Landmarks',
+            'title' => 'Imo State Landmarks',
+            'subtitle' => 'Creative landmark collage celebrating Imo State.'
+        ],
+    ];
+}
 
-    // Community & Fellowship — Imolites One Family
-    [
-        'category' => 'community',
-        'image'    => 'assets/gallery-imolites-family.jpg',
-        'alt'      => 'Imolites, One Family',
-        'title'    => 'Imolites, One Family',
-        'subtitle' => 'General Assembly & Members Celebration',
-    ],
-    [
-        'category' => 'community',
-        'image'    => 'assets/gallery-one-family-1.jpg',
-        'alt'      => 'Imolites, One Family',
-        'title'    => 'Imolites, One Family',
-        'subtitle' => 'Fellowship & Unity in Diaspora',
-    ],
-    [
-        'category' => 'community',
-        'image'    => 'assets/gallery-one-family-2.jpg',
-        'alt'      => 'Imolites, One Family',
-        'title'    => 'Imolites, One Family',
-        'subtitle' => 'Community Fellowship & Brotherhood',
-    ],
+function get_all_gallery_items() {
+    $baseItems = get_base_gallery_items();
+    
+    // 1. Deleted blacklist
+    $deletedFile = __DIR__ . '/deleted_photos.json';
+    $deletedIds = file_exists($deletedFile) ? (json_decode(file_get_contents($deletedFile), true) ?: []) : [];
 
-    // Official Club Branding & Crest
-    [
-        'category' => 'branding',
-        'image'    => 'assets/official-logo.png',
-        'alt'      => 'Official Imolites Crest',
-        'title'    => 'Official Imolites Crest',
-        'subtitle' => 'The club-approved official emblem, preserved as supplied.',
-    ],
-    [
-        'category' => 'branding',
-        'image'    => 'assets/merchandise.webp',
-        'alt'      => 'Official crest on shirts, hats, jackets and accessories',
-        'title'    => 'Official Crest on Apparel',
-        'subtitle' => 'Official crest on shirts, hats, jackets and club accessories.',
-    ],
+    // 2. Metadata edits
+    $editedFile = __DIR__ . '/edited_photos.json';
+    $edits = file_exists($editedFile) ? (json_decode(file_get_contents($editedFile), true) ?: []) : [];
 
-    // Cultural & Heritage Artwork
-    [
-        'category' => 'heritage',
-        'image'    => 'assets/heritage-map.webp',
-        'alt'      => 'Imo State — Land of Opportunity',
-        'title'    => 'Imo State — Land of Opportunity',
-        'subtitle' => 'Illustrated Imo State map artwork from our creative collection.',
-    ],
-    [
-        'category' => 'heritage',
-        'image'    => 'assets/heritage-mosaic.webp',
-        'alt'      => 'Imo State Heritage & Opportunity',
-        'title'    => 'Imo State Heritage & Opportunity',
-        'subtitle' => 'Artistic cultural mosaic inspired by Imo State.',
-    ],
-    [
-        'category' => 'heritage',
-        'image'    => 'assets/heritage-landmarks.webp',
-        'alt'      => 'Imo State Landmarks',
-        'title'    => 'Imo State Landmarks',
-        'subtitle' => 'Creative landmark collage celebrating Imo State.',
-    ],
-];
+    // 3. Community photos
+    $communityFile = __DIR__ . '/community_photos.json';
+    $commItems = file_exists($communityFile) ? (json_decode(file_get_contents($communityFile), true) ?: []) : [];
 
-// Video items
-$video_items = [
-    [
-        'title'       => 'Imolites video feature',
-        'poster'      => 'assets/induction-video-poster.jpg',
-        'src'         => 'assets/induction-video.mp4',
-        'description' => 'Club media • 3 min 43 sec',
-    ],
-    [
-        'title'       => 'Imolites short feature',
-        'poster'      => 'assets/club-video-poster.jpg',
-        'src'         => 'assets/club-video.mp4',
-        'description' => 'Club media • 35 sec',
-    ],
-];
+    // 4. Admin items
+    $adminFile = __DIR__ . '/admin_gallery_items.json';
+    $admItems = file_exists($adminFile) ? (json_decode(file_get_contents($adminFile), true) ?: []) : [];
+
+    $apply_edits = function(&$item) use ($edits) {
+        $id = $item['id'] ?? '';
+        $img = $item['image'] ?? '';
+        $key = isset($edits[$id]) ? $id : (isset($edits[$img]) ? $img : null);
+        if ($key && isset($edits[$key])) {
+            $e = $edits[$key];
+            if (!empty($e['title'])) { $item['title'] = $e['title']; $item['alt'] = $e['title']; }
+            if (isset($e['subtitle'])) { $item['subtitle'] = $e['subtitle']; }
+            if (!empty($e['category'])) { $item['category'] = $e['category']; }
+        }
+    };
+
+    $all = array_merge($commItems, $admItems, $baseItems);
+    $result = [];
+    foreach ($all as $item) {
+        $id = $item['id'] ?? '';
+        $img = $item['image'] ?? '';
+        $legacyKey = 'base_' . md5($img);
+        if (!in_array($id, $deletedIds) && !in_array($img, $deletedIds) && !in_array($legacyKey, $deletedIds)) {
+            $apply_edits($item);
+            $result[] = $item;
+        }
+    }
+    return $result;
+}
