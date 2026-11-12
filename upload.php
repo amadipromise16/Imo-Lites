@@ -128,20 +128,60 @@ function sanitize_and_save_image($binary, $destinationPath, $detectedExt) {
 
 // Filter out test entries
 function is_test_entry($p) {
+    if (!is_array($p)) return true;
     $sub = strtolower($p['subtitle'] ?? '');
     $tit = strtolower($p['title'] ?? '');
-    return (strpos($sub, '2:59 pm') !== false || (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
+    return (strpos($sub, '2:59 pm') !== false || 
+            (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false) ||
+            (strpos($sub, 'nov 12, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
 }
 
-// Handle GET: return all public community photos
+// Handle GET: return all public community photos + admin custom items, minus deleted items
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $deletedFile = __DIR__ . '/data/deleted_photos.json';
+    $deletedIds = file_exists($deletedFile) ? (json_decode(file_get_contents($deletedFile), true) ?: []) : [];
+    if (!is_array($deletedIds)) $deletedIds = [];
+
     $photos = [];
     if (file_exists($dataFile)) {
         $json = @file_get_contents($dataFile);
-        $photos = json_decode($json, true) ?: [];
-        $photos = array_values(array_filter($photos, function($p) { return !is_test_entry($p); }));
+        $comm = $json ? (json_decode($json, true) ?: []) : [];
+        if (is_array($comm)) {
+            foreach ($comm as $p) {
+                if (is_array($p) && !is_test_entry($p)) {
+                    $id = $p['id'] ?? '';
+                    $img = $p['image'] ?? '';
+                    if (!in_array($id, $deletedIds) && !in_array($img, $deletedIds)) {
+                        $photos[] = $p;
+                    }
+                }
+            }
+        }
     }
-    echo json_encode(['success' => true, 'photos' => $photos]);
+
+    // Also include admin custom items
+    $adminFile = __DIR__ . '/data/admin_gallery_items.json';
+    if (file_exists($adminFile)) {
+        $admJson = @file_get_contents($adminFile);
+        $adm = $admJson ? (json_decode($admJson, true) ?: []) : [];
+        if (is_array($adm)) {
+            foreach ($adm as $p) {
+                if (is_array($p) && !is_test_entry($p)) {
+                    $id = $p['id'] ?? '';
+                    $img = $p['image'] ?? '';
+                    if (!in_array($id, $deletedIds) && !in_array($img, $deletedIds)) {
+                        $photos[] = $p;
+                    }
+                }
+            }
+        }
+    }
+
+    echo json_encode([
+        'success'     => true,
+        'photos'      => $photos,
+        'deleted_ids' => $deletedIds
+    ]);
     exit;
 }
 

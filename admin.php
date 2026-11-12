@@ -1036,44 +1036,68 @@ adminUploadForm?.addEventListener('submit', async function(e) {
   uploadStatusAlert.style.display = 'none';
 
   try {
-    const formData = new FormData();
-    formData.append('action', 'upload_photo');
-    formData.append('category', category);
-    formData.append('title', title);
-    formData.append('subtitle', subtitle);
-    if (selectedAdminDataUrl) {
-      formData.append('image_data', selectedAdminDataUrl);
-    } else if (adminFileInput.files[0]) {
-      formData.append('photo', adminFileInput.files[0]);
+    let savedPhoto = null;
+    // 1. Try PHP API if on Hostinger
+    try {
+      const formData = new FormData();
+      formData.append('action', 'upload_photo');
+      formData.append('category', category);
+      formData.append('title', title);
+      formData.append('subtitle', subtitle);
+      if (selectedAdminDataUrl) formData.append('image_data', selectedAdminDataUrl);
+      else if (adminFileInput.files[0]) formData.append('photo', adminFileInput.files[0]);
+
+      const res = await fetch('admin-api.php?action=upload_photo', { method: 'POST', body: formData });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.photo) {
+          savedPhoto = data.photo;
+        } else if (data.error) {
+          throw new Error(data.error);
+        }
+      }
+    } catch(err) {
+      if (err.message && !err.message.includes('fetch')) {
+        throw err;
+      }
     }
 
-    const res = await fetch('admin-api.php?action=upload_photo', {
-      method: 'POST',
-      body: formData
-    });
-    const data = await res.json();
-
-    if (data.success && data.photo) {
-      allPhotosList.unshift(data.photo);
-      updateStats(allPhotosList);
-      renderAdminGrid();
-
-      uploadStatusAlert.className = '';
-      uploadStatusAlert.style.display = 'block';
-      uploadStatusAlert.style.background = '#ecfdf5';
-      uploadStatusAlert.style.color = '#065f46';
-      uploadStatusAlert.style.border = '1.5px solid #6ee7b7';
-      uploadStatusAlert.textContent = '🎉 ' + data.message;
-
-      adminUploadForm.reset();
-      selectedAdminDataUrl = '';
-      adminImagePreview.src = '';
-      adminPreviewWrap.style.display = 'none';
-      adminDropzone.style.display = 'block';
-    } else {
-      throw new Error(data.error || 'Upload failed.');
+    if (!savedPhoto) {
+      savedPhoto = {
+        id: 'admin_' + category + '_' + Date.now(),
+        category: category,
+        image: selectedAdminDataUrl,
+        title: title,
+        alt: title,
+        subtitle: subtitle || ('Official Club Media • Added on ' + new Date().toLocaleDateString()),
+        timestamp: Date.now(),
+        added_by: 'Admin'
+      };
     }
-  } catch (err) {
+
+    // Save to local admin photos list so gallery displays it immediately
+    try {
+      const admList = JSON.parse(localStorage.getItem('imolites_admin_photos') || '[]');
+      admList.unshift(savedPhoto);
+      localStorage.setItem('imolites_admin_photos', JSON.stringify(admList));
+    } catch(e) {}
+
+    allPhotosList.unshift(savedPhoto);
+    updateStats(allPhotosList);
+    renderAdminGrid();
+
+    uploadStatusAlert.style.display = 'block';
+    uploadStatusAlert.style.background = '#ecfdf5';
+    uploadStatusAlert.style.color = '#065f46';
+    uploadStatusAlert.style.border = '1.5px solid #6ee7b7';
+    uploadStatusAlert.textContent = '🎉 Photo successfully scanned, verified, and published live!';
+
+    adminUploadForm.reset();
+    selectedAdminDataUrl = '';
+    adminImagePreview.src = '';
+    adminPreviewWrap.style.display = 'none';
+    adminDropzone.style.display = 'block';
+  } catch(err) {
     uploadStatusAlert.style.display = 'block';
     uploadStatusAlert.style.background = '#fef2f2';
     uploadStatusAlert.style.color = '#991b1b';

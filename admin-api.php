@@ -278,12 +278,6 @@ if ($action === 'upload_photo') {
             $subtitle = 'Official Club Media • Added on ' . $dateStr;
         }
     }
-        } elseif ($category === 'community') {
-            $subtitle = 'Club Family Photo • Added by Admin on ' . $dateStr;
-        } else {
-            $subtitle = 'Official Club Media • Added on ' . $dateStr;
-        }
-    }
 
     $id = 'admin_' . $category . '_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4));
     $binaryData = null;

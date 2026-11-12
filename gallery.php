@@ -29,7 +29,9 @@ if (file_exists($communityFile)) {
             if (!is_array($p)) return false;
             $sub = strtolower($p['subtitle'] ?? '');
             $tit = strtolower($p['title'] ?? '');
-            return !(strpos($sub, '2:59 pm') !== false || (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
+            return !(strpos($sub, '2:59 pm') !== false || 
+                     (strpos($sub, 'nov 10, 2026') !== false && strpos($tit, 'community celebration snap') !== false) ||
+                     (strpos($sub, 'nov 12, 2026') !== false && strpos($tit, 'community celebration snap') !== false));
         }));
     } else {
         $communityPhotos = [];
@@ -658,31 +660,87 @@ try {
 } catch(e) {}
 
 function isTestPhoto(p) {
-  if (!p) return false;
+  if (!p) return true;
   const sub = (p.subtitle || '').toLowerCase();
   const tit = (p.title || '').toLowerCase();
-  if (sub.includes('2:59 pm') || (sub.includes('nov 10, 2026') && tit.includes('community celebration snap'))) {
+  const deletedList = JSON.parse(localStorage.getItem('imolites_deleted_photos') || '[]');
+  if (p.id && deletedList.includes(p.id)) return true;
+  if (p.image && deletedList.includes(p.image)) return true;
+  if (sub.includes('2:59 pm') || 
+      (sub.includes('nov 10, 2026') && tit.includes('community celebration snap')) ||
+      (sub.includes('nov 12, 2026') && tit.includes('community celebration snap'))) {
     return true;
   }
   return false;
 }
 
-// Remove any test card that might be in initial HTML
-document.querySelectorAll('.gallery-card[data-category="community"]').forEach(card => {
+// Remove any test card or deleted card that might be in initial HTML
+document.querySelectorAll('.gallery-card').forEach(card => {
   const text = card.textContent.toLowerCase();
-  if (text.includes('2:59 pm') || (text.includes('nov 10, 2026') && text.includes('community celebration snap'))) {
+  if (text.includes('2:59 pm') || 
+      (text.includes('nov 10, 2026') && text.includes('community celebration snap')) ||
+      (text.includes('nov 12, 2026') && text.includes('community celebration snap'))) {
     card.remove();
   }
 });
 
+// Filter deleted photos & apply admin edits locally
+function applyLocalModeration() {
+  try {
+    const deletedList = JSON.parse(localStorage.getItem('imolites_deleted_photos') || '[]');
+    if (Array.isArray(deletedList) && deletedList.length > 0) {
+      document.querySelectorAll('.gallery-card').forEach(card => {
+        const id = card.dataset.id || '';
+        const img = card.querySelector('img')?.src || '';
+        if (deletedList.includes(id) || deletedList.includes(img)) {
+          card.remove();
+        }
+      });
+    }
+
+    const editsMap = JSON.parse(localStorage.getItem('imolites_photo_edits') || '{}');
+    document.querySelectorAll('.gallery-card').forEach(card => {
+      const id = card.dataset.id || '';
+      const img = card.querySelector('img')?.src || '';
+      const key = editsMap[id] ? id : (editsMap[img] ? img : null);
+      if (key && editsMap[key]) {
+        const e = editsMap[key];
+        if (e.title) {
+          const b = card.querySelector('figcaption b');
+          if (b) b.textContent = e.title;
+        }
+        if (e.subtitle) {
+          const sm = card.querySelector('figcaption small');
+          if (sm) sm.textContent = e.subtitle;
+        }
+        if (e.category) {
+          card.dataset.category = e.category;
+        }
+      }
+    });
+  } catch(e) {}
+}
+
 // Load cached community snaps immediately on page load
 function loadCachedCommunityPhotos() {
   try {
-    const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const deletedList = JSON.parse(localStorage.getItem('imolites_deleted_photos') || '[]');
+    let cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     if (Array.isArray(cached)) {
-      cached.filter(p => !isTestPhoto(p)).forEach(photo => prependPhotoToGallery(photo));
+      cached = cached.filter(p => !isTestPhoto(p) && !deletedList.includes(p.id) && !deletedList.includes(p.image));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cached));
+      cached.forEach(photo => prependPhotoToGallery(photo));
+    }
+    
+    // Also load admin custom items from localStorage
+    let cachedAdmin = JSON.parse(localStorage.getItem('imolites_admin_photos') || '[]');
+    if (Array.isArray(cachedAdmin)) {
+      cachedAdmin = cachedAdmin.filter(p => !isTestPhoto(p) && !deletedList.includes(p.id) && !deletedList.includes(p.image));
+      localStorage.setItem('imolites_admin_photos', JSON.stringify(cachedAdmin));
+      cachedAdmin.forEach(photo => prependPhotoToGallery(photo));
     }
   } catch(e) {}
+  applyLocalModeration();
 }
 
 // Client-side fast image compression for instant sharp uploads
@@ -741,6 +799,9 @@ photoFileInput.addEventListener('change', async function() {
 // Function to prepend photo card to DOM
 function prependPhotoToGallery(photo) {
   if (!photo || !photo.image || isTestPhoto(photo)) return;
+  const deletedList = JSON.parse(localStorage.getItem('imolites_deleted_photos') || '[]');
+  if (deletedList.includes(photo.id) || deletedList.includes(photo.image)) return;
+
   // Check if card with this image or id already exists
   if (photo.id && document.querySelector(`.gallery-card[data-id="${photo.id}"]`)) return;
   if (document.querySelector(`.gallery-card img[src="${photo.image}"]`)) return;
@@ -751,6 +812,17 @@ function prependPhotoToGallery(photo) {
   figure.dataset.category = cat;
   if (photo.id) figure.dataset.id = photo.id;
 
+  // Handle visibility on initial load
+  if (currentSection === 'all') {
+    if (['executive', 'trustees', 'induction_committee', 'events'].includes(cat)) {
+      figure.style.display = 'none';
+    } else {
+      figure.style.display = 'block';
+    }
+  } else {
+    figure.style.display = (currentSection === cat) ? 'block' : 'none';
+  }
+
   if (cat === 'executive') {
     figure.dataset.inFolder = 'executive';
     const badge = document.createElement('span');
@@ -758,12 +830,23 @@ function prependPhotoToGallery(photo) {
     badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
     badge.textContent = 'Executive Committee';
     figure.appendChild(badge);
+  } else if (cat === 'trustees') {
+    const badge = document.createElement('span');
+    badge.className = 'badge-executive';
+    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
+    badge.textContent = 'Board of Trustees & Founder';
+    figure.appendChild(badge);
+  } else if (cat === 'induction_committee') {
+    const badge = document.createElement('span');
+    badge.className = 'badge-executive';
+    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
+    badge.textContent = 'Induction Committee';
+    figure.appendChild(badge);
   } else if (cat === 'events') {
-    figure.dataset.inFolder = 'events';
     const badge = document.createElement('span');
     badge.className = 'badge-executive';
     badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-    badge.textContent = '2026 Induction';
+    badge.textContent = '2026 Induction Honoree';
     figure.appendChild(badge);
   } else {
     const badge = document.createElement('span');
@@ -775,18 +858,18 @@ function prependPhotoToGallery(photo) {
 
   const img = document.createElement('img');
   img.src = photo.image;
-  img.alt = photo.title || 'Community Photo';
+  img.alt = photo.title || 'Gallery Photo';
   img.loading = 'lazy';
   img.tabIndex = 0;
   figure.appendChild(img);
 
   const figcaption = document.createElement('figcaption');
   const b = document.createElement('b');
-  b.textContent = photo.title || 'Community Celebration Snap';
+  b.textContent = photo.title || 'Gallery Photo';
   figcaption.appendChild(b);
 
   const small = document.createElement('small');
-  small.textContent = photo.subtitle || ('Shared by ' + (photo.uploader || 'Member') + ' on ' + new Date(photo.timestamp || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+  small.textContent = photo.subtitle || ('Added on ' + new Date(photo.timestamp || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
   figcaption.appendChild(small);
 
   figure.appendChild(figcaption);
@@ -799,6 +882,7 @@ function prependPhotoToGallery(photo) {
 // Fetch photos from the global cloud edge database & local PHP backend
 async function loadGlobalCommunityPhotos() {
   const remotePhotos = [];
+  const deletedSet = new Set(JSON.parse(localStorage.getItem('imolites_deleted_photos') || '[]'));
 
   // 1. Try local PHP upload endpoint on Hostinger
   if (window.location.protocol.startsWith('http')) {
@@ -806,47 +890,41 @@ async function loadGlobalCommunityPhotos() {
       const phpRes = await fetch('upload.php');
       if (phpRes.ok) {
         const phpData = await phpRes.json();
-        if (phpData && Array.isArray(phpData.photos)) {
-          remotePhotos.push(...phpData.photos);
+        if (phpData) {
+          if (Array.isArray(phpData.deleted_ids)) {
+            phpData.deleted_ids.forEach(id => deletedSet.add(id));
+            localStorage.setItem('imolites_deleted_photos', JSON.stringify([...deletedSet]));
+          }
+          if (Array.isArray(phpData.photos)) {
+            remotePhotos.push(...phpData.photos);
+          }
         }
       }
     } catch(e) {}
   }
 
-  // 2. Try global Cloudflare Edge KV
+  // 2. Also check admin photos in localStorage
   try {
-    const kvRes = await fetch(CLOUD_KV_ENDPOINT);
-    if (kvRes.ok) {
-      const kvData = await kvRes.json();
-      if (kvData && Array.isArray(kvData.photos)) {
-        remotePhotos.push(...kvData.photos);
-      }
+    const admList = JSON.parse(localStorage.getItem('imolites_admin_photos') || '[]');
+    if (Array.isArray(admList)) {
+      remotePhotos.push(...admList);
     }
-  } catch(err) {
-    console.warn('Could not read global community photos:', err);
-  }
+  } catch(e) {}
 
-  // Deduplicate and filter test photos
-  const seen = new Set();
-  const uniquePhotos = [];
-  for (const p of remotePhotos) {
-    if (isTestPhoto(p)) continue;
-    const key = p.id || p.image;
-    if (key && !seen.has(key)) {
-      seen.add(key);
-      uniquePhotos.push(p);
-    }
-  }
+  // Filter out deleted and test photos
+  const filtered = remotePhotos.filter(p => {
+    if (isTestPhoto(p)) return false;
+    const id = p.id || '';
+    const img = p.image || '';
+    if (deletedSet.has(id) || deletedSet.has(img)) return false;
+    return true;
+  });
 
-  if (uniquePhotos.length > 0) {
-    uniquePhotos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-    uniquePhotos.forEach(photo => prependPhotoToGallery(photo));
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(uniquePhotos));
-    } catch(e) {}
-  }
+  // Apply to gallery
+  filtered.forEach(photo => prependPhotoToGallery(photo));
 
-  cards = [...document.querySelectorAll('.gallery-card')];
+  // Purge any deleted items from DOM
+  applyLocalModeration();
 }
 
 // 1. Load instant cache first

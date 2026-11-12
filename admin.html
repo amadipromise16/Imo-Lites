@@ -1359,13 +1359,20 @@ adminUploadForm?.addEventListener('submit', async function(e) {
       else if (adminFileInput.files[0]) formData.append('photo', adminFileInput.files[0]);
 
       const res = await fetch('admin-api.php?action=upload_photo', { method: 'POST', body: formData });
-      const data = await res.json();
-      if (data.success && data.photo) {
-        savedPhoto = data.photo;
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.photo) {
+          savedPhoto = data.photo;
+        } else if (data.error) {
+          throw new Error(data.error);
+        }
       }
-    } catch(e) {}
+    } catch(err) {
+      if (err.message && !err.message.includes('fetch')) {
+        throw err;
+      }
+    }
 
-    // 2. Fallback to Cloud KV + localStorage
     if (!savedPhoto) {
       savedPhoto = {
         id: 'admin_' + category + '_' + Date.now(),
@@ -1377,21 +1384,14 @@ adminUploadForm?.addEventListener('submit', async function(e) {
         timestamp: Date.now(),
         added_by: 'Admin'
       };
-
-      // Sync Cloud KV
-      try {
-        await fetch(CLOUD_KV_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ photo: savedPhoto })
-        });
-      } catch(e) {}
-
-      // Save locally
-      const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      cached.unshift(savedPhoto);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(cached.slice(0, 100)));
     }
+
+    // Save to local admin photos list so gallery displays it immediately
+    try {
+      const admList = JSON.parse(localStorage.getItem('imolites_admin_photos') || '[]');
+      admList.unshift(savedPhoto);
+      localStorage.setItem('imolites_admin_photos', JSON.stringify(admList));
+    } catch(e) {}
 
     allPhotosList.unshift(savedPhoto);
     updateStats(allPhotosList);
