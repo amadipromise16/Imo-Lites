@@ -444,7 +444,7 @@ function setupLightboxEvents() {
       img.dataset.hasLb = 'true';
       img.addEventListener('click', (e) => {
         const parentCard = img.closest('.gallery-card');
-        if (parentCard && parentCard.dataset.isFolder === 'true' && currentActiveFolder !== parentCard.dataset.folderTarget) {
+        if (parentCard && parentCard.dataset.isFolder === 'true' && (!folderExpanded || currentSection !== parentCard.dataset.folderTarget)) {
           // If on main view, clicking the cover card opens the folder
           return;
         }
@@ -455,7 +455,7 @@ function setupLightboxEvents() {
       img.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           const parentCard = img.closest('.gallery-card');
-          if (parentCard && parentCard.dataset.isFolder === 'true' && currentActiveFolder !== parentCard.dataset.folderTarget) {
+          if (parentCard && parentCard.dataset.isFolder === 'true' && (!folderExpanded || currentSection !== parentCard.dataset.folderTarget)) {
             return;
           }
           lbImg.src = img.src;
@@ -697,7 +697,6 @@ function prependPhotoToGallery(photo) {
     badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
     badge.textContent = 'Executive Committee';
     figure.appendChild(badge);
-    if (currentActiveFolder !== 'executive') figure.style.display = 'none';
   } else if (cat === 'events') {
     figure.dataset.inFolder = 'events';
     const badge = document.createElement('span');
@@ -705,14 +704,12 @@ function prependPhotoToGallery(photo) {
     badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
     badge.textContent = '2026 Induction';
     figure.appendChild(badge);
-    if (currentActiveFolder !== 'events') figure.style.display = 'none';
   } else {
     const badge = document.createElement('span');
     badge.className = 'badge-community';
     badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
     badge.textContent = 'Community Snap';
     figure.appendChild(badge);
-    if (currentActiveFolder) figure.style.display = 'none';
   }
 
   const img = document.createElement('img');
