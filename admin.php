@@ -587,7 +587,7 @@ if ($is_logged_in) {
             2026 Gala Banquet Table QR Code (Logo Edition)
           </h2>
           <p style="color:#d0ded5; font-size:14px; line-height:1.55; margin:0 0 16px;">
-            This custom QR code is beautifully designed in the shape of our official club crest medallion for event organizers to print and place on banquet tables. When guests point their phone camera, it instantly opens the 2026 Induction E-Brochure &amp; Media gallery. (Removed from public website pages per instructions).
+            This custom QR code is beautifully designed in the shape of our official club crest medallion for event organizers to print and place on banquet tables. When guests point their phone camera, it instantly opens the official club website (https://imolites.org) with complete access to club history, brochures, gala videos, and galleries. (Removed from public website pages per instructions).
           </p>
           <div style="display:flex; flex-wrap:wrap; gap:10px;">
             <a href="print-table-qr.php" target="_blank" class="btn" style="background:#d4af37; color:#042115; font-weight:bold; font-size:13.5px; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
