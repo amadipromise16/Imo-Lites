@@ -22,6 +22,7 @@ $ext = (!isset($static_export) || !$static_export) ? '.php' : '.html';
         <a href="connect<?= $ext ?>">Social Media &amp; Community</a>
         <a href="https://www.facebook.com/share/1KKe8uVxz8/?mibextid=wwXIfr" rel="noopener" target="_blank">Official Facebook ↗</a>
         <a href="https://www.tiktok.com/@imolitesusa1?_r=1&amp;_t=ZP-9BIUJp5vLWY" rel="noopener" target="_blank">TikTok @imolitesusa1 ↗</a>
+        <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" rel="noopener" target="_blank">Official YouTube ↗</a>
         <a href="https://www.google.com/maps/search/?api=1&amp;query=3338+Broadway+Blvd+Garland+TX+75043" rel="noopener" target="_blank">Event location ↗</a>
         <a href="admin<?= $ext ?>" style="color:var(--gold,#d4af37); font-weight:600;">🔒 Admin Portal</a>
       </div>

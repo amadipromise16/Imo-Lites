@@ -580,6 +580,7 @@ if ($is_logged_in) {
             <div class="form-group">
               <label for="photo-category">Gallery Section / Folder *</label>
               <select id="photo-category" name="category" required>
+                <option value="brochure">📖 2026 Induction Brochure &amp; Media</option>
                 <option value="executive">👔 Executive Committee (Executive Council Folder)</option>
                 <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
                 <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
@@ -638,6 +639,7 @@ if ($is_logged_in) {
       <!-- Filters -->
       <div class="admin-filter-bar">
         <button class="admin-filter active" data-filter="all">All Photos (<span id="cnt-all">0</span>)</button>
+        <button class="admin-filter" data-filter="brochure">📖 Brochure (<span id="cnt-brochure">0</span>)</button>
         <button class="admin-filter" data-filter="executive">👔 Executive (<span id="cnt-exec">0</span>)</button>
         <button class="admin-filter" data-filter="trustees">🏛️ Trustees &amp; Founder (<span id="cnt-trustees">0</span>)</button>
         <button class="admin-filter" data-filter="induction_committee">🤝 Induction Comm (<span id="cnt-induct-comm">0</span>)</button>
@@ -683,6 +685,7 @@ if ($is_logged_in) {
           <div class="form-group">
             <label for="edit-photo-category">Gallery Section *</label>
             <select id="edit-photo-category" required>
+              <option value="brochure">📖 2026 Induction Brochure &amp; Media</option>
               <option value="executive">👔 Executive Committee</option>
               <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
               <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
@@ -866,6 +869,7 @@ function updateStats(photos) {
   if (statComm) statComm.textContent = photos.filter(p => p.category === 'community').length;
 
   document.getElementById('cnt-all') && (document.getElementById('cnt-all').textContent = photos.length);
+  document.getElementById('cnt-brochure') && (document.getElementById('cnt-brochure').textContent = photos.filter(p => p.category === 'brochure').length);
   document.getElementById('cnt-exec') && (document.getElementById('cnt-exec').textContent = photos.filter(p => p.category === 'executive').length);
   document.getElementById('cnt-trustees') && (document.getElementById('cnt-trustees').textContent = photos.filter(p => p.category === 'trustees').length);
   document.getElementById('cnt-induct-comm') && (document.getElementById('cnt-induct-comm').textContent = photos.filter(p => p.category === 'induction_committee').length);

@@ -306,6 +306,43 @@ function get_base_gallery_items() {
             'title' => 'Imo State Landmarks',
             'subtitle' => 'Creative landmark collage celebrating Imo State.'
         ],
+        [
+            'id' => 'brochure_landscape_video',
+            'category' => 'brochure',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/induction-video-poster.jpg',
+            'video' => 'assets/induction-video.mp4',
+            'download_url' => 'https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t',
+            'gdrive_url' => 'https://drive.google.com/file/d/17YikZRwCrO4P5-VeyM81MltQjFPUPqc2/view?usp=sharing',
+            'youtube_url' => 'https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA',
+            'alt' => '2026 Induction E-Brochure — Landscape Video Edition',
+            'title' => '2026 Induction E-Brochure — Landscape Video Edition',
+            'subtitle' => 'Official 2026 Gala & Induction E-Brochure • High Definition Landscape Video (624 MB)'
+        ],
+        [
+            'id' => 'brochure_portrait_edition',
+            'category' => 'brochure',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/digital-brochure.webp',
+            'download_url' => 'assets/digital-brochure.webp',
+            'alt' => '2026 Induction E-Brochure — Portrait Mobile Edition',
+            'title' => '2026 Induction E-Brochure — Portrait Edition',
+            'subtitle' => 'Official 2026 Gala & Induction E-Brochure • High-Resolution Portrait Page Layout'
+        ],
+        [
+            'id' => 'brochure_official_qr',
+            'category' => 'brochure',
+            'folder_id' => null,
+            'is_folder_cover' => false,
+            'image' => 'assets/qr-induction-brochure.svg',
+            'download_png' => 'assets/qr-induction-brochure.png',
+            'download_svg' => 'assets/qr-induction-brochure.svg',
+            'alt' => 'Official 2026 Induction Brochure QR Code',
+            'title' => 'Official 2026 Induction Brochure QR Code',
+            'subtitle' => 'Scan with any phone to open the 2026 Induction E-Brochure & Video immediately'
+        ],
     ];
 }
 

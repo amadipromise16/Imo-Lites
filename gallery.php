@@ -192,6 +192,7 @@ require __DIR__ . '/includes/header.php';
       <!-- Filter Bar -->
       <div aria-label="Filter gallery" class="filterbar" role="group">
         <button class="filter active" data-filter="all">All images</button>
+        <button class="filter" data-filter="brochure">📖 2026 Induction Brochure</button>
         <button class="filter" data-filter="executive">Executive Committee</button>
         <button class="filter" data-filter="trustees">Board of Trustees &amp; Founder</button>
         <button class="filter" data-filter="induction_committee">Induction Committee</button>
@@ -200,6 +201,48 @@ require __DIR__ . '/includes/header.php';
         <button class="filter" data-filter="heritage">Imo State artwork</button>
         <button class="filter" data-filter="branding">Official crest &amp; swag</button>
         <a class="filter-btn" href="videos<?= $ext ?>">Watch Videos ↗</a>
+      </div>
+
+      <!-- Dedicated 2026 Induction Brochure Showcase Hero -->
+      <div id="brochure-showcase-box" style="display:none; margin:0 0 32px; background:linear-gradient(135deg,#042115 0%,#072e1e 50%,#0d4630 100%); border:2px solid var(--gold,#d4af37); border-radius:16px; padding:28px 24px; color:#ffffff; box-shadow:0 10px 30px rgba(0,0,0,0.25);">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:20px;">
+          <div style="max-width:650px;">
+            <div style="display:inline-block; background:rgba(212,175,55,0.2); border:1px solid #d4af37; color:#f3e0aa; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:20px; margin-bottom:10px;">
+              ★ Official 2026 Gala Media Release ★
+            </div>
+            <h2 style="font-family:'Playfair Display',serif; font-size:26px; color:#ffffff; margin:0 0 8px;">
+              2026 Induction E-Brochure, Video &amp; Official QR Code
+            </h2>
+            <p style="color:#d0ded5; font-size:14.5px; line-height:1.55; margin:0 0 16px;">
+              Welcome to the official media hub for our 2026 Induction and End of the Year Party. Download the full landscape video brochure (624 MB) or portrait layout, stream the video online, scan the branded QR code with your mobile camera, and connect with our official YouTube channel!
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+              <a href="https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t" class="btn" style="background:#d4af37; color:#042115; font-weight:bold; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;" download>
+                📥 Download Full HD Video (624 MB)
+              </a>
+              <a href="assets/digital-brochure.webp" download="imolites-2026-induction-brochure-portrait.webp" class="btn btn-outline" style="border:1.5px solid #d4af37; color:#f3e0aa; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                📱 Download Portrait Brochure
+              </a>
+              <a href="assets/qr-induction-brochure.png" download="imolites-2026-induction-brochure-qr.png" class="btn btn-outline" style="border:1.5px solid #86efac; color:#86efac; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                📲 Download QR Code (PNG)
+              </a>
+              <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" target="_blank" rel="noopener" class="btn btn-outline" style="border:1.5px solid #ff4444; color:#ffffff; background:rgba(255,0,0,0.15); font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                📺 Watch on YouTube ↗
+              </a>
+            </div>
+          </div>
+          <div style="text-align:center; min-width:180px;">
+            <div style="background:#ffffff; padding:10px; border-radius:12px; border:2px solid #d4af37; display:inline-block; box-shadow:0 8px 24px rgba(0,0,0,0.35);">
+              <img src="assets/qr-induction-brochure.png" alt="Scan QR code for 2026 Induction Brochure" style="width:140px; height:140px; display:block;"/>
+            </div>
+            <div style="font-size:11px; color:#f3e0aa; font-weight:700; margin-top:8px; text-transform:uppercase; letter-spacing:0.05em;">
+              Scan on Mobile
+            </div>
+            <a href="assets/qr-induction-brochure.svg" download="imolites-qr-code.svg" style="font-size:11.5px; color:#86efac; text-decoration:underline; display:block; margin-top:4px;">
+              Get Vector (SVG) ↓
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- Active Folder Navigation Bar -->
@@ -224,8 +267,8 @@ require __DIR__ . '/includes/header.php';
           $itemId = $item['id'] ?? '';
           $folderId = $item['folder_id'] ?? ($category === 'executive' ? 'executive' : '');
           $isFolderCover = !empty($item['is_folder_cover']);
-          // Hide executive, trustees, induction_committee, and events (2026 honorees) on initial load of 'all'
-          $hideOnAll = in_array($category, ['executive', 'trustees', 'induction_committee', 'events']) || $isFolderCover || !empty($folderId);
+          // Hide executive, trustees, induction_committee, events, and brochure on initial load of 'all'
+          $hideOnAll = in_array($category, ['executive', 'trustees', 'induction_committee', 'events', 'brochure']) || $isFolderCover || !empty($folderId);
 
           $cardClasses = ['gallery-card'];
           if ($isFolderCover) $cardClasses[] = 'album-folder-card';
@@ -251,6 +294,10 @@ require __DIR__ . '/includes/header.php';
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Induction Committee</span>
             <?php elseif ($category === 'events'): ?>
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
+            <?php elseif ($category === 'brochure'): ?>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#b8860b 100%);color:#ffffff;border:1px solid #f3e0aa;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">
+                <?= ($itemId === 'brochure_official_qr') ? 'Official QR Code' : '2026 Induction Brochure' ?>
+              </span>
             <?php endif; ?>
 
             <img alt="<?= htmlspecialchars($item['alt'] ?? ($item['title'] ?? 'Imolites Gallery Photo'), ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
@@ -265,6 +312,37 @@ require __DIR__ . '/includes/header.php';
                 <?= htmlspecialchars($item['caption'] ?? '', ENT_QUOTES, 'UTF-8') ?>
               <?php endif; ?>
             </figcaption>
+
+            <?php if ($category === 'brochure'): ?>
+              <div style="padding:10px 14px 14px; display:flex; flex-direction:column; gap:8px; background:rgba(7,46,30,0.03); border-top:1px solid rgba(0,0,0,0.06);">
+                <?php if ($itemId === 'brochure_landscape_video'): ?>
+                  <a href="https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t" class="btn" style="padding:8px 12px; font-size:12.5px; text-align:center; background:#d4af37; color:#042115; font-weight:700; border-radius:6px; text-decoration:none;" download>
+                    📥 Download Full Video (624 MB)
+                  </a>
+                  <div style="display:flex; gap:6px;">
+                    <a href="https://drive.google.com/file/d/17YikZRwCrO4P5-VeyM81MltQjFPUPqc2/view?usp=sharing" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; padding:6px 8px; font-size:11.5px; text-align:center; border:1px solid #072e1e; border-radius:6px; text-decoration:none;">
+                      Drive Player ↗
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; padding:6px 8px; font-size:11.5px; text-align:center; border:1px solid #c00; color:#c00; border-radius:6px; text-decoration:none;">
+                      YouTube ↗
+                    </a>
+                  </div>
+                <?php elseif ($itemId === 'brochure_portrait_edition'): ?>
+                  <a href="assets/digital-brochure.webp" download="imolites-2026-induction-brochure-portrait.webp" class="btn" style="padding:8px 12px; font-size:12.5px; text-align:center; background:#072e1e; color:#ffffff; font-weight:700; border-radius:6px; text-decoration:none;">
+                    📥 Download Portrait Layout
+                  </a>
+                <?php elseif ($itemId === 'brochure_official_qr'): ?>
+                  <div style="display:flex; gap:6px;">
+                    <a href="assets/qr-induction-brochure.png" download="imolites-2026-induction-brochure-qr.png" class="btn" style="flex:1; padding:8px 8px; font-size:12px; text-align:center; background:#072e1e; color:#ffffff; font-weight:700; border-radius:6px; text-decoration:none;">
+                      📥 Save PNG
+                    </a>
+                    <a href="assets/qr-induction-brochure.svg" download="imolites-2026-induction-brochure-qr.svg" class="btn btn-outline" style="flex:1; padding:8px 8px; font-size:12px; text-align:center; border:1px solid #072e1e; border-radius:6px; text-decoration:none;">
+                      Save SVG
+                    </a>
+                  </div>
+                <?php endif; ?>
+              </div>
+            <?php endif; ?>
 
             <?php if ($isFolderCover): ?>
               <div class="folder-action-hint">
@@ -365,17 +443,33 @@ function updateGalleryDisplay() {
   cards = [...document.querySelectorAll('.gallery-card')];
   buttons.forEach(b => b.classList.toggle('active', b.dataset.filter === currentSection));
 
+  const brochureShowcaseBox = document.getElementById('brochure-showcase-box');
+  if (brochureShowcaseBox) {
+    brochureShowcaseBox.style.display = (currentSection === 'brochure') ? 'block' : 'none';
+  }
+
   if (currentSection === 'all') {
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
       const cat = c.dataset.category;
-      // HIDE executive, trustees, induction_committee, AND events (2026 induction honorees) on 'all'
-      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || cat === 'events' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
+      // HIDE executive, trustees, induction_committee, events, AND brochure on 'all'
+      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || cat === 'events' || cat === 'brochure' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
         c.style.display = 'none';
       } else {
         c.style.display = 'block';
       }
+    });
+  } else if (currentSection === 'brochure') {
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '📖 2026 Official Induction E-Brochure & Media';
+      folderBarDesc.textContent = 'Download Landscape video edition (624 MB), Portrait mobile edition, and scan our branded QR code';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
+    }
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'brochure') ? 'block' : 'none';
     });
   } else if (currentSection === 'executive') {
     if (!folderExpanded) {
@@ -490,8 +584,9 @@ function setupFolderClickEvents() {
 }
 setupFolderClickEvents();
 
-// Check URL query parameters
-const urlFilter = new URLSearchParams(window.location.search).get('category');
+// Check URL query parameters & hash
+const urlParams = new URLSearchParams(window.location.search);
+const urlFilter = urlParams.get('category') || urlParams.get('section') || urlParams.get('tab') || (window.location.hash ? window.location.hash.replace('#', '') : null);
 if (urlFilter) {
   applyFilter(urlFilter);
 } else {

@@ -34,12 +34,13 @@ require __DIR__ . '/includes/header.php';
 
       <div style="margin-top:28px; padding:20px 24px; background:#04261a; border:1px solid var(--gold); border-radius:10px; color:#fff; text-align:center;">
         <p style="margin:0; font-size:16px; font-weight:700; color:#f3e0aa;">
-          🎥 View more of our videos on TikTok and Facebook!
+          🎥 View more of our videos on YouTube, TikTok and Facebook!
         </p>
         <p style="margin:8px 0 0; font-size:14px; color:#c5d8cd;">
           Follow our daily stories, gala previews, member spotlights, and cultural celebration highlights.
         </p>
         <div style="display:inline-flex; gap:12px; margin-top:14px; flex-wrap:wrap; justify-content:center;">
+          <a class="btn btn-outline" href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" rel="noopener" target="_blank" style="padding:10px 18px; font-size:13.5px; border-color:#ff4444; color:#fff; background:rgba(255,0,0,0.15);">YouTube Channel ↗</a>
           <a class="btn" href="https://www.tiktok.com/@imolitesusa1?_r=1&amp;_t=ZP-9BIUJp5vLWY" rel="noopener" target="_blank" style="padding:10px 18px; font-size:13.5px;">TikTok @imolitesusa1 ↗</a>
           <a class="btn btn-outline" href="https://www.facebook.com/share/1KKe8uVxz8/?mibextid=wwXIfr" rel="noopener" target="_blank" style="padding:10px 18px; font-size:13.5px; border-color:var(--gold); color:#fff;">Facebook Page ↗</a>
         </div>

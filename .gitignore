@@ -5,4 +5,7 @@ $RECYCLE.BIN/
 .DS_Store
 *.log
 hostinger-deploy.zip
+node_modules/
+package-lock.json
+build_qr.js
 
