@@ -1,5 +1,16 @@
 {
+  "name": "imolites-website",
+  "version": "1.0.0",
+  "description": "Imolites in Diaspora Social Club USA Official Website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Build successful'"
+  },
   "dependencies": {
     "qrcode": "^1.5.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
