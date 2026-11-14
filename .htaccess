@@ -35,7 +35,25 @@ DirectoryIndex index.php index.html
     RewriteRule ^(.*)$ $1.php [L]
 </IfModule>
 
-# Caching for fast performance
+# Caching and Cache-Busting for Hostinger & Cloudflare
+<IfModule mod_headers.c>
+    # Immediately revalidate HTML and PHP dynamic files
+    <FilesMatch "\.(php|html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Hostinger LiteSpeed Cache Directives
+<IfModule LiteSpeed>
+    CacheLookup on
+    CacheEngine off
+</IfModule>
+
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/webp "access plus 1 month"
@@ -43,13 +61,4 @@ DirectoryIndex index.php index.html
     ExpiresByType image/png "access plus 1 month"
     ExpiresByType video/mp4 "access plus 1 month"
     ExpiresByType audio/mpeg "access plus 1 month"
-    ExpiresByType text/css "access plus 1 hour"
-    ExpiresByType application/javascript "access plus 1 hour"
-</IfModule>
-
-# Ensure CSS and JS are revalidated upon deployment
-<IfModule mod_headers.c>
-    <FilesMatch "\.(css|js)$">
-        Header set Cache-Control "max-age=3600, must-revalidate"
-    </FilesMatch>
 </IfModule>

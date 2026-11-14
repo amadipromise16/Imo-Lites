@@ -19,7 +19,7 @@ if (!isset($active_page)) {
   <meta content="<?= htmlspecialchars($meta_description, ENT_QUOTES, 'UTF-8') ?>" name="description"/>
   <title><?= $page_title ?></title>
   <link rel="icon" href="assets/crest-logo.png?v=2" type="image/png"/>
-  <link href="style.css?v=20261111c" rel="stylesheet"/>
+  <link href="style.css?v=20261114_v2" rel="stylesheet"/>
 </head>
 <body>
 <div class="topline">Our roots unite us. Progress moves us forward.</div>

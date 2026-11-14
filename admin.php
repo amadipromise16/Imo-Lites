@@ -5,6 +5,10 @@
  */
 session_start();
 
+header("Cache-Control: no-cache, no-store, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 $page_title = "Admin Portal | Imolites in Diaspora Social Club USA";
 $meta_description = "Administrative portal to manage and moderate Imolites gallery photos, sections, and community uploads.";
 $active_page = 'admin';
@@ -570,6 +574,44 @@ if ($is_logged_in) {
     <div class="security-notice">
       <span style="font-size:24px;">🛡️</span>
       <span><strong>Antivirus &amp; Upload Sanitizer Active:</strong> All uploads undergo deep magic-byte inspection, executable code scanning, and GD pixel re-encoding to block viruses, web shells, and malicious payloads.</span>
+    </div>
+
+    <!-- Dedicated Event Banquet Table QR Code & Print Section -->
+    <div style="margin: 0 0 28px; background: linear-gradient(135deg, #042115 0%, #072e1e 50%, #0d4630 100%); border: 2px solid var(--gold); border-radius: 16px; padding: 24px 26px; color: #ffffff; box-shadow: 0 8px 30px rgba(0,0,0,0.25);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:20px;">
+        <div style="max-width:680px;">
+          <div style="display:inline-block; background:rgba(212,175,55,0.2); border:1px solid var(--gold); color:#f3e0aa; font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:20px; margin-bottom:10px;">
+            ★ Official Event Table &amp; Banquet Print Tool ★
+          </div>
+          <h2 style="font-family:'Playfair Display',serif; font-size:22px; color:#ffffff; margin:0 0 8px;">
+            2026 Gala Banquet Table QR Code (Logo Edition)
+          </h2>
+          <p style="color:#d0ded5; font-size:14px; line-height:1.55; margin:0 0 16px;">
+            This custom QR code is beautifully designed in the shape of our official club crest medallion for event organizers to print and place on banquet tables. When guests point their phone camera, it instantly opens the 2026 Induction E-Brochure &amp; Media gallery. (Removed from public website pages per instructions).
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <a href="print-table-qr.php" target="_blank" class="btn" style="background:#d4af37; color:#042115; font-weight:bold; font-size:13.5px; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+              🖨️ Open Print-Ready Table Stand Cards (PDF/Print)
+            </a>
+            <a href="assets/imolites-logo-qr-code.png" download="imolites-logo-qr-code.png" class="btn btn-outline" style="border:1.5px solid #d4af37; color:#f3e0aa; font-size:13.5px; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+              📥 Download Print PNG (300 DPI)
+            </a>
+            <a href="assets/imolites-logo-qr-code.svg" download="imolites-logo-qr-code.svg" class="btn btn-outline" style="border:1.5px solid #86efac; color:#86efac; font-size:13.5px; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+              📥 Download Vector (SVG)
+            </a>
+          </div>
+        </div>
+        <div style="text-align:center; min-width:140px;">
+          <a href="print-table-qr.php" target="_blank" style="text-decoration:none; display:block;">
+            <div style="background:#ffffff; padding:8px; border-radius:50%; border:3px solid var(--gold); display:inline-block; box-shadow:0 8px 24px rgba(0,0,0,0.35);">
+              <img src="assets/imolites-logo-qr-code.png" alt="Logo QR Code Preview" style="width:130px; height:130px; display:block; border-radius:50%; object-fit:cover;"/>
+            </div>
+            <div style="font-size:11px; color:#f3e0aa; font-weight:700; margin-top:8px; text-transform:uppercase; letter-spacing:0.05em;">
+              Click to Print →
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- Admin Photo Upload Form -->

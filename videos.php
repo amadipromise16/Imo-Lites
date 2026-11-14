@@ -1,4 +1,8 @@
 <?php
+header("Cache-Control: no-cache, no-store, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 $page_title = "Videos | Imolites in Diaspora Social Club USA";
 $meta_description = "Watch cultural celebrations, induction features, and club media from Imolites in Diaspora Social Club USA.";
 $active_page = 'videos';
@@ -27,7 +31,7 @@ require __DIR__ . '/includes/header.php';
           <h3>2026 Induction E-Brochure (Landscape Edition)</h3>
           <p>Official Gala E-Brochure • High Definition Video (624 MB)</p>
           <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
-            <a class="btn" href="https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t" download style="padding:7px 12px; font-size:12.5px;">📥 Download Full HD (624 MB)</a>
+            <a class="btn" href="https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t" download="imolites-2026-induction-brochure-landscape.mp4" style="padding:7px 12px; font-size:12.5px;">📥 Download Landscape Brochure</a>
             <a class="btn btn-outline" href="https://drive.google.com/file/d/17YikZRwCrO4P5-VeyM81MltQjFPUPqc2/view?usp=sharing" target="_blank" rel="noopener" style="padding:7px 12px; font-size:12.5px; border-color:var(--gold); color:#f3e0aa;">Google Drive Player ↗</a>
           </div>
         </article>
@@ -57,10 +61,10 @@ require __DIR__ . '/includes/header.php';
 
       <div style="margin-top:32px; padding:22px 24px; background:#ffffff; border:2px solid var(--gold); border-radius:12px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px;">
         <div style="display:flex; align-items:center; gap:16px;">
-          <img src="assets/qr-induction-brochure.png" alt="QR Code" style="width:70px; height:70px; border-radius:8px; border:1px solid #d4af37;"/>
+          <img src="assets/digital-brochure.webp" alt="Portrait Brochure" style="width:65px; height:75px; object-fit:cover; border-radius:6px; border:1px solid #d4af37;"/>
           <div>
-            <h4 style="font-family:'Playfair Display',serif; color:#072e1e; font-size:18px; margin:0 0 4px;">Looking for the Portrait E-Brochure &amp; Official QR Code?</h4>
-            <p style="color:#4a5c52; font-size:13.5px; margin:0;">Access the digital portrait layout, scan the branded QR code, or download for printing.</p>
+            <h4 style="font-family:'Playfair Display',serif; color:#072e1e; font-size:18px; margin:0 0 4px;">Looking for the 2026 Induction Portrait Brochure?</h4>
+            <p style="color:#4a5c52; font-size:13.5px; margin:0;">Access the official full-color portrait brochure layout and direct download edition.</p>
           </div>
         </div>
         <a class="btn" href="gallery<?= $ext ?>?category=brochure" style="white-space:nowrap;">Open Brochure Section →</a>
