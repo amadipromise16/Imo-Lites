@@ -361,6 +361,11 @@ if ($is_logged_in) {
       color: #ffffff;
       border: 1px solid var(--gold);
     }
+    .badge-charity-admin {
+      background: #991b1b;
+      color: #ffffff;
+      border: 1px solid var(--gold);
+    }
     .badge-trustees-admin {
       background: #072e1e;
       color: #f3e0aa;
@@ -581,6 +586,7 @@ if ($is_logged_in) {
               <label for="photo-category">Gallery Section / Folder *</label>
               <select id="photo-category" name="category" required>
                 <option value="brochure">📖 2026 Induction Brochure &amp; Media</option>
+                <option value="charity">❤️ Charity Outreach (School for the Deaf)</option>
                 <option value="executive">👔 Executive Committee (Executive Council Folder)</option>
                 <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
                 <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
@@ -640,6 +646,7 @@ if ($is_logged_in) {
       <div class="admin-filter-bar">
         <button class="admin-filter active" data-filter="all">All Photos (<span id="cnt-all">0</span>)</button>
         <button class="admin-filter" data-filter="brochure">📖 Brochure (<span id="cnt-brochure">0</span>)</button>
+        <button class="admin-filter" data-filter="charity">❤️ Charity (<span id="cnt-charity">0</span>)</button>
         <button class="admin-filter" data-filter="executive">👔 Executive (<span id="cnt-exec">0</span>)</button>
         <button class="admin-filter" data-filter="trustees">🏛️ Trustees &amp; Founder (<span id="cnt-trustees">0</span>)</button>
         <button class="admin-filter" data-filter="induction_committee">🤝 Induction Comm (<span id="cnt-induct-comm">0</span>)</button>
@@ -686,6 +693,7 @@ if ($is_logged_in) {
             <label for="edit-photo-category">Gallery Section *</label>
             <select id="edit-photo-category" required>
               <option value="brochure">📖 2026 Induction Brochure &amp; Media</option>
+              <option value="charity">❤️ Charity Outreach (School for the Deaf)</option>
               <option value="executive">👔 Executive Committee</option>
               <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
               <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
@@ -870,6 +878,7 @@ function updateStats(photos) {
 
   document.getElementById('cnt-all') && (document.getElementById('cnt-all').textContent = photos.length);
   document.getElementById('cnt-brochure') && (document.getElementById('cnt-brochure').textContent = photos.filter(p => p.category === 'brochure').length);
+  document.getElementById('cnt-charity') && (document.getElementById('cnt-charity').textContent = photos.filter(p => p.category === 'charity').length);
   document.getElementById('cnt-exec') && (document.getElementById('cnt-exec').textContent = photos.filter(p => p.category === 'executive').length);
   document.getElementById('cnt-trustees') && (document.getElementById('cnt-trustees').textContent = photos.filter(p => p.category === 'trustees').length);
   document.getElementById('cnt-induct-comm') && (document.getElementById('cnt-induct-comm').textContent = photos.filter(p => p.category === 'induction_committee').length);
@@ -898,7 +907,8 @@ function renderAdminGrid() {
 
     let badgeClass = 'badge-other-admin';
     let badgeLabel = photo.category || 'Photo';
-    if (photo.category === 'executive') { badgeClass = 'badge-exec-admin'; badgeLabel = 'Executive'; }
+    if (photo.category === 'charity') { badgeClass = 'badge-charity-admin'; badgeLabel = 'Charity Outreach'; }
+    else if (photo.category === 'executive') { badgeClass = 'badge-exec-admin'; badgeLabel = 'Executive'; }
     else if (photo.category === 'trustees') { badgeClass = 'badge-trustees-admin'; badgeLabel = 'Trustees & Founder'; }
     else if (photo.category === 'induction_committee') { badgeClass = 'badge-induct-comm-admin'; badgeLabel = 'Induction Comm'; }
     else if (photo.category === 'community') { badgeClass = 'badge-comm-admin'; badgeLabel = 'Community Snap'; }

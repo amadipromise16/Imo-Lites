@@ -335,5 +335,28 @@
     "alt": "Official 2026 Induction Brochure QR Code",
     "title": "Official 2026 Induction Brochure QR Code",
     "subtitle": "Scan with any phone to open the 2026 Induction E-Brochure & Video immediately"
+  },
+  {
+    "id": "charity_outreach_flyer",
+    "category": "charity",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/charity-outreach-deaf-school.jpg",
+    "download_url": "assets/charity-outreach-deaf-school.jpg",
+    "alt": "Imolites Charity Outreach — School for the Deaf, Orodo",
+    "title": "Imolites Charity Outreach — School for the Deaf, Orodo",
+    "subtitle": "Demonstrating Love, Food Donation, Support, and Rebuilding the School Perimeter Wall"
+  },
+  {
+    "id": "charity_outreach_video_combined",
+    "category": "charity",
+    "folder_id": "",
+    "is_folder_cover": false,
+    "image": "assets/charity-outreach-poster.jpg",
+    "video": "assets/charity-outreach-video.mp4",
+    "download_url": "assets/charity-outreach-video.mp4",
+    "alt": "Imolites Charity Outreach Documentary Video",
+    "title": "Charity Outreach Video — School for the Deaf, Orodo",
+    "subtitle": "Official Club Outreach Documentary • 3 min 48 sec • Full HD Video"
   }
 ]

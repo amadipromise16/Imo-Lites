@@ -248,7 +248,7 @@ if ($action === 'list_all') {
 // 5. ACTION: ADMIN UPLOAD PHOTO TO ANY SECTION
 if ($action === 'upload_photo') {
     $category = trim($_POST['category'] ?? 'executive');
-    $allowedCategories = ['brochure', 'executive', 'trustees', 'induction_committee', 'events', 'community', 'heritage', 'branding'];
+    $allowedCategories = ['brochure', 'charity', 'executive', 'trustees', 'induction_committee', 'events', 'community', 'heritage', 'branding'];
     if (!in_array($category, $allowedCategories)) {
         $category = 'executive';
     }
@@ -266,6 +266,8 @@ if ($action === 'upload_photo') {
     if ($subtitle === '') {
         if ($category === 'brochure') {
             $subtitle = '2026 Induction Brochure • Added by Admin on ' . $dateStr;
+        } elseif ($category === 'charity') {
+            $subtitle = 'Charity Outreach • Added by Admin on ' . $dateStr;
         } elseif ($category === 'executive') {
             $subtitle = 'Executive Committee • Added by Admin on ' . $dateStr;
         } elseif ($category === 'trustees') {

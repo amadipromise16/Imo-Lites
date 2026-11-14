@@ -193,6 +193,7 @@ require __DIR__ . '/includes/header.php';
       <div aria-label="Filter gallery" class="filterbar" role="group">
         <button class="filter active" data-filter="all">All images</button>
         <button class="filter" data-filter="brochure">📖 2026 Induction Brochure</button>
+        <button class="filter" data-filter="charity">❤️ Charity Outreach</button>
         <button class="filter" data-filter="executive">Executive Committee</button>
         <button class="filter" data-filter="trustees">Board of Trustees &amp; Founder</button>
         <button class="filter" data-filter="induction_committee">Induction Committee</button>
@@ -245,6 +246,42 @@ require __DIR__ . '/includes/header.php';
         </div>
       </div>
 
+      <!-- Dedicated Charity Outreach Showcase Hero -->
+      <div id="charity-showcase-box" style="display:none; margin:0 0 32px; background:linear-gradient(135deg,#1f1305 0%,#3d2107 50%,#072e1e 100%); border:2px solid var(--gold,#d4af37); border-radius:16px; padding:28px 24px; color:#ffffff; box-shadow:0 10px 30px rgba(0,0,0,0.25);">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:20px;">
+          <div style="max-width:700px;">
+            <div style="display:inline-block; background:rgba(212,175,55,0.2); border:1px solid #d4af37; color:#f3e0aa; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:20px; margin-bottom:10px;">
+              ❤️ Imolites Giving Back · Matthew 25:40
+            </div>
+            <h2 style="font-family:'Playfair Display',serif; font-size:26px; color:#ffffff; margin:0 0 8px;">
+              Charity Outreach — School for the Deaf, Ofekata, Orodo
+            </h2>
+            <p style="color:#d0ded5; font-size:14.5px; line-height:1.55; margin:0 0 16px;">
+              <em>"Inasmuch as ye have done it unto one of the least of these my brethren, ye have done it unto me."</em> — Our humanitarian visit brought essential food supplies and financial support to the children. Join our urgent call to help rebuild the school perimeter wall to keep these precious children safe!
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+              <a href="assets/charity-outreach-video.mp4" download="imolites-charity-outreach-video.mp4" class="btn" style="background:#d4af37; color:#042115; font-weight:bold; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                📥 Download Full Video (3m 48s MP4)
+              </a>
+              <a href="assets/charity-outreach-deaf-school.jpg" download="imolites-charity-outreach-flyer.jpg" class="btn btn-outline" style="border:1.5px solid #d4af37; color:#f3e0aa; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                📸 Download Outreach Flyer
+              </a>
+              <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" target="_blank" rel="noopener" class="btn btn-outline" style="border:1.5px solid #ff4444; color:#ffffff; background:rgba(255,0,0,0.15); font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                📺 Watch on YouTube ↗
+              </a>
+            </div>
+          </div>
+          <div style="text-align:center; min-width:180px;">
+            <div style="background:#ffffff; padding:6px; border-radius:12px; border:2px solid #d4af37; display:inline-block; box-shadow:0 8px 24px rgba(0,0,0,0.35); max-width:160px;">
+              <img src="assets/charity-outreach-deaf-school.jpg" alt="Charity Outreach Flyer Preview" style="width:100%; height:auto; border-radius:6px; display:block;"/>
+            </div>
+            <div style="font-size:11px; color:#f3e0aa; font-weight:700; margin-top:8px; text-transform:uppercase; letter-spacing:0.05em;">
+              Ofekata, Orodo
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Active Folder Navigation Bar -->
       <div id="active-folder-bar" class="active-folder-bar" style="display:none;">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -267,8 +304,8 @@ require __DIR__ . '/includes/header.php';
           $itemId = $item['id'] ?? '';
           $folderId = $item['folder_id'] ?? ($category === 'executive' ? 'executive' : '');
           $isFolderCover = !empty($item['is_folder_cover']);
-          // Hide executive, trustees, induction_committee, events, and brochure on initial load of 'all'
-          $hideOnAll = in_array($category, ['executive', 'trustees', 'induction_committee', 'events', 'brochure']) || $isFolderCover || !empty($folderId);
+          // Hide executive, trustees, induction_committee, events, brochure, and charity on initial load of 'all'
+          $hideOnAll = in_array($category, ['executive', 'trustees', 'induction_committee', 'events', 'brochure', 'charity']) || $isFolderCover || !empty($folderId);
 
           $cardClasses = ['gallery-card'];
           if ($isFolderCover) $cardClasses[] = 'album-folder-card';
@@ -298,9 +335,20 @@ require __DIR__ . '/includes/header.php';
               <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#b8860b 100%);color:#ffffff;border:1px solid #f3e0aa;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">
                 <?= ($itemId === 'brochure_official_qr') ? 'Official QR Code' : '2026 Induction Brochure' ?>
               </span>
+            <?php elseif ($category === 'charity'): ?>
+              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#991b1b 0%,#072e1e 100%);color:#ffffff;border:1px solid #fca5a5;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">
+                <?= ($itemId === 'charity_outreach_video_combined') ? '🎬 Charity Video' : '❤️ Charity Outreach' ?>
+              </span>
             <?php endif; ?>
 
-            <img alt="<?= htmlspecialchars($item['alt'] ?? ($item['title'] ?? 'Imolites Gallery Photo'), ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
+            <?php if (!empty($item['video'])): ?>
+              <video controls playsinline poster="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" preload="metadata" style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:#000;">
+                <source src="<?= htmlspecialchars($item['video'], ENT_QUOTES, 'UTF-8') ?>" type="video/mp4"/>
+                Your browser does not support video playback.
+              </video>
+            <?php else: ?>
+              <img alt="<?= htmlspecialchars($item['alt'] ?? ($item['title'] ?? 'Imolites Gallery Photo'), ENT_QUOTES, 'UTF-8') ?>" loading="lazy" src="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" tabindex="0"/>
+            <?php endif; ?>
             
             <figcaption>
               <?php if (!empty($item['title'])): ?>
@@ -340,6 +388,18 @@ require __DIR__ . '/includes/header.php';
                       Save SVG
                     </a>
                   </div>
+                <?php endif; ?>
+              </div>
+            <?php elseif ($category === 'charity'): ?>
+              <div style="padding:10px 14px 14px; display:flex; flex-direction:column; gap:8px; background:rgba(153,27,27,0.03); border-top:1px solid rgba(0,0,0,0.06);">
+                <?php if ($itemId === 'charity_outreach_video_combined'): ?>
+                  <a href="assets/charity-outreach-video.mp4" download="imolites-charity-outreach-video.mp4" class="btn" style="padding:8px 12px; font-size:12.5px; text-align:center; background:#d4af37; color:#042115; font-weight:700; border-radius:6px; text-decoration:none;">
+                    📥 Download Video to Phone (MP4)
+                  </a>
+                <?php elseif ($itemId === 'charity_outreach_flyer'): ?>
+                  <a href="assets/charity-outreach-deaf-school.jpg" download="imolites-charity-outreach-flyer.jpg" class="btn" style="padding:8px 12px; font-size:12.5px; text-align:center; background:#072e1e; color:#ffffff; font-weight:700; border-radius:6px; text-decoration:none;">
+                    📥 Download Photo to Phone (JPG)
+                  </a>
                 <?php endif; ?>
               </div>
             <?php endif; ?>
@@ -448,13 +508,18 @@ function updateGalleryDisplay() {
     brochureShowcaseBox.style.display = (currentSection === 'brochure') ? 'block' : 'none';
   }
 
+  const charityShowcaseBox = document.getElementById('charity-showcase-box');
+  if (charityShowcaseBox) {
+    charityShowcaseBox.style.display = (currentSection === 'charity') ? 'block' : 'none';
+  }
+
   if (currentSection === 'all') {
     folderExpanded = false;
     if (activeFolderBar) activeFolderBar.style.display = 'none';
     cards.forEach(c => {
       const cat = c.dataset.category;
-      // HIDE executive, trustees, induction_committee, events, AND brochure on 'all'
-      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || cat === 'events' || cat === 'brochure' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
+      // HIDE executive, trustees, induction_committee, events, brochure, AND charity on 'all'
+      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || cat === 'events' || cat === 'brochure' || cat === 'charity' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
         c.style.display = 'none';
       } else {
         c.style.display = 'block';
@@ -470,6 +535,17 @@ function updateGalleryDisplay() {
     }
     cards.forEach(c => {
       c.style.display = (c.dataset.category === 'brochure') ? 'block' : 'none';
+    });
+  } else if (currentSection === 'charity') {
+    folderExpanded = true;
+    if (activeFolderBar) {
+      activeFolderBar.style.display = 'flex';
+      folderBarTitle.textContent = '❤️ Imolites Charity Outreach — School for the Deaf';
+      folderBarDesc.textContent = 'Our humanitarian visit to the School for the Deaf in Ofekata, Orodo, Imo State • Watch and download the full video and outreach flyer';
+      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
+    }
+    cards.forEach(c => {
+      c.style.display = (c.dataset.category === 'charity') ? 'block' : 'none';
     });
   } else if (currentSection === 'executive') {
     if (!folderExpanded) {
