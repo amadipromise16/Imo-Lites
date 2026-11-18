@@ -197,7 +197,7 @@ function get_base_gallery_items() {
             'video' => 'assets/induction-video.mp4',
             'download_url' => 'https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t',
             'gdrive_url' => 'https://drive.google.com/file/d/17YikZRwCrO4P5-VeyM81MltQjFPUPqc2/view?usp=sharing',
-            'youtube_url' => 'https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA',
+            'youtube_url' => 'https://youtu.be/hvrJDQLKgBE?is=4Zr8S_kOlLJ7ViS8',
             'alt' => '2026 Induction E-Brochure — Landscape Edition',
             'title' => '2026 Induction E-Brochure — Landscape Edition',
             'subtitle' => 'Official 2026 Gala & Induction E-Brochure • High Definition Landscape Video (624 MB)'
@@ -218,38 +218,6 @@ function get_base_gallery_items() {
             'alt' => '2026 Induction & Gala Invitation Poster',
             'title' => '2026 Induction & Gala Invitation Poster',
             'subtitle' => 'Official Gala Invitation • November 14, 2026 • Garland, Texas'
-        ],
-        [
-            'id' => 'induction_gala_flyer',
-            'category' => 'induction',
-            'image' => 'assets/gala-flyer.webp',
-            'alt' => '2026 Induction Gala Program Flyer',
-            'title' => '2026 Induction Gala Program Flyer',
-            'subtitle' => 'Official Gala Program Flyer • Imolites in Diaspora Social Club USA'
-        ],
-        [
-            'id' => 'induction_exec_poster',
-            'category' => 'induction',
-            'image' => 'assets/gallery-executives-group.jpg',
-            'alt' => '2026 Induction Gala Executive Council',
-            'title' => '2026 Induction Gala Executive Council',
-            'subtitle' => '2026 Gala Memorabilia • Executive Leadership'
-        ],
-        [
-            'id' => 'induction_trustees_poster',
-            'category' => 'induction',
-            'image' => 'assets/gallery-trustees-founders-1.jpg',
-            'alt' => '2026 Induction Gala Trustees & Founders',
-            'title' => '2026 Induction Gala Trustees & Founders',
-            'subtitle' => '2026 Gala Memorabilia • Founding Leadership Council'
-        ],
-        [
-            'id' => 'induction_committee_poster',
-            'category' => 'induction',
-            'image' => 'assets/gallery-induction-committee.jpg',
-            'alt' => '2026 Induction Gala Planning Committee Poster',
-            'title' => '2026 Induction Gala Planning Committee Poster',
-            'subtitle' => '2026 Gala Memorabilia • The Team That Put The Event Together'
         ],
         [
             'id' => 'honoree_ethelbert_nwachukwu',

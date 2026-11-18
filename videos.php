@@ -74,7 +74,7 @@ require __DIR__ . '/includes/header.php';
         <h3 style="font-family:'Playfair Display',serif; color:#ffffff; font-size:22px; margin:0 0 8px;">View More of Our Videos on YouTube, TikTok and Facebook</h3>
         <p style="color:#d0ded5; font-size:14.5px; max-width:620px; margin:0 auto 18px;">Stay entertained and connected with event highlights, cultural dances, celebration clips, and member spotlights directly on our official social channels.</p>
         <div style="display:inline-flex; gap:14px; flex-wrap:wrap; justify-content:center;">
-          <a class="btn btn-outline" href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" rel="noopener" target="_blank" style="display:inline-flex; align-items:center; gap:8px; border-color:#ff4444; color:#ffffff; background:rgba(255,0,0,0.15);">
+          <a class="btn btn-outline" href="https://youtu.be/hvrJDQLKgBE?is=4Zr8S_kOlLJ7ViS8" rel="noopener" target="_blank" style="display:inline-flex; align-items:center; gap:8px; border-color:#ff4444; color:#ffffff; background:rgba(255,0,0,0.15);">
             <span>📺 Watch on YouTube</span> ↗
           </a>
           <a class="btn" href="https://www.tiktok.com/@imolitesusa1?_r=1&amp;_t=ZP-9BIUJp5vLWY" rel="noopener" target="_blank" style="display:inline-flex; align-items:center; gap:8px;">

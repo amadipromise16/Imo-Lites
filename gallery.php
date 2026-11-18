@@ -196,7 +196,7 @@ require __DIR__ . '/includes/header.php';
 
       <!-- Filter Bar -->
       <div aria-label="Filter gallery" class="filterbar" role="group">
-        <button class="filter active" data-filter="all">All images</button>
+        <button class="filter active" data-filter="all">All Photos</button>
         <button class="filter" data-filter="executive">Executive Committee</button>
         <button class="filter" data-filter="trustees">Board of Trustees &amp; Founder</button>
         <button class="filter" data-filter="induction_committee">Induction Committee</button>
@@ -228,7 +228,7 @@ require __DIR__ . '/includes/header.php';
               <a href="https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t" download="imolites-2026-induction-brochure-landscape.mp4" class="btn btn-outline" style="border:1.5px solid #d4af37; color:#f3e0aa; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
                 📥 Download Landscape Brochure
               </a>
-              <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" target="_blank" rel="noopener" class="btn btn-outline" style="border:1.5px solid #ff4444; color:#ffffff; background:rgba(255,0,0,0.15); font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+              <a href="https://youtu.be/hvrJDQLKgBE?is=4Zr8S_kOlLJ7ViS8" target="_blank" rel="noopener" class="btn btn-outline" style="border:1.5px solid #ff4444; color:#ffffff; background:rgba(255,0,0,0.15); font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
                 📺 Watch on YouTube ↗
               </a>
             </div>
@@ -264,7 +264,7 @@ require __DIR__ . '/includes/header.php';
               <a href="assets/charity-outreach-deaf-school.jpg" download="imolites-charity-outreach-flyer.jpg" class="btn btn-outline" style="border:1.5px solid #d4af37; color:#f3e0aa; font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
                 📸 Download Outreach Flyer
               </a>
-              <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" target="_blank" rel="noopener" class="btn btn-outline" style="border:1.5px solid #ff4444; color:#ffffff; background:rgba(255,0,0,0.15); font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+              <a href="https://youtu.be/hvrJDQLKgBE?is=4Zr8S_kOlLJ7ViS8" target="_blank" rel="noopener" class="btn btn-outline" style="border:1.5px solid #ff4444; color:#ffffff; background:rgba(255,0,0,0.15); font-size:13.5px; padding:10px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
                 📺 Watch on YouTube ↗
               </a>
             </div>
@@ -285,10 +285,12 @@ require __DIR__ . '/includes/header.php';
         <?php foreach ($display_items as $item): 
           $category = $item['category'] ?? 'community';
           $itemId = $item['id'] ?? '';
+          $isCommunity = ($category === 'community');
         ?>
           <figure class="gallery-card" 
                   data-category="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>" 
-                  <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
+                  <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
+                  style="<?= $isCommunity ? 'display:block;' : 'display:none;' ?>">
             
             <?php if (!empty($item['video'])): ?>
               <video controls playsinline poster="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" preload="metadata" style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:#000;">
@@ -320,7 +322,7 @@ require __DIR__ . '/includes/header.php';
                     <a href="https://drive.google.com/file/d/17YikZRwCrO4P5-VeyM81MltQjFPUPqc2/view?usp=sharing" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; padding:6px 8px; font-size:11.5px; text-align:center; border:1px solid #072e1e; border-radius:6px; text-decoration:none;">
                       Drive Player ↗
                     </a>
-                    <a href="https://www.youtube.com/results?search_query=Imolites+in+Diaspora+Social+Club+USA" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; padding:6px 8px; font-size:11.5px; text-align:center; border:1px solid #c00; color:#c00; border-radius:6px; text-decoration:none;">
+                    <a href="https://youtu.be/hvrJDQLKgBE?is=4Zr8S_kOlLJ7ViS8" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; padding:6px 8px; font-size:11.5px; text-align:center; border:1px solid #c00; color:#c00; border-radius:6px; text-decoration:none;">
                       YouTube ↗
                     </a>
                   </div>
@@ -444,7 +446,8 @@ function updateGalleryDisplay() {
   cards.forEach(c => {
     const cat = c.dataset.category;
     if (currentSection === 'all') {
-      c.style.display = 'block';
+      // Leave only community photos in All Photos tab as instructed
+      c.style.display = (cat === 'community') ? 'block' : 'none';
     } else if (currentSection === 'induction') {
       c.style.display = (cat === 'induction' || cat === 'events' || cat === 'brochure') ? 'block' : 'none';
     } else {
@@ -779,10 +782,12 @@ function prependPhotoToGallery(photo) {
   if (photo.id) figure.dataset.id = photo.id;
 
   // Handle visibility
-  if (currentSection === 'all' || currentSection === cat || (currentSection === 'induction' && (cat === 'induction' || cat === 'events' || cat === 'brochure'))) {
-    figure.style.display = 'block';
+  if (currentSection === 'all') {
+    figure.style.display = (cat === 'community') ? 'block' : 'none';
+  } else if (currentSection === 'induction') {
+    figure.style.display = (cat === 'induction' || cat === 'events' || cat === 'brochure') ? 'block' : 'none';
   } else {
-    figure.style.display = 'none';
+    figure.style.display = (cat === currentSection) ? 'block' : 'none';
   }
 
   const img = document.createElement('img');
