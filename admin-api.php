@@ -267,8 +267,8 @@ if ($action === 'upload_photo') {
 
     // Default subtitles per section if empty
     if ($subtitle === '') {
-        if ($category === 'brochure') {
-            $subtitle = '2026 Induction Brochure • Added by Admin on ' . $dateStr;
+        if ($category === 'induction' || $category === 'events' || $category === 'brochure') {
+            $subtitle = '2026 Induction • Added by Admin on ' . $dateStr;
         } elseif ($category === 'charity') {
             $subtitle = 'Charity Outreach • Added by Admin on ' . $dateStr;
         } elseif ($category === 'executive') {
@@ -276,9 +276,7 @@ if ($action === 'upload_photo') {
         } elseif ($category === 'trustees') {
             $subtitle = 'Board of Trustees & Founder • Added by Admin on ' . $dateStr;
         } elseif ($category === 'induction_committee') {
-            $subtitle = '2026 Induction Committee • Added by Admin on ' . $dateStr;
-        } elseif ($category === 'events') {
-            $subtitle = '2026 Induction Honorees • Added by Admin on ' . $dateStr;
+            $subtitle = 'Induction Committee • Added by Admin on ' . $dateStr;
         } elseif ($category === 'community') {
             $subtitle = 'Club Family Photo • Added by Admin on ' . $dateStr;
         } else {

@@ -197,12 +197,11 @@ require __DIR__ . '/includes/header.php';
       <!-- Filter Bar -->
       <div aria-label="Filter gallery" class="filterbar" role="group">
         <button class="filter active" data-filter="all">All images</button>
-        <button class="filter" data-filter="brochure">📖 2026 Induction Brochure</button>
-        <button class="filter" data-filter="charity">❤️ Charity Outreach</button>
         <button class="filter" data-filter="executive">Executive Committee</button>
         <button class="filter" data-filter="trustees">Board of Trustees &amp; Founder</button>
         <button class="filter" data-filter="induction_committee">Induction Committee</button>
-        <button class="filter" data-filter="events">2026 Induction Honorees</button>
+        <button class="filter" data-filter="induction">🎖️ 2026 Induction</button>
+        <button class="filter" data-filter="charity">❤️ Charity Outreach</button>
         <button class="filter" data-filter="community">Community snaps</button>
         <button class="filter" data-filter="heritage">Imo State artwork</button>
         <button class="filter" data-filter="branding">Official crest &amp; swag</button>
@@ -281,65 +280,16 @@ require __DIR__ . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Active Folder Navigation Bar -->
-      <div id="active-folder-bar" class="active-folder-bar" style="display:none;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <span style="font-size:26px;">📁</span>
-          <div>
-            <h3 id="folder-bar-title" style="margin:0; font-family:'Playfair Display',serif; color:#f3e0aa; font-size:20px;">Album Folder</h3>
-            <p id="folder-bar-desc" style="margin:2px 0 0; font-size:13px; color:#d0ded5;">Viewing photos in this folder</p>
-          </div>
-        </div>
-        <button type="button" id="btn-close-folder" class="btn btn-outline" style="border-color:var(--gold); color:#f3e0aa; padding:8px 16px; font-size:13px; cursor:pointer;">
-          ← Back to All Albums
-        </button>
-      </div>
-
       <!-- Gallery Grid -->
       <div class="gallery-grid" id="gallery-grid">
         <?php foreach ($display_items as $item): 
           $category = $item['category'] ?? 'community';
-          $isCommunity = ($category === 'community');
           $itemId = $item['id'] ?? '';
-          $folderId = $item['folder_id'] ?? ($category === 'executive' ? 'executive' : '');
-          $isFolderCover = !empty($item['is_folder_cover']);
-          // Hide executive, trustees, induction_committee, events, brochure, and charity on initial load of 'all'
-          $hideOnAll = in_array($category, ['executive', 'trustees', 'induction_committee', 'events', 'brochure', 'charity']) || $isFolderCover || !empty($folderId);
-
-          $cardClasses = ['gallery-card'];
-          if ($isFolderCover) $cardClasses[] = 'album-folder-card';
         ?>
-          <figure class="<?= implode(' ', $cardClasses) ?>" 
+          <figure class="gallery-card" 
                   data-category="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>" 
-                  <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
-                  <?= $isFolderCover ? 'data-is-folder="true" data-folder-target="' . htmlspecialchars($folderId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
-                  <?= (!$isFolderCover && $folderId) ? 'data-in-folder="' . htmlspecialchars($folderId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
-                  <?= $hideOnAll ? 'style="display:none;"' : '' ?>>
+                  <?= $itemId ? 'data-id="' . htmlspecialchars($itemId, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
             
-            <?php if ($isFolderCover): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 12px rgba(0,0,0,0.35);z-index:2;display:inline-flex;align-items:center;gap:6px;margin:0;line-height:normal;">
-                📁 Executive Council Album
-              </span>
-            <?php elseif ($isCommunity): ?>
-              <span class="badge-community" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Community Snap</span>
-            <?php elseif ($category === 'executive'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Executive Committee</span>
-            <?php elseif ($category === 'trustees'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Board of Trustees &amp; Founder</span>
-            <?php elseif ($category === 'induction_committee'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">Induction Committee</span>
-            <?php elseif ($category === 'events'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">2026 Induction Honoree</span>
-            <?php elseif ($category === 'brochure'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#b8860b 100%);color:#ffffff;border:1px solid #f3e0aa;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">
-                2026 Induction Brochure
-              </span>
-            <?php elseif ($category === 'charity'): ?>
-              <span class="badge-executive" style="position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#991b1b 0%,#072e1e 100%);color:#ffffff;border:1px solid #fca5a5;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;">
-                <?= ($itemId === 'charity_outreach_video_combined') ? '🎬 Charity Video' : '❤️ Charity Outreach' ?>
-              </span>
-            <?php endif; ?>
-
             <?php if (!empty($item['video'])): ?>
               <video controls playsinline poster="<?= htmlspecialchars($item['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>" preload="metadata" style="width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:#000;">
                 <source src="<?= htmlspecialchars($item['video'], ENT_QUOTES, 'UTF-8') ?>" type="video/mp4"/>
@@ -360,11 +310,11 @@ require __DIR__ . '/includes/header.php';
               <?php endif; ?>
             </figcaption>
 
-            <?php if ($category === 'brochure'): ?>
+            <?php if ($category === 'induction' && !empty($item['download_url'])): ?>
               <div style="padding:10px 14px 14px; display:flex; flex-direction:column; gap:8px; background:rgba(7,46,30,0.03); border-top:1px solid rgba(0,0,0,0.06);">
                 <?php if ($itemId === 'brochure_landscape_video'): ?>
                   <a href="https://drive.usercontent.google.com/download?id=17YikZRwCrO4P5-VeyM81MltQjFPUPqc2&export=download&confirm=t" download="imolites-2026-induction-brochure-landscape.mp4" class="btn" style="padding:8px 12px; font-size:12.5px; text-align:center; background:#d4af37; color:#042115; font-weight:700; border-radius:6px; text-decoration:none;">
-                    📥 Download Landscape Brochure
+                    📥 Download Landscape Brochure (624 MB)
                   </a>
                   <div style="display:flex; gap:6px;">
                     <a href="https://drive.google.com/file/d/17YikZRwCrO4P5-VeyM81MltQjFPUPqc2/view?usp=sharing" target="_blank" rel="noopener" class="btn btn-outline" style="flex:1; padding:6px 8px; font-size:11.5px; text-align:center; border:1px solid #072e1e; border-radius:6px; text-decoration:none;">
@@ -391,12 +341,6 @@ require __DIR__ . '/includes/header.php';
                     📥 Download Photo to Phone (JPG)
                   </a>
                 <?php endif; ?>
-              </div>
-            <?php endif; ?>
-
-            <?php if ($isFolderCover): ?>
-              <div class="folder-action-hint">
-                📁 Click to Open Executive Album &amp; View All Photos →
               </div>
             <?php endif; ?>
           </figure>
@@ -478,16 +422,10 @@ require __DIR__ . '/includes/header.php';
 </div>
 
 <script>
-// Filter & Folder Album Controller
+// Filter Controller
 const buttons = [...document.querySelectorAll('.filter')];
 let cards = [...document.querySelectorAll('.gallery-card')];
-const activeFolderBar = document.getElementById('active-folder-bar');
-const folderBarTitle = document.getElementById('folder-bar-title');
-const folderBarDesc = document.getElementById('folder-bar-desc');
-const btnCloseFolder = document.getElementById('btn-close-folder');
-
 let currentSection = 'all';
-let folderExpanded = false;
 
 function updateGalleryDisplay() {
   cards = [...document.querySelectorAll('.gallery-card')];
@@ -495,7 +433,7 @@ function updateGalleryDisplay() {
 
   const brochureShowcaseBox = document.getElementById('brochure-showcase-box');
   if (brochureShowcaseBox) {
-    brochureShowcaseBox.style.display = (currentSection === 'brochure') ? 'block' : 'none';
+    brochureShowcaseBox.style.display = (currentSection === 'induction' || currentSection === 'brochure') ? 'block' : 'none';
   }
 
   const charityShowcaseBox = document.getElementById('charity-showcase-box');
@@ -503,114 +441,20 @@ function updateGalleryDisplay() {
     charityShowcaseBox.style.display = (currentSection === 'charity') ? 'block' : 'none';
   }
 
-  if (currentSection === 'all') {
-    folderExpanded = false;
-    if (activeFolderBar) activeFolderBar.style.display = 'none';
-    cards.forEach(c => {
-      const cat = c.dataset.category;
-      // HIDE executive, trustees, induction_committee, events, brochure, AND charity on 'all'
-      if (cat === 'executive' || cat === 'trustees' || cat === 'induction_committee' || cat === 'events' || cat === 'brochure' || cat === 'charity' || c.dataset.isFolder === 'true' || c.dataset.inFolder) {
-        c.style.display = 'none';
-      } else {
-        c.style.display = 'block';
-      }
-    });
-  } else if (currentSection === 'brochure') {
-    folderExpanded = true;
-    if (activeFolderBar) activeFolderBar.style.display = 'none';
-    cards.forEach(c => {
-      c.style.display = (c.dataset.category === 'brochure') ? 'block' : 'none';
-    });
-  } else if (currentSection === 'charity') {
-    folderExpanded = true;
-    if (activeFolderBar) {
-      activeFolderBar.style.display = 'flex';
-      folderBarTitle.textContent = '❤️ Imolites Charity Outreach — School for the Deaf';
-      folderBarDesc.textContent = 'Our humanitarian visit to the School for the Deaf in Ofekata, Orodo, Imo State • Watch and download the full video and outreach flyer';
-      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
-    }
-    cards.forEach(c => {
-      c.style.display = (c.dataset.category === 'charity') ? 'block' : 'none';
-    });
-  } else if (currentSection === 'executive') {
-    if (!folderExpanded) {
-      if (activeFolderBar) activeFolderBar.style.display = 'none';
-      cards.forEach(c => {
-        if (c.dataset.isFolder === 'true' && c.dataset.folderTarget === 'executive') {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
+  cards.forEach(c => {
+    const cat = c.dataset.category;
+    if (currentSection === 'all') {
+      c.style.display = 'block';
+    } else if (currentSection === 'induction') {
+      c.style.display = (cat === 'induction' || cat === 'events' || cat === 'brochure') ? 'block' : 'none';
     } else {
-      if (activeFolderBar) {
-        activeFolderBar.style.display = 'flex';
-        folderBarTitle.textContent = 'Executive Committee Album';
-        folderBarDesc.textContent = 'Meet the Executive Officers of Imolites in Diaspora Social Club USA';
-        if (btnCloseFolder) btnCloseFolder.textContent = '← Back to Executive Cover';
-      }
-      cards.forEach(c => {
-        if (c.dataset.category === 'executive' || c.dataset.inFolder === 'executive') {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
+      c.style.display = (cat === currentSection) ? 'block' : 'none';
     }
-  } else if (currentSection === 'trustees') {
-    folderExpanded = true;
-    if (activeFolderBar) {
-      activeFolderBar.style.display = 'flex';
-      folderBarTitle.textContent = '🏛️ Board of Trustees & Founder Album';
-      folderBarDesc.textContent = 'Honoring the Visionary Founder and Board of Trustees of Imolites in Diaspora Social Club USA';
-      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
-    }
-    cards.forEach(c => {
-      c.style.display = (c.dataset.category === 'trustees') ? 'block' : 'none';
-    });
-  } else if (currentSection === 'induction_committee') {
-    folderExpanded = true;
-    if (activeFolderBar) {
-      activeFolderBar.style.display = 'flex';
-      folderBarTitle.textContent = '🤝 2026 Induction Planning Committee';
-      folderBarDesc.textContent = 'The dedicated committee members organizing and putting the 2026 Induction Gala together';
-      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
-    }
-    cards.forEach(c => {
-      c.style.display = (c.dataset.category === 'induction_committee') ? 'block' : 'none';
-    });
-  } else if (currentSection === 'events') {
-    folderExpanded = true;
-    if (activeFolderBar) {
-      activeFolderBar.style.display = 'flex';
-      folderBarTitle.textContent = '🎖️ 2026 Induction Honorees Album';
-      folderBarDesc.textContent = 'Celebrating the distinguished honorees of our 2026 Induction & End of the Year Party';
-      if (btnCloseFolder) btnCloseFolder.textContent = '← Back to All Photos';
-    }
-    cards.forEach(c => {
-      c.style.display = (c.dataset.category === 'events') ? 'block' : 'none';
-    });
-  } else {
-    // Other categories: community, heritage, branding
-    folderExpanded = false;
-    if (activeFolderBar) activeFolderBar.style.display = 'none';
-    cards.forEach(c => {
-      c.style.display = (c.dataset.category === currentSection) ? 'block' : 'none';
-    });
-  }
+  });
 }
 
 function applyFilter(v) {
   currentSection = v;
-  folderExpanded = false;
-  updateGalleryDisplay();
-  const grid = document.getElementById('gallery-grid');
-  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function openFolder(folderId) {
-  currentSection = folderId;
-  folderExpanded = true;
   updateGalleryDisplay();
   const grid = document.getElementById('gallery-grid');
   if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -619,31 +463,6 @@ function openFolder(folderId) {
 buttons.forEach(btn => {
   btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
 });
-
-if (btnCloseFolder) {
-  btnCloseFolder.addEventListener('click', () => {
-    if (currentSection === 'executive' && folderExpanded) {
-      folderExpanded = false;
-      updateGalleryDisplay();
-    } else {
-      applyFilter('all');
-    }
-  });
-}
-
-function setupFolderClickEvents() {
-  document.querySelectorAll('.gallery-card[data-is-folder="true"]').forEach(card => {
-    if (!card.dataset.hasFolderEvent) {
-      card.dataset.hasFolderEvent = 'true';
-      card.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        openFolder(this.dataset.folderTarget);
-      });
-    }
-  });
-}
-setupFolderClickEvents();
 
 // Check URL query parameters & hash
 const urlParams = new URLSearchParams(window.location.search);
@@ -661,22 +480,13 @@ function setupLightboxEvents() {
   document.querySelectorAll('.gallery-card img').forEach(img => {
     if (!img.dataset.hasLb) {
       img.dataset.hasLb = 'true';
-      img.addEventListener('click', (e) => {
-        const parentCard = img.closest('.gallery-card');
-        if (parentCard && parentCard.dataset.isFolder === 'true' && (!folderExpanded || currentSection !== parentCard.dataset.folderTarget)) {
-          // If on main view, clicking the cover card opens the folder
-          return;
-        }
+      img.addEventListener('click', () => {
         lbImg.src = img.src;
         lbImg.alt = img.alt;
         lightbox.classList.add('open');
       });
       img.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-          const parentCard = img.closest('.gallery-card');
-          if (parentCard && parentCard.dataset.isFolder === 'true' && (!folderExpanded || currentSection !== parentCard.dataset.folderTarget)) {
-            return;
-          }
           lbImg.src = img.src;
           lbImg.alt = img.alt;
           lightbox.classList.add('open');
@@ -968,48 +778,11 @@ function prependPhotoToGallery(photo) {
   figure.dataset.category = cat;
   if (photo.id) figure.dataset.id = photo.id;
 
-  // Handle visibility on initial load
-  if (currentSection === 'all') {
-    if (['executive', 'trustees', 'induction_committee', 'events'].includes(cat)) {
-      figure.style.display = 'none';
-    } else {
-      figure.style.display = 'block';
-    }
+  // Handle visibility
+  if (currentSection === 'all' || currentSection === cat || (currentSection === 'induction' && (cat === 'induction' || cat === 'events' || cat === 'brochure'))) {
+    figure.style.display = 'block';
   } else {
-    figure.style.display = (currentSection === cat) ? 'block' : 'none';
-  }
-
-  if (cat === 'executive') {
-    figure.dataset.inFolder = 'executive';
-    const badge = document.createElement('span');
-    badge.className = 'badge-executive';
-    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#042115 0%,#0d4630 60%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-    badge.textContent = 'Executive Committee';
-    figure.appendChild(badge);
-  } else if (cat === 'trustees') {
-    const badge = document.createElement('span');
-    badge.className = 'badge-executive';
-    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 50%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-    badge.textContent = 'Board of Trustees & Founder';
-    figure.appendChild(badge);
-  } else if (cat === 'induction_committee') {
-    const badge = document.createElement('span');
-    badge.className = 'badge-executive';
-    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#14532d 0%,#042115 100%);color:#ffffff;border:1px solid #86efac;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-    badge.textContent = 'Induction Committee';
-    figure.appendChild(badge);
-  } else if (cat === 'events') {
-    const badge = document.createElement('span');
-    badge.className = 'badge-executive';
-    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#8b0000 0%,#b8860b 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-    badge.textContent = '2026 Induction Honoree';
-    figure.appendChild(badge);
-  } else {
-    const badge = document.createElement('span');
-    badge.className = 'badge-community';
-    badge.style.cssText = 'position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#072e1e 0%,#0d4630 100%);color:#ffffff;border:1px solid #d4af37;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:2;display:inline-block;margin:0;line-height:normal;';
-    badge.textContent = 'Community Snap';
-    figure.appendChild(badge);
+    figure.style.display = 'none';
   }
 
   const img = document.createElement('img');

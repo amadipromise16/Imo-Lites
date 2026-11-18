@@ -627,12 +627,11 @@ if ($is_logged_in) {
             <div class="form-group">
               <label for="photo-category">Gallery Section / Folder *</label>
               <select id="photo-category" name="category" required>
-                <option value="brochure">📖 2026 Induction Brochure &amp; Media</option>
-                <option value="charity">❤️ Charity Outreach (School for the Deaf)</option>
-                <option value="executive">👔 Executive Committee (Executive Council Folder)</option>
+                <option value="executive">👔 Executive Committee</option>
                 <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
-                <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
-                <option value="events">🎖️ 2026 Induction Honorees</option>
+                <option value="induction_committee">🤝 Induction Committee</option>
+                <option value="induction">🎖️ 2026 Induction</option>
+                <option value="charity">❤️ Charity Outreach (School for the Deaf)</option>
                 <option value="community">📸 Community Snaps &amp; Family</option>
                 <option value="heritage">🎨 Imo State Artwork &amp; Landmarks</option>
                 <option value="branding">🦅 Official Crest &amp; Swag</option>
@@ -734,12 +733,11 @@ if ($is_logged_in) {
           <div class="form-group">
             <label for="edit-photo-category">Gallery Section *</label>
             <select id="edit-photo-category" required>
-              <option value="brochure">📖 2026 Induction Brochure &amp; Media</option>
-              <option value="charity">❤️ Charity Outreach (School for the Deaf)</option>
               <option value="executive">👔 Executive Committee</option>
               <option value="trustees">🏛️ Board of Trustees &amp; Founder</option>
-              <option value="induction_committee">🤝 2026 Induction Planning Committee</option>
-              <option value="events">🎖️ 2026 Induction Honorees</option>
+              <option value="induction_committee">🤝 Induction Committee</option>
+              <option value="induction">🎖️ 2026 Induction</option>
+              <option value="charity">❤️ Charity Outreach (School for the Deaf)</option>
               <option value="community">📸 Community Snaps</option>
               <option value="heritage">🎨 Imo State Artwork &amp; Landmarks</option>
               <option value="branding">🦅 Official Crest &amp; Swag</option>
